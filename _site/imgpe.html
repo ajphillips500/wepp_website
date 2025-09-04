@@ -1,0 +1,648 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.5.57">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+
+<title>The iMGPE Algorithm – AJ Phillips Thesis Project</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+  vertical-align: middle;
+}
+</style>
+
+
+<script src="site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="site_libs/quarto-nav/headroom.min.js"></script>
+<script src="site_libs/clipboard/clipboard.min.js"></script>
+<script src="site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="site_libs/quarto-search/fuse.min.js"></script>
+<script src="site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="./">
+<script src="site_libs/quarto-html/quarto.js"></script>
+<script src="site_libs/quarto-html/popper.min.js"></script>
+<script src="site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="site_libs/quarto-html/anchor.min.js"></script>
+<link href="site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="site_libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="site_libs/bootstrap/bootstrap.min.css" rel="stylesheet" id="quarto-bootstrap" data-mode="light">
+<script id="quarto-search-options" type="application/json">{
+  "location": "navbar",
+  "copy-button": false,
+  "collapse-after": 3,
+  "panel-placement": "end",
+  "type": "overlay",
+  "limit": 50,
+  "keyboard-shortcut": [
+    "f",
+    "/",
+    "s"
+  ],
+  "show-item-context": false,
+  "language": {
+    "search-no-results-text": "No results",
+    "search-matching-documents-text": "matching documents",
+    "search-copy-link-title": "Copy link to search",
+    "search-hide-matches-text": "Hide additional matches",
+    "search-more-match-text": "more match in this document",
+    "search-more-matches-text": "more matches in this document",
+    "search-clear-button-title": "Clear",
+    "search-text-placeholder": "",
+    "search-detached-cancel-button-title": "Cancel",
+    "search-submit-button-title": "Submit",
+    "search-label": "Search"
+  }
+}</script>
+
+  <script src="https://cdnjs.cloudflare.com/polyfill/v3/polyfill.min.js?features=es6"></script>
+  <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
+
+<script type="text/javascript">
+const typesetMath = (el) => {
+  if (window.MathJax) {
+    // MathJax Typeset
+    window.MathJax.typeset([el]);
+  } else if (window.katex) {
+    // KaTeX Render
+    var mathElements = el.getElementsByClassName("math");
+    var macros = [];
+    for (var i = 0; i < mathElements.length; i++) {
+      var texText = mathElements[i].firstChild;
+      if (mathElements[i].tagName == "SPAN") {
+        window.katex.render(texText.data, mathElements[i], {
+          displayMode: mathElements[i].classList.contains('display'),
+          throwOnError: false,
+          macros: macros,
+          fleqn: false
+        });
+      }
+    }
+  }
+}
+window.Quarto = {
+  typesetMath
+};
+</script>
+
+<link rel="stylesheet" href="styles.css">
+</head>
+
+<body class="nav-fixed">
+
+<div id="quarto-search-results"></div>
+  <header id="quarto-header" class="headroom fixed-top">
+    <nav class="navbar navbar-expand-lg " data-bs-theme="dark">
+      <div class="navbar-container container-fluid">
+      <div class="navbar-brand-container mx-auto">
+    <a class="navbar-brand" href="./index.html">
+    <span class="navbar-title">AJ Phillips Thesis Project</span>
+    </a>
+  </div>
+            <div id="quarto-search" class="" title="Search"></div>
+          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse" aria-controls="navbarCollapse" role="menu" aria-expanded="false" aria-label="Toggle navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+  <span class="navbar-toggler-icon"></span>
+</button>
+          <div class="collapse navbar-collapse" id="navbarCollapse">
+            <ul class="navbar-nav navbar-nav-scroll me-auto">
+  <li class="nav-item">
+    <a class="nav-link" href="./index.html"> 
+<span class="menu-text">Weekly</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="./dictionary.html"> 
+<span class="menu-text">Data Dictionary</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link active" href="./imgpe.html" aria-current="page"> 
+<span class="menu-text">iMGPE</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="./ref.html"> 
+<span class="menu-text">References</span></a>
+  </li>  
+</ul>
+          </div> <!-- /navcollapse -->
+            <div class="quarto-navbar-tools">
+</div>
+      </div> <!-- /container-fluid -->
+    </nav>
+</header>
+<!-- content -->
+<div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article page-navbar">
+<!-- sidebar -->
+<!-- margin-sidebar -->
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+        <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">On this page</h2>
+   
+  <ul>
+  <li><a href="#data-model" id="toc-data-model" class="nav-link active" data-scroll-target="#data-model">Data Model</a></li>
+  <li><a href="#gibbs-sampling-algorithm" id="toc-gibbs-sampling-algorithm" class="nav-link" data-scroll-target="#gibbs-sampling-algorithm">Gibbs Sampling Algorithm</a></li>
+  </ul>
+</nav>
+    </div>
+<!-- main -->
+<main class="content" id="quarto-document-content">
+
+<header id="title-block-header" class="quarto-title-block default">
+<div class="quarto-title">
+<h1 class="title">The iMGPE Algorithm</h1>
+</div>
+
+
+
+<div class="quarto-title-meta">
+
+    
+  
+    
+  </div>
+  
+
+
+</header>
+
+
+<section id="data-model" class="level2">
+<h2 class="anchored" data-anchor-id="data-model">Data Model</h2>
+<p>The basic data model of the Infinite Mixture of Gaussian Process Experts model is as follows. We have an <span class="math inline">\(n\times 1\)</span> continuous response vector <span class="math inline">\(y\)</span> and an <span class="math inline">\(n\times d\)</span> data matrix <span class="math inline">\(X\)</span>. The estimated value of a data point <span class="math inline">\(y_i\)</span> under the iMGPE model is the sum of the fitted estimates for that data point from all possible GP experts fit to subsets of the data containing <span class="math inline">\(y_i\)</span> and weighted by a Dirichlet process. Let <span class="math inline">\(z\)</span> represent a possible vector of cluster assignments and let <span class="math inline">\(z^{(k)}\)</span> be the <span class="math inline">\(k^{th}\)</span> element of some ordered list of all possible <span class="math inline">\(z\)</span>. Then <span class="math inline">\(j=1,\dots,J_k\)</span> index the clusters within <span class="math inline">\(z^{(k)}\)</span>. Let <span class="math inline">\(C_j^{(k)}\)</span> be the number of observations in cluster <span class="math inline">\(j\)</span> given assignment <span class="math inline">\(z^{(k)}\)</span>. Then we have as follows.</p>
+<p><span class="math display">\[y\sim \sum_{k=1}^{p(n)} \left[\prod_{j=1}^{J_k} N_{C_j^{(k)}}(0,\Sigma_{\theta_j}) \right] w_k\]</span> <span class="math display">\[w_k=P(z=z^{(k)}|\alpha,\phi)\]</span> where the <span class="math inline">\(w_z\)</span> are the marginal probabilities of a modified Chinese Restaurant Process that generates cluster assignments <span class="math inline">\(z\)</span> and <span class="math inline">\(p(n)\)</span> is the <a href="https://en.wikipedia.org/wiki/Partition_function_(number_theory)">partition function</a>. The CRP used here has been modified to depend on the input data <span class="math inline">\(X\)</span>. It is controlled by two parameters, <span class="math inline">\(\alpha\)</span> and <span class="math inline">\(\phi\)</span>, the first being the usual concentration parameter and the second controlling the cluster occupancy estimates. A more in-depth explanation of this CRP is provided in the iMGPE Algorithm section from last week. It should also be noted that there is no known closed form for <span class="math inline">\(w_k\)</span>. The closest I could find was the multivariate <a href="https://en.wikipedia.org/wiki/Ewens%27s_sampling_formula">Ewen’s distribution</a>, which describes the distribution on the set of <span class="math inline">\(p(n)\)</span> that arises from a regular Chinese Restaurant Process. However, it only accounts for the number of clusters of different sizes, and does not serve as a marginal distribution of <span class="math inline">\(z\)</span>.</p>
+<p>The full joint distribution, including the priors for all parameters, is as follows. Here, <span class="math inline">\(\Phi\)</span> is the pdf of a normal distribution.</p>
+<p><span class="math display">\[p(y,\theta,\phi,\alpha)=\left[ \sum_{k=1}^{p(n)} \left[\prod_{j=1}^{J_k} \Phi_{C_j^{(k)}}(0,\Sigma_{\theta_j}) \right] p(z(k)|\alpha,\phi)\right] p(\theta)p(\phi)p(\alpha)\]</span></p>
+<p>Alternatively, the model can be expressed in hierarchical terms where <span class="math inline">\(J_z\)</span> is the number of clusters in <span class="math inline">\(z\)</span> and <span class="math inline">\(C_{j,z}\)</span> is the number of observations in the <span class="math inline">\(j^{th}\)</span> cluster in <span class="math inline">\(z\)</span>.</p>
+<p><span class="math display">\[y|z\sim \prod_{j=1}^{J_z} N_{C_{j,z}}(0,\Sigma_{\theta_{j}})\]</span> <span class="math display">\[z|\alpha,\phi \sim MCRP(\alpha,\phi)\]</span></p>
+<p>Here, <span class="math inline">\(N_{C_j^{(z)}}(0,\Sigma_{\theta_j})\)</span> is the <span class="math inline">\(C_j^{(z)}\)</span>-dimensional multivariate normal distribution with covariance matrix <span class="math inline">\(\Sigma_{\theta_j}\)</span> defined by a Gaussian kernel function with parameters <span class="math inline">\(\theta_j\)</span>.</p>
+<p>Then <span class="math inline">\(\theta_j\)</span> is the parameter vector for the GP expert assigned to cluster <span class="math inline">\(j\)</span>, while <span class="math inline">\(\alpha\)</span> is the CRP concentration parameter and <span class="math inline">\(\phi\)</span> is the parameter vector for the CRP’s occupation number estimate. Note that <span class="math inline">\(\phi\)</span> is purely a vector of lengthscales for a Gaussian kernel. The priors on <span class="math inline">\(\theta\)</span>, <span class="math inline">\(\alpha\)</span>, and <span class="math inline">\(\phi\)</span> are described below.</p>
+<p><span class="math display">\[\theta_{j,k}\stackrel{ind}{\sim} Gamma(a_k,b_k) \text{ for } k=1,\dots,d\]</span> <span class="math display">\[\alpha\sim Inv.Gam(1,1),\text{   } \phi_k\stackrel{iid}{\sim} LogN(0,1) \text{ for } k=1,\dots,d\]</span> That is, each element <span class="math inline">\(k\)</span> of <span class="math inline">\(\theta_j\)</span> (the dimension of <span class="math inline">\(X\)</span> plus a noise parameter) is assigned a independent Gamma prior with fixed parameters <span class="math inline">\(a_k\)</span> and <span class="math inline">\(b_k\)</span>. Thus, every GP expert has the same prior on its noise parameter and so on. Similarly, each element of <span class="math inline">\(\phi\)</span> receives an independent log-normal prior.</p>
+<p>A third visualization of the model structure is a directed acyclic graph, shown below. Starting with the priors for <span class="math inline">\(\alpha\)</span>, <span class="math inline">\(\phi\)</span>, and <span class="math inline">\(\theta\)</span>, we can draw their values and generate our latent variables <span class="math inline">\(z\)</span> and our true variables <span class="math inline">\(y\)</span>. Note that <span class="math inline">\(\theta\)</span> depends on <span class="math inline">\(z\)</span> as well as its prior, as <span class="math inline">\(z\)</span> defines the number of clusters and thus the number of GP parameters to be drawn. The red and blue boxes indicate the quantities which are drawn multiple times for each of the <span class="math inline">\(n\)</span> data points or each of the <span class="math inline">\(J\)</span> clusters.</p>
+<div class="cell">
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="imgpe_files/figure-html/unnamed-chunk-1-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+</section>
+<section id="gibbs-sampling-algorithm" class="level2">
+<h2 class="anchored" data-anchor-id="gibbs-sampling-algorithm">Gibbs Sampling Algorithm</h2>
+<p>The modified CRP used in this algorithm is defined by <a href="https://www.tandfonline.com/doi/abs/10.1080/10618600.2000.10474879">“R. M. Neal”</a> (Algorithm 8 in that paper with <span class="math inline">\(m=1\)</span>) and works as follows:</p>
+<p>We represent the current cluster state with assignment labels <span class="math inline">\(z=(z_1,\dots,z_n)\)</span> and GP parameter vectors <span class="math inline">\(\theta_1,\dots,\theta_J\)</span> where <span class="math inline">\(J\)</span> is the number of clusters in the current state. For <span class="math inline">\(i=1,\dots,n\)</span>, repeat the following. Let <span class="math inline">\(J^{-i}\)</span> be the number of clusters in <span class="math inline">\(z\)</span> with point <span class="math inline">\(i\)</span> removed. Let <span class="math inline">\(\theta_{J^{-i}+1}\)</span> be a parameter vector drawn from its prior distribution, in this case <span class="math inline">\(Gamma^d(a,b)\)</span>. Draw a new value for <span class="math inline">\(z_i\)</span> with the following conditional probabilities:</p>
+<p><span class="math display">\[P(z_i=j|z_{-i},y_i,\dots)\propto \begin{cases}
+\frac{n-1}{n+\alpha-1}\frac{\sum_{i'\neq i,z_{i'}=j} K_{\phi}(X_i,X_{i'})}{\sum_{i'\neq i} K_{\phi}(X_i,X_{i'})} f(y_i|\theta_j) \text{ for } j=1,\dots,J^{-i}\\
+\frac{\alpha}{n+\alpha-1}f(y_i|\theta_{J^{-i}+1}) \text{ for } j=J^{-i}+1
+\end{cases}\]</span></p>
+<p>where <span class="math inline">\(f(y_i|\theta_j)\)</span> is the normal density of <span class="math inline">\(y_i\)</span> given the kriging equations with parameter vector <span class="math inline">\(\theta_j\)</span> defining the kernel function.</p>
+<p>I have implemented the Infinite Mixture of Gaussian Process Experts algorithm mostly as described by the authors Rasmussen and Ghahramani, though with a few alterations of my own which are noted below. First, I initialize indicator variables <span class="math inline">\(z\)</span> to a set of values. I generally start by assigning all points to a single cluster. I set gamma prior distributions on the lengthscale and nugget parameters of the GP experts, using the ‘darg’ and ‘garg’ functions of the package ‘laGP’ and set initial values for <span class="math inline">\(\alpha\)</span> and <span class="math inline">\(\phi\)</span>. This approach then iterates through the following MCMC algorithm.</p>
+<ol type="1">
+<li>Perform a Gibbs sampling sweep over the cluster assignment indicators, using the modified Chinese Restaurant Process described in the model explanation, to generate a new cluster assignment vector <span class="math inline">\(z\)</span>.</li>
+<li>Fit a Gaussian process expert to each cluster in <span class="math inline">\(z\)</span> and get ML estimates of each expert’s parameters <span class="math inline">\(\theta_j\)</span>. Note that this is not a sampling step but maximization.</li>
+<li>Sample the Dirichlet process concentration parameter, <span class="math inline">\(\alpha\)</span>, using quantile slice sampling with a <span class="math inline">\(Gamma(1,1)\)</span> proposal distribution. The posterior distribution of <span class="math inline">\(\alpha\)</span> we sample from is <span class="math display">\[p(\alpha|n, J)\propto \alpha^{J-3/2}\exp(-1/2\alpha)\Gamma(\alpha)/\Gamma(n+\alpha)\]</span></li>
+<li>Sample the other CRP parameter <span class="math inline">\(\phi\)</span> via random walk Monte Carlo. The random walk step uses a normal proposal distribution centered at the current value and with variance equal to <span class="math inline">\((2.38^2/d)H^{-1}\)</span>, <span class="math inline">\(d\)</span> being the number of inputs and <span class="math inline">\(H\)</span> the Hessian matrix of the distribution of <span class="math inline">\(\phi\)</span>. The posterior distribution of <span class="math inline">\(\phi\)</span> we are sampling from is <span class="math display">\[p(\phi|z,\alpha,\dots)\propto p(z|y,\phi,\alpha)p(\phi)\approx \left[\prod_{i=1}^n p(z_i|y,\phi,\alpha) \right] p(\phi)\]</span></li>
+<li>Repeat from step 1 until the MCMC output has converged.</li>
+</ol>
+
+
+</section>
+
+</main> <!-- /main -->
+<script id="quarto-html-after-body" type="application/javascript">
+window.document.addEventListener("DOMContentLoaded", function (event) {
+  const toggleBodyColorMode = (bsSheetEl) => {
+    const mode = bsSheetEl.getAttribute("data-mode");
+    const bodyEl = window.document.querySelector("body");
+    if (mode === "dark") {
+      bodyEl.classList.add("quarto-dark");
+      bodyEl.classList.remove("quarto-light");
+    } else {
+      bodyEl.classList.add("quarto-light");
+      bodyEl.classList.remove("quarto-dark");
+    }
+  }
+  const toggleBodyColorPrimary = () => {
+    const bsSheetEl = window.document.querySelector("link#quarto-bootstrap");
+    if (bsSheetEl) {
+      toggleBodyColorMode(bsSheetEl);
+    }
+  }
+  toggleBodyColorPrimary();  
+  const icon = "";
+  const anchorJS = new window.AnchorJS();
+  anchorJS.options = {
+    placement: 'right',
+    icon: icon
+  };
+  anchorJS.add('.anchored');
+  const isCodeAnnotation = (el) => {
+    for (const clz of el.classList) {
+      if (clz.startsWith('code-annotation-')) {                     
+        return true;
+      }
+    }
+    return false;
+  }
+  const onCopySuccess = function(e) {
+    // button target
+    const button = e.trigger;
+    // don't keep focus
+    button.blur();
+    // flash "checked"
+    button.classList.add('code-copy-button-checked');
+    var currentTitle = button.getAttribute("title");
+    button.setAttribute("title", "Copied!");
+    let tooltip;
+    if (window.bootstrap) {
+      button.setAttribute("data-bs-toggle", "tooltip");
+      button.setAttribute("data-bs-placement", "left");
+      button.setAttribute("data-bs-title", "Copied!");
+      tooltip = new bootstrap.Tooltip(button, 
+        { trigger: "manual", 
+          customClass: "code-copy-button-tooltip",
+          offset: [0, -8]});
+      tooltip.show();    
+    }
+    setTimeout(function() {
+      if (tooltip) {
+        tooltip.hide();
+        button.removeAttribute("data-bs-title");
+        button.removeAttribute("data-bs-toggle");
+        button.removeAttribute("data-bs-placement");
+      }
+      button.setAttribute("title", currentTitle);
+      button.classList.remove('code-copy-button-checked');
+    }, 1000);
+    // clear code selection
+    e.clearSelection();
+  }
+  const getTextToCopy = function(trigger) {
+      const codeEl = trigger.previousElementSibling.cloneNode(true);
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
+        }
+      }
+      return codeEl.innerText;
+  }
+  const clipboard = new window.ClipboardJS('.code-copy-button:not([data-in-quarto-modal])', {
+    text: getTextToCopy
+  });
+  clipboard.on('success', onCopySuccess);
+  if (window.document.getElementById('quarto-embedded-source-code-modal')) {
+    // For code content inside modals, clipBoardJS needs to be initialized with a container option
+    // TODO: Check when it could be a function (https://github.com/zenorocha/clipboard.js/issues/860)
+    const clipboardModal = new window.ClipboardJS('.code-copy-button[data-in-quarto-modal]', {
+      text: getTextToCopy,
+      container: window.document.getElementById('quarto-embedded-source-code-modal')
+    });
+    clipboardModal.on('success', onCopySuccess);
+  }
+    var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
+    var mailtoRegex = new RegExp(/^mailto:/);
+      var filterRegex = new RegExp('/' + window.location.host + '/');
+    var isInternal = (href) => {
+        return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
+    }
+    // Inspect non-navigation links and adorn them if external
+ 	var links = window.document.querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item):not(.quarto-navigation-tool):not(.about-link)');
+    for (var i=0; i<links.length; i++) {
+      const link = links[i];
+      if (!isInternal(link.href)) {
+        // undo the damage that might have been done by quarto-nav.js in the case of
+        // links that we want to consider external
+        if (link.dataset.originalHref !== undefined) {
+          link.href = link.dataset.originalHref;
+        }
+      }
+    }
+  function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
+    const config = {
+      allowHTML: true,
+      maxWidth: 500,
+      delay: 100,
+      arrow: false,
+      appendTo: function(el) {
+          return el.parentElement;
+      },
+      interactive: true,
+      interactiveBorder: 10,
+      theme: 'quarto',
+      placement: 'bottom-start',
+    };
+    if (contentFn) {
+      config.content = contentFn;
+    }
+    if (onTriggerFn) {
+      config.onTrigger = onTriggerFn;
+    }
+    if (onUntriggerFn) {
+      config.onUntrigger = onUntriggerFn;
+    }
+    window.tippy(el, config); 
+  }
+  const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+  for (var i=0; i<noterefs.length; i++) {
+    const ref = noterefs[i];
+    tippyHover(ref, function() {
+      // use id or data attribute instead here
+      let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+      try { href = new URL(href).hash; } catch {}
+      const id = href.replace(/^#\/?/, "");
+      const note = window.document.getElementById(id);
+      if (note) {
+        return note.innerHTML;
+      } else {
+        return "";
+      }
+    });
+  }
+  const xrefs = window.document.querySelectorAll('a.quarto-xref');
+  const processXRef = (id, note) => {
+    // Strip column container classes
+    const stripColumnClz = (el) => {
+      el.classList.remove("page-full", "page-columns");
+      if (el.children) {
+        for (const child of el.children) {
+          stripColumnClz(child);
+        }
+      }
+    }
+    stripColumnClz(note)
+    if (id === null || id.startsWith('sec-')) {
+      // Special case sections, only their first couple elements
+      const container = document.createElement("div");
+      if (note.children && note.children.length > 2) {
+        container.appendChild(note.children[0].cloneNode(true));
+        for (let i = 1; i < note.children.length; i++) {
+          const child = note.children[i];
+          if (child.tagName === "P" && child.innerText === "") {
+            continue;
+          } else {
+            container.appendChild(child.cloneNode(true));
+            break;
+          }
+        }
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(container);
+        }
+        return container.innerHTML
+      } else {
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(note);
+        }
+        return note.innerHTML;
+      }
+    } else {
+      // Remove any anchor links if they are present
+      const anchorLink = note.querySelector('a.anchorjs-link');
+      if (anchorLink) {
+        anchorLink.remove();
+      }
+      if (window.Quarto?.typesetMath) {
+        window.Quarto.typesetMath(note);
+      }
+      // TODO in 1.5, we should make sure this works without a callout special case
+      if (note.classList.contains("callout")) {
+        return note.outerHTML;
+      } else {
+        return note.innerHTML;
+      }
+    }
+  }
+  for (var i=0; i<xrefs.length; i++) {
+    const xref = xrefs[i];
+    tippyHover(xref, undefined, function(instance) {
+      instance.disable();
+      let url = xref.getAttribute('href');
+      let hash = undefined; 
+      if (url.startsWith('#')) {
+        hash = url;
+      } else {
+        try { hash = new URL(url).hash; } catch {}
+      }
+      if (hash) {
+        const id = hash.replace(/^#\/?/, "");
+        const note = window.document.getElementById(id);
+        if (note !== null) {
+          try {
+            const html = processXRef(id, note.cloneNode(true));
+            instance.setContent(html);
+          } finally {
+            instance.enable();
+            instance.show();
+          }
+        } else {
+          // See if we can fetch this
+          fetch(url.split('#')[0])
+          .then(res => res.text())
+          .then(html => {
+            const parser = new DOMParser();
+            const htmlDoc = parser.parseFromString(html, "text/html");
+            const note = htmlDoc.getElementById(id);
+            if (note !== null) {
+              const html = processXRef(id, note);
+              instance.setContent(html);
+            } 
+          }).finally(() => {
+            instance.enable();
+            instance.show();
+          });
+        }
+      } else {
+        // See if we can fetch a full url (with no hash to target)
+        // This is a special case and we should probably do some content thinning / targeting
+        fetch(url)
+        .then(res => res.text())
+        .then(html => {
+          const parser = new DOMParser();
+          const htmlDoc = parser.parseFromString(html, "text/html");
+          const note = htmlDoc.querySelector('main.content');
+          if (note !== null) {
+            // This should only happen for chapter cross references
+            // (since there is no id in the URL)
+            // remove the first header
+            if (note.children.length > 0 && note.children[0].tagName === "HEADER") {
+              note.children[0].remove();
+            }
+            const html = processXRef(null, note);
+            instance.setContent(html);
+          } 
+        }).finally(() => {
+          instance.enable();
+          instance.show();
+        });
+      }
+    }, function(instance) {
+    });
+  }
+      let selectedAnnoteEl;
+      const selectorForAnnotation = ( cell, annotation) => {
+        let cellAttr = 'data-code-cell="' + cell + '"';
+        let lineAttr = 'data-code-annotation="' +  annotation + '"';
+        const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+        return selector;
+      }
+      const selectCodeLines = (annoteEl) => {
+        const doc = window.document;
+        const targetCell = annoteEl.getAttribute("data-target-cell");
+        const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+        const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+        const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+        const lineIds = lines.map((line) => {
+          return targetCell + "-" + line;
+        })
+        let top = null;
+        let height = null;
+        let parent = null;
+        if (lineIds.length > 0) {
+            //compute the position of the single el (top and bottom and make a div)
+            const el = window.document.getElementById(lineIds[0]);
+            top = el.offsetTop;
+            height = el.offsetHeight;
+            parent = el.parentElement.parentElement;
+          if (lineIds.length > 1) {
+            const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+            const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+            height = bottom - top;
+          }
+          if (top !== null && height !== null && parent !== null) {
+            // cook up a div (if necessary) and position it 
+            let div = window.document.getElementById("code-annotation-line-highlight");
+            if (div === null) {
+              div = window.document.createElement("div");
+              div.setAttribute("id", "code-annotation-line-highlight");
+              div.style.position = 'absolute';
+              parent.appendChild(div);
+            }
+            div.style.top = top - 2 + "px";
+            div.style.height = height + 4 + "px";
+            div.style.left = 0;
+            let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+            if (gutterDiv === null) {
+              gutterDiv = window.document.createElement("div");
+              gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+              gutterDiv.style.position = 'absolute';
+              const codeCell = window.document.getElementById(targetCell);
+              const gutter = codeCell.querySelector('.code-annotation-gutter');
+              gutter.appendChild(gutterDiv);
+            }
+            gutterDiv.style.top = top - 2 + "px";
+            gutterDiv.style.height = height + 4 + "px";
+          }
+          selectedAnnoteEl = annoteEl;
+        }
+      };
+      const unselectCodeLines = () => {
+        const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+        elementsIds.forEach((elId) => {
+          const div = window.document.getElementById(elId);
+          if (div) {
+            div.remove();
+          }
+        });
+        selectedAnnoteEl = undefined;
+      };
+        // Handle positioning of the toggle
+    window.addEventListener(
+      "resize",
+      throttle(() => {
+        elRect = undefined;
+        if (selectedAnnoteEl) {
+          selectCodeLines(selectedAnnoteEl);
+        }
+      }, 10)
+    );
+    function throttle(fn, ms) {
+    let throttle = false;
+    let timer;
+      return (...args) => {
+        if(!throttle) { // first call gets through
+            fn.apply(this, args);
+            throttle = true;
+        } else { // all the others get throttled
+            if(timer) clearTimeout(timer); // cancel #2
+            timer = setTimeout(() => {
+              fn.apply(this, args);
+              timer = throttle = false;
+            }, ms);
+        }
+      };
+    }
+      // Attach click handler to the DT
+      const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+      for (const annoteDlNode of annoteDls) {
+        annoteDlNode.addEventListener('click', (event) => {
+          const clickedEl = event.target;
+          if (clickedEl !== selectedAnnoteEl) {
+            unselectCodeLines();
+            const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+            if (activeEl) {
+              activeEl.classList.remove('code-annotation-active');
+            }
+            selectCodeLines(clickedEl);
+            clickedEl.classList.add('code-annotation-active');
+          } else {
+            // Unselect the line
+            unselectCodeLines();
+            clickedEl.classList.remove('code-annotation-active');
+          }
+        });
+      }
+  const findCites = (el) => {
+    const parentEl = el.parentElement;
+    if (parentEl) {
+      const cites = parentEl.dataset.cites;
+      if (cites) {
+        return {
+          el,
+          cites: cites.split(' ')
+        };
+      } else {
+        return findCites(el.parentElement)
+      }
+    } else {
+      return undefined;
+    }
+  };
+  var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+  for (var i=0; i<bibliorefs.length; i++) {
+    const ref = bibliorefs[i];
+    const citeInfo = findCites(ref);
+    if (citeInfo) {
+      tippyHover(citeInfo.el, function() {
+        var popup = window.document.createElement('div');
+        citeInfo.cites.forEach(function(cite) {
+          var citeDiv = window.document.createElement('div');
+          citeDiv.classList.add('hanging-indent');
+          citeDiv.classList.add('csl-entry');
+          var biblioDiv = window.document.getElementById('ref-' + cite);
+          if (biblioDiv) {
+            citeDiv.innerHTML = biblioDiv.innerHTML;
+          }
+          popup.appendChild(citeDiv);
+        });
+        return popup.innerHTML;
+      });
+    }
+  }
+});
+</script>
+</div> <!-- /content -->
+
+
+
+
+</body></html>

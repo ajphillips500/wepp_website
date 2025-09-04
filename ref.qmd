@@ -1,0 +1,7 @@
+---
+title: "References"
+---
+
+M. Blei, D., & I. Frazier, P. (2010). Distance Dependent Chinese Restaurant Processes. Journal of Machine Learning Research. https://jmlr.org/papers/volume12/blei11a/blei11a.pdf
+
+Rasmussen, C. E., & Ghahramani, Z. (2001). Infinite mixtures of Gaussian process experts. Neural Information Processing Systems, 14, 881–888. http://learning.eng.cam.ac.uk/zoubin/papers/iMGPE.pdf

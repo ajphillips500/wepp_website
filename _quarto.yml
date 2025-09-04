@@ -1,0 +1,25 @@
+project:
+  type: website
+  output-dir: docs
+
+website:
+  title: "AJ Phillips Thesis Project"
+  navbar:
+    left:
+      - href: index.qmd
+        text: Weekly
+      - href: dictionary.qmd
+        text: Data Dictionary
+      - href: imgpe.qmd
+        text: iMGPE
+      - href: ref.qmd
+        text: References
+
+format:
+  html:
+    theme: cosmo
+    css: styles.css
+    toc: true
+
+editor: visual
+

@@ -1,0 +1,29 @@
+---
+title: "Data Dictionary"
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = FALSE)
+options(tinytex.verbose = TRUE)
+```
+
+## Motorcycle Data Set
+
+This data set contains the acceleration of a crash test dummy at a sequence of points in time as it rides a motorcycle into an obstacle.
+
+```{r}
+knitr::include_graphics("Reports/motorcycle_data.png")
+```
+
+## Simulated Data Set 1
+
+Column $x$ is a random draw from a uniform distribution on the interval $(0,5)$. Column $ytrue$ is generated from the $x$ values with the following function:
+$$f(x)= \begin{cases}
+\frac{7}{3}-\frac{2}{3}x\text{ if } x\leq 2\\
+\cos(\pi x)\text{ if } x>2
+\end{cases}$$
+Column $y$ is the $ytrue$ column plus $N(\mu=0,\sigma^2=0.04)$ random noise.
+
+```{r}
+knitr::include_graphics("Reports/simulated_data1.png")
+```
