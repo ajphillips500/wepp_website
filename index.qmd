@@ -7,6 +7,50 @@ knitr::opts_chunk$set(echo = FALSE)
 options(tinytex.verbose = TRUE)
 ```
 
+## September 11, 2025
+
+### Summary
+
+This week I studied the Monte Carlo Expectation Maximization algorithm and compared it to my variant of iMGPE with MLE updates on $\theta$. The two algorithms are actually very similar, if not identical, but serve different theoretical purposes. 
+
+I also lay out several new research concepts on the "Research Plans" page.
+
+### iMGPE and MCEM
+
+While the authors of the iMGPE algorithm formulated it in purely Bayesian terms, I had coded a variation of it that performed MLE updates on the GP parameters while keeping to sampling steps for all other parameters. This raises the question of whether such an approach has any interesting properties or any similarities to more established methods.
+
+The most similar existing algorithm to this Monte Carlo plus Maximum Likelihood approach is the Monte Carlo Expectation Maximization algorithm or MCEM. The Expectation Maximization algorithm is an iterative process to find MLE or MAP estimates of data parameters. It works by assuming that your response $Y$ and your observed data $X$ can be supplemented by some unobserved data (or latent variables) $Z$ that, in conjunction with $X$, helps to explain $Y$ via a vector of unknown parameters $\theta$. The algorithm then iterates between an expectation step, in which we define an objective function as a conditional expectation, and a maximization step, in which we maximize this function over $\theta$. Given $\theta^{(k-1)}$ as the previous value for $\theta$, the k-th update steps are to define $Q(\theta|\theta^{(k-1)})$ and then maximize it.
+
+The E step:
+
+$$Q(\theta | \theta^{(k-1)}) = E\left[\log(p(\theta|Z,Y)p(Z|\theta^{(k-1)},Y))\right]$$ 
+
+The M step:
+
+$$\theta^{(k)} = \text{argmax}_{\theta} \text{ } Q(\theta | \theta^{(k-1)})$$
+
+The MCEM algorithm is a variation of EM where the conditional expectation of the E step is replaced with a Monte Carlo average. At each iteration, the researcher draws a random sample from $p(Z|\theta^{(k-1)},Y)$ and defines
+
+$$\hat Q(\theta| \theta^{(k-1)}) =\sum_{b=1}^B w_b\log(p(\theta|Z_b,Y)p(Z_b|\theta^{(k-1)},Y))$$
+
+based on weights $w_b$ (for iid sampling, we usually take all $w_b=1/B$) and maximize it as normal.
+
+There are some major differences between MCEM and MC+ML. MCEM produces a sequence of parameter values that asymptotically approach the MLE. MCEM is not really a Bayesian method as $\theta$ is not treated as a random variable, has no prior, and is estimated via a point value rather than a posterior distribution. MC+ML (in the context of the iMGPE algorithm) is meant to produce samples from the model's joint posterior distribution. It is partially Bayesian as the non-GP parameters do have priors and posteriors.
+
+However, there are also significant similarities. If we took the iMGPE model, defining the spatial data $X$ as our observed data, the cluster assignment structure $z$ as our unobserved data (perhaps in combination with $\alpha$ and $\phi$), and the GP expert parameters $\theta$ as our parameters of interest, then the resulting MCEM algorithm would be very similar to our MC+ML algorithm. At each iteration of MCEM, we draw a sample of size $B=1$ from the conditional distributions of $\alpha$, $\phi$, and $z$ and then maximize $\log(p(\theta|Z,y)p(Z|\theta^{(k-1)},y))$ This is equivalent to one iteration of iMGPE, which maximizes $p(\theta|Z,y)$.
+
+The MC+ML method can be considered an MCEM algorithm, but that leaves the question of whether approaching the model in this way is really useful or desirable. The MCEM algorithm is intended to find MLEs for some parameter vector of interest. Here, we are less interested in the parameters of the GP experts and more in the posterior and posterior predictive distributions for $y$.
+
+### DD-CRP iMGPE Implementation
+
+I have previously developed code for a version of the iMGPE algorithm that uses a Distance Dependent Chinese Restaurant Process for its clustering step. I trained it for $5000$ iterations on the simulated data set 1 and examined its output. This method tended to put all points into a single cluster, causing its $\alpha$ parameter to be very small and its $\phi$ parameter to grow without converging. Presumably, $\phi$ increased out of control since it has no significance in the context of a single cluster.
+
+A plot of the true and estimated functions is shown below. The credible interval for the estimate is not shown as the data was almost always in a single cluster and thus there is no uncertainty in the estimate.
+
+```{r}
+knitr::include_graphics('Reports/plot4-7-31-25.png')
+```
+
 ## August 28, 2025
 
 ### Summary
@@ -17,14 +61,11 @@ This week I studied how the iMGPE algorithm behaves when the value of $\alpha$ i
 
 Let $\omega=\{\alpha,\phi,z,\theta\}$ be the set of all model parameters. Suppose we fit the model to input data $x$ and response $y$ and now wish to predict some new response value $y^*$ given the corresponding input data point $x^*$. Then the predictive posterior distribution is
 
-$$p_{x,x^*}(y^*|y)=\int_{\Omega} p_{x^*}(y^*|\omega)p_x(\omega|y) d\omega$$ 
+$$p_{x,x^*}(y^*|y)=\int_{\Omega} p_{x^*}(y^*|\omega)p_x(\omega|y) d\omega$$
 
 where $p_{x^*}(y^*|\omega)$ is the pdf of $y^*$ given the model parameters and the new data $x^*$ and $p_x(\omega|y)$ is the posterior distribution of the model parameters given our training data. The pdf of $y^*$ would then be a weighted sum of the expert predictions.
 
-$$p(y^*|x^*,\Omega) =\sum_{j=1}^J N(\mu_j^*,\sigma_j^{2*})P(z_{y^*}=j)$$
-The expert predictions are weighted by the probability of $(x^*,y^*)$ being assigned to each expert by our clustering process. Also 
-$$\mu_j^*=K_{\theta_j}(x^*,X^{(j)})^TK_{\theta_j}^{-1}y^{(j)}\text{ and } \sigma_j^*=K_{\theta_j}(x^*,x^*)-K_{\theta_j}(x^*,X^{(j)})^T  K_{\theta_j}^{-1} K_{\theta_j}(x^*,X^{(j)})$$ 
-where $K_{\theta_j}$ is the covariance matrix based on parameters $\theta_j$ and $X^{(j)}\subset X$ and $y^{(j)} \subset y$ are the data and response values associated with cluster $j$.
+$$p(y^*|x^*,\Omega) =\sum_{j=1}^J N(\mu_j^*,\sigma_j^{2*})P(z_{y^*}=j)$$ The expert predictions are weighted by the probability of $(x^*,y^*)$ being assigned to each expert by our clustering process. Also $$\mu_j^*=K_{\theta_j}(x^*,X^{(j)})^TK_{\theta_j}^{-1}y^{(j)}\text{ and } \sigma_j^*=K_{\theta_j}(x^*,x^*)-K_{\theta_j}(x^*,X^{(j)})^T  K_{\theta_j}^{-1} K_{\theta_j}(x^*,X^{(j)})$$ where $K_{\theta_j}$ is the covariance matrix based on parameters $\theta_j$ and $X^{(j)}\subset X$ and $y^{(j)} \subset y$ are the data and response values associated with cluster $j$.
 
 Our posterior distribution is proportional to the likelihood times the priors. However, it cannot be calculated directly since the component $p(z|\alpha,\phi)$ does not have a known closed form.
 
@@ -34,7 +75,7 @@ $$p(\Omega|X,y)\propto p(y|z,\theta)p(z|\alpha,\phi)\times p(\theta)p(\alpha)p(\
 
 To better understand the influence of the parameter $\alpha$ on the iMGPE algorithm, I ran the algorithm while holding $\alpha$ fixed at values of $1$, $5$, and $25$ across iterations, while allowing other paramters to vary. This was repeated for the MLE method and the slice sampling methods for fitting Gaussian process experts.
 
-Below are the trace plots of $\phi$ for the MLE method with $\alpha$ fixed at values of $1$, $5$, and $25$. 
+Below are the trace plots of $\phi$ for the MLE method with $\alpha$ fixed at values of $1$, $5$, and $25$.
 
 ```{r}
 knitr::include_graphics('Reports2/plot2-8-21-25.png')
@@ -42,7 +83,7 @@ knitr::include_graphics('Reports2/plot4-8-21-25.png')
 knitr::include_graphics('Reports2/plot10-8-21-25.png')
 ```
 
-Below are plotted credible intervals for the fitted functions for each level of $\alpha$.  
+Below are plotted credible intervals for the fitted functions for each level of $\alpha$.
 
 ```{r}
 knitr::include_graphics('Reports2/plot1-8-21-25.png')
@@ -70,7 +111,7 @@ knitr::include_graphics('Reports2/plot11-8-21-25.png')
 
 For the slice method, the average number of clusters given an $\alpha$ values of $1$, $5$, and $25$ are $7.6$, $9.3$, and $11.2$.
 
-Prior to this experiment, I suspected that the biggest influence on the predictive accuracy of the iMGPE algorithm was the number of clusters it generated, with fewer clusters resulting in greater accuracy. Then $\alpha$ would be the single most influential parameter, as it has a large influence on the number of clusters. This has been partially borne out, as the number of clusters does increase and accuracy does decrease as $\alpha$ increases. 
+Prior to this experiment, I suspected that the biggest influence on the predictive accuracy of the iMGPE algorithm was the number of clusters it generated, with fewer clusters resulting in greater accuracy. Then $\alpha$ would be the single most influential parameter, as it has a large influence on the number of clusters. This has been partially borne out, as the number of clusters does increase and accuracy does decrease as $\alpha$ increases.
 
 However, the GP fitting method also seems to have a major impact on both the number of clusters and predictive accuracy. For $\alpha=25$ the MLE method resulted in almost four times as many clusters on average as the slice method. Additionally, the MLE method was much more accurate that the slice sampling method even for $\alpha=1$, when both methods had roughly the same average number of clusters. Further investigation is needed to understand how accuracy is affected by the model parameters and structure and how it can be maximized.
 
@@ -84,14 +125,11 @@ This week I attempted to mathematically derive the posterior predictive distribu
 
 Let $\Omega=\{\alpha,\phi,z,\theta\}$ be the set of all model parameters. Suppose we fit the model to input data $X$ and response $y$ and now wish to predict some new response value $y^*$ given the corresponding input data point $x^*$. Then the predictive posterior distribution is
 
-$$p(y^*|x^*,X,y)=\int_{\Omega} p(y^*|x^*,\Omega)p(\Omega|X,y) d\Omega$$ 
+$$p(y^*|x^*,X,y)=\int_{\Omega} p(y^*|x^*,\Omega)p(\Omega|X,y) d\Omega$$
 
 where $p(y^*|x^*,\Omega)$ is the pdf of $y^*$ given the model parameters and the new data $x^*$ and $p(\Omega|X,y)$ is the posterior distribution of the model parameters given our training data. The pdf of $y^*$ would then be a weighted sum of the expert predictions.
 
-$$p(y^*|x^*,\Omega) =\sum_{j=1}^J N(\mu_j^*,\sigma_j^{2*})P(z_{y^*}=j)$$
-The expert predictions are weighted by the probability of $(x^*,y^*)$ being assigned to each expert by our clustering process. Also 
-$$\mu_j^*=K(x^*,X^{(j)})^TK^{-1}y^{(j)}\text{ and } \sigma_j^*=K(x^*,x^*)-K(x^*,X^{(j)})^T K^{-1}K(x^*,X^{(j)})$$ 
-where $K$ is the covariance matrix based on parameters $\theta_j$ and $X^{(j)}\subset X$ and $y^{(j)} \subset y$ are the data and response values associated with cluster $j$.
+$$p(y^*|x^*,\Omega) =\sum_{j=1}^J N(\mu_j^*,\sigma_j^{2*})P(z_{y^*}=j)$$ The expert predictions are weighted by the probability of $(x^*,y^*)$ being assigned to each expert by our clustering process. Also $$\mu_j^*=K(x^*,X^{(j)})^TK^{-1}y^{(j)}\text{ and } \sigma_j^*=K(x^*,x^*)-K(x^*,X^{(j)})^T K^{-1}K(x^*,X^{(j)})$$ where $K$ is the covariance matrix based on parameters $\theta_j$ and $X^{(j)}\subset X$ and $y^{(j)} \subset y$ are the data and response values associated with cluster $j$.
 
 Our posterior distribution is proportional to the likelihood times the priors. However, it cannot be calculated directly since the component $p(z|\alpha,\phi)$ does not have a known closed form.
 
@@ -136,8 +174,7 @@ This week I continued my research into how best to make posterior predictions us
 
 Let $\Omega=\{\alpha,\phi,z,\theta\}$ be the set of all model parameters. Then the predictive posterior distribution is
 
-$$p(y^*)=\int_{\Omega} p(y^*|x^*,\Omega)p(\Omega|X,y) d\Omega$$ 
-$$=\int_{\Omega} \left[\sum_{j=1}^J N(\mu^*,\sigma^{2*})P(z_{y^*}=j) \right] p(\theta|z,X,y)p(z|\alpha,\phi,X) p(\alpha)p(\phi)p(\theta) d\Omega$$
+$$p(y^*)=\int_{\Omega} p(y^*|x^*,\Omega)p(\Omega|X,y) d\Omega$$ $$=\int_{\Omega} \left[\sum_{j=1}^J N(\mu^*,\sigma^{2*})P(z_{y^*}=j) \right] p(\theta|z,X,y)p(z|\alpha,\phi,X) p(\alpha)p(\phi)p(\theta) d\Omega$$
 
 where the component in brackets is a weighted sum of each experts prediction and the component outside the brackets is the posterior density of the model parameters. The expert predictions are weighted by the probability of $(x^*,y^*)$ being assigned to each expert by our clustering process. Also $$\mu_j^*=K(x^*,X^{(j)})^TK^{-1}y^{(j)}\text{ and } \sigma_j^*=K(x^*,x^*)-K(x^*,X^{(j)})^T K^{-1}K(x^*,X^{(j)})$$ where $K$ is the covariance matrix based on parameters $\theta_j$ and $X^{(j)}\subset X$ and $y^{(j)} \subset y$ are the data and response values associated with cluster $j$.
 

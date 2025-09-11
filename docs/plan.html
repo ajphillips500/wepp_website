@@ -67,6 +67,35 @@ ul.task-list li input[type="checkbox"] {
   }
 }</script>
 
+  <script src="https://cdnjs.cloudflare.com/polyfill/v3/polyfill.min.js?features=es6"></script>
+  <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
+
+<script type="text/javascript">
+const typesetMath = (el) => {
+  if (window.MathJax) {
+    // MathJax Typeset
+    window.MathJax.typeset([el]);
+  } else if (window.katex) {
+    // KaTeX Render
+    var mathElements = el.getElementsByClassName("math");
+    var macros = [];
+    for (var i = 0; i < mathElements.length; i++) {
+      var texText = mathElements[i].firstChild;
+      if (mathElements[i].tagName == "SPAN") {
+        window.katex.render(texText.data, mathElements[i], {
+          displayMode: mathElements[i].classList.contains('display'),
+          throwOnError: false,
+          macros: macros,
+          fleqn: false
+        });
+      }
+    }
+  }
+}
+window.Quarto = {
+  typesetMath
+};
+</script>
 
 <link rel="stylesheet" href="styles.css">
 </head>
@@ -119,8 +148,14 @@ ul.task-list li input[type="checkbox"] {
 <div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article page-navbar">
 <!-- sidebar -->
 <!-- margin-sidebar -->
-    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar zindex-bottom">
-        
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+        <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">On this page</h2>
+   
+  <ul>
+  <li><a href="#chapter-concepts" id="toc-chapter-concepts" class="nav-link active" data-scroll-target="#chapter-concepts">Chapter Concepts</a></li>
+  </ul>
+</nav>
     </div>
 <!-- main -->
 <main class="content" id="quarto-document-content">
@@ -144,11 +179,18 @@ ul.task-list li input[type="checkbox"] {
 </header>
 
 
-<p>First idea: Compare the fully Bayesian version of iMGPE described by Rasmussen et al.&nbsp;with the partially Bayesian version I have used where the parameters of the GP experts are fit with maximum likelihood estimation. Compare their theoretical properties and evaluate the accuracy and precision of the estimates of each.</p>
-<p>Second idea: Replace the Modified Chinese Restaurant Process presented by the authors with another, better defined, clustering step such as the Distance Dependent CRP presented by Blei and Frazier. Compare the theoretical tractability and theoretical properties of each distribution.</p>
-<p>Third idea: Modify the clustering step or the GP expert step of the iMGPE algorithm to accept categorical variables as covariates. Experiment with different approaches to find the most reliable and computationally efficient method of incorporating categorical covariate information.</p>
+<section id="chapter-concepts" class="level1">
+<h1>Chapter Concepts</h1>
+<p>1: Compare the fully Bayesian version of iMGPE described by Rasmussen et al.&nbsp;with the partially Bayesian version I have used where the parameters of the GP experts are fit with maximum likelihood estimation. Compare their theoretical properties and evaluate the accuracy and precision of the estimates of each.</p>
+<p>2: Replace the Modified Chinese Restaurant Process presented by the authors with another, better defined, clustering step such as the Distance Dependent CRP presented by Blei and Frazier. Compare the theoretical tractability and theoretical properties of each distribution.</p>
+<p>3: Modify the clustering step or the GP expert step of the iMGPE algorithm to accept categorical variables as covariates. Experiment with different approaches to find the most reliable and computationally efficient method of incorporating categorical covariate information.</p>
+<p>4: Modify the iMGPE algorithm to handle very large data sets (large <span class="math inline">\(n\)</span>). In theory, iMGPE should already handle this by partitioning the data. The authors supplement this with the rather brute force suggestion of simply forbidding the construction of clusters of size greater than some threshold. We could study the effectiveness of the current algorithm and explore alternative methods of restricting maximum cluster size or requiring a minimum number of clusters. Another direction is to include big data methods such as Vecchia approximation in the fitting of GP experts, so that we can handle very large clusters.</p>
+<p>5: Incorporate deep GP experts into the iMGPE algorithm. I am of two minds regarding the utility of this modification. The practical benefit of deep GPs is that multiple layers of GPs can fit to non-Gaussian models, handling data features like outliers, discontinuities, and heteroskedasticity better than a single GP. The iMGPE algorithm was already supposed to help with these same issues by partitioning the data in each iteration into clusters so that the data in each cluster is appropriate for a single GP. On the other hand, it is not certain that iMGPE is as effective at this as deep GPs are or that we could not improve both methods by combining them.</p>
+<p>6: Modify the iMGPE algorithm to include a variable selection step. This is often done in a Bayesian way by using a vector of Bernoulli parameters <span class="math inline">\(\pi_{1:p}= (\pi_1,\dots, \pi_p)\sim \prod_{j=1}^p Bern(\gamma_j)\)</span> to represent which of <span class="math inline">\(p\)</span> variables are selected. My first thought was to draw a new instance of <span class="math inline">\(\pi_{1:p}\)</span> for each cluster so that we could let different variables be relevant in different parts of the data. However, as clusters do not carry over between iterations of the algorithm, we would need to make sure the conditional distributions for the <span class="math inline">\(\gamma_j\)</span> are dependent on the input values.</p>
+<p>7: Modify the iMGPE algorithm to accept functional inputs or outputs. Identify or develop a reasonable method of measuring the distance between two functions and of clustering similar functions. Consider whether functional inputs should be handled differently for the purposes of clustering and GP expert sampling.</p>
 
 
+</section>
 
 </main> <!-- /main -->
 <script id="quarto-html-after-body" type="application/javascript">

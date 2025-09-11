@@ -2,8 +2,18 @@
 title: "Research Plan"
 ---
 
-First idea: Compare the fully Bayesian version of iMGPE described by Rasmussen et al. with the partially Bayesian version I have used where the parameters of the GP experts are fit with maximum likelihood estimation.  Compare their theoretical properties and evaluate the accuracy and precision of the estimates of each.
+# Chapter Concepts
 
-Second idea: Replace the Modified Chinese Restaurant Process presented by the authors with another, better defined, clustering step such as the Distance Dependent CRP presented by Blei and Frazier.  Compare the theoretical tractability and theoretical properties of each distribution.
+1: Compare the fully Bayesian version of iMGPE described by Rasmussen et al. with the partially Bayesian version I have used where the parameters of the GP experts are fit with maximum likelihood estimation.  Compare their theoretical properties and evaluate the accuracy and precision of the estimates of each.
 
-Third idea: Modify the clustering step or the GP expert step of the iMGPE algorithm to accept categorical variables as covariates.  Experiment with different approaches to find the most reliable and computationally efficient method of incorporating categorical covariate information.
+2: Replace the Modified Chinese Restaurant Process presented by the authors with another, better defined, clustering step such as the Distance Dependent CRP presented by Blei and Frazier.  Compare the theoretical tractability and theoretical properties of each distribution.
+
+3: Modify the clustering step or the GP expert step of the iMGPE algorithm to accept categorical variables as covariates.  Experiment with different approaches to find the most reliable and computationally efficient method of incorporating categorical covariate information.
+
+4: Modify the iMGPE algorithm to handle very large data sets (large $n$). In theory, iMGPE should already handle this by partitioning the data. The authors supplement this with the rather brute force suggestion of simply forbidding the construction of clusters of size greater than some threshold. We could study the effectiveness of the current algorithm and explore alternative methods of restricting maximum cluster size or requiring a minimum number of clusters. Another direction is to include big data methods such as Vecchia approximation in the fitting of GP experts, so that we can handle very large clusters.
+
+5: Incorporate deep GP experts into the iMGPE algorithm. I am of two minds regarding the utility of this modification. The practical benefit of deep GPs is that multiple layers of GPs can fit to non-Gaussian models, handling data features like outliers, discontinuities, and heteroskedasticity better than a single GP. The iMGPE algorithm was already supposed to help with these same issues by partitioning the data in each iteration into clusters so that the data in each cluster is appropriate for a single GP. On the other hand, it is not certain that iMGPE is as effective at this as deep GPs are or that we could not improve both methods by combining them.
+
+6: Modify the iMGPE algorithm to include a variable selection step. This is often done in a Bayesian way by using a vector of Bernoulli parameters $\pi_{1:p}= (\pi_1,\dots, \pi_p)\sim \prod_{j=1}^p Bern(\gamma_j)$ to represent which of $p$ variables are selected. My first thought was to draw a new instance of $\pi_{1:p}$ for each cluster so that we could let different variables be relevant in different parts of the data. However, as clusters do not carry over between iterations of the algorithm, we would need to make sure the conditional distributions for the $\gamma_j$ are dependent on the input values.
+
+7: Modify the iMGPE algorithm to accept functional inputs or outputs. Identify or develop a reasonable method of measuring the distance between two functions and of clustering similar functions. Consider whether functional inputs should be handled differently for the purposes of clustering and GP expert sampling.
