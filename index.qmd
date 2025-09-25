@@ -7,7 +7,7 @@ knitr::opts_chunk$set(echo = FALSE)
 options(tinytex.verbose = TRUE)
 ```
 
-## September 18, 2025
+## September 25, 2025
 
 ### Summary
 
@@ -29,7 +29,7 @@ This week I examined a paper by Nicholas Foti and Sinead Williamson titled [A Su
 
 $$P(Z_1=z_1, Z_2=z_2,\dots, Z_n=z_n) = \int \prod_{i=1}^n Q_{\theta}(Z_i=z_i) p(d\theta)$$
 
-Where $\{Q_{\theta}, \theta\in \Theta\}$ is a family of conditional distributions and $p(d\theta)$ is a probability measure over $\theta$ (which could be a pdf or pmf) called the de Finetti mixing measure.
+Where $\{Q_{\theta}, \theta\in \Theta\}$ is a family of conditional distributions and $p(d\theta)$ is a distribution over $\Theta$ called the de Finetti mixing measure.
 
 For example, taking the de Finetti mixing measure to be the Dirichlet distribution, then it generates a finite vector of locations and weights $\theta$, which defines a multinomial distribution $Q_{\theta}$ which generates new observations of $Z$, which in this case is a random partition over $n$ points. In practice we often integrate over the de Finetti mixing measure, dealing only with the predictive distribution $p(Z_{n+1}|Z_1,\dots, Z_n)$. Here, 
 $$p(Z_{n+1}=\theta_k| Z_{1:n})= \begin{cases}
@@ -39,7 +39,9 @@ $$p(Z_{n+1}=\theta_k| Z_{1:n})= \begin{cases}
 
 Where $n_k$ is the number of points assigned to cluster $k$.
 
-Dependence on covariates can be injected into this process at several different points. It can be added to the de Finetti mixture measure, or to the conditional distributions that generate observations or directly into the predictive distribution of new data points in $Z$.
+Dependence on covariates can be injected into this process at several different points. It can be added to the de Finetti mixture measure, or to the marginal distributions $Q_{\theta},$ or directly into the predictive distribution of new data points in $Z$. Note that the de Finetti mixture measure is a discrete distribution, so it is defined by the locations of its point masses and the weights or probabilities associated with each location. Covariates can be included to induce dependence either among the weights or among the locations of the point masses.
+
+The authors recommend different dependence strategies depending on how you expect to see covariates influence your data. If the values of some parameters are expected to change with a covariate, then the locations of the de Finetti mixture measure can be made dependent while its weights are held constant. If you expect the proportions of the latent components to vary across the covariate space, then holding the locations fixed while the weights are made dependent is appropriate. Lastly, if you expect that observations will be similar to observations at nearby covariates, then introducing dependence through the marginal distributions $Q_{\theta}$ or the predictive distributions $p(Z_i|Z_{j\neq i})$ is the best way to accomplish this.
 
 The authors discuss the Distance Dependent CRP as an example of covariate dependence through the predictive distribution. They note that it is very flexible, allowing for the modeling of many relationships between data points, but lacks the property of marginal invariance, meaning that marginalizing over a given data point results in a different distribution than if that point was not included in the model at all.
 

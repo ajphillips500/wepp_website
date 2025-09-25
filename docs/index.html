@@ -153,7 +153,7 @@ window.Quarto = {
     <h2 id="toc-title">On this page</h2>
    
   <ul>
-  <li><a href="#september-18-2025" id="toc-september-18-2025" class="nav-link active" data-scroll-target="#september-18-2025">September 18, 2025</a>
+  <li><a href="#september-25-2025" id="toc-september-25-2025" class="nav-link active" data-scroll-target="#september-25-2025">September 25, 2025</a>
   <ul class="collapse">
   <li><a href="#summary" id="toc-summary" class="nav-link" data-scroll-target="#summary">Summary</a></li>
   <li><a href="#imgpe-em-and-mcem" id="toc-imgpe-em-and-mcem" class="nav-link" data-scroll-target="#imgpe-em-and-mcem">iMGPE-EM and MCEM</a></li>
@@ -433,8 +433,8 @@ window.Quarto = {
 </header>
 
 
-<section id="september-18-2025" class="level2">
-<h2 class="anchored" data-anchor-id="september-18-2025">September 18, 2025</h2>
+<section id="september-25-2025" class="level2">
+<h2 class="anchored" data-anchor-id="september-25-2025">September 25, 2025</h2>
 <section id="summary" class="level3">
 <h3 class="anchored" data-anchor-id="summary">Summary</h3>
 <p>This week I concluded that iMGPE algorithm with ML estimation of the Gaussian process experts is an EM algorithm that I named iMGPE-EM, while iMGPE refers to the fully Bayesian implementation described by Rasmussen and Ghahramani. I have updated the terminology used in the past few weeks accordingly.</p>
@@ -450,13 +450,14 @@ window.Quarto = {
 <h3 class="anchored" data-anchor-id="clustering-papers">Clustering Papers</h3>
 <p>This week I examined a paper by Nicholas Foti and Sinead Williamson titled <a href="https://www.researchgate.net/publication/233720862_A_Survey_of_Non-Exchangeable_Priors_for_Bayesian_Nonparametric_Models">A Survey of Non-Exchangeable Priors for Bayesian Nonparametric Models.</a> The authors note that the construction of a Bayesian nonparametric model for exchangeable data generally works as follows. Given exchangeable data <span class="math inline">\(Z_{1:n}\)</span> controlled by a potentially infinite vector of parameters <span class="math inline">\(\theta\)</span>, de Finetti’s Theorem tells us that</p>
 <p><span class="math display">\[P(Z_1=z_1, Z_2=z_2,\dots, Z_n=z_n) = \int \prod_{i=1}^n Q_{\theta}(Z_i=z_i) p(d\theta)\]</span></p>
-<p>Where <span class="math inline">\(\{Q_{\theta}, \theta\in \Theta\}\)</span> is a family of conditional distributions and <span class="math inline">\(p(d\theta)\)</span> is a probability measure over <span class="math inline">\(\theta\)</span> (which could be a pdf or pmf) called the de Finetti mixing measure.</p>
+<p>Where <span class="math inline">\(\{Q_{\theta}, \theta\in \Theta\}\)</span> is a family of conditional distributions and <span class="math inline">\(p(d\theta)\)</span> is a distribution over <span class="math inline">\(\Theta\)</span> called the de Finetti mixing measure.</p>
 <p>For example, taking the de Finetti mixing measure to be the Dirichlet distribution, then it generates a finite vector of locations and weights <span class="math inline">\(\theta\)</span>, which defines a multinomial distribution <span class="math inline">\(Q_{\theta}\)</span> which generates new observations of <span class="math inline">\(Z\)</span>, which in this case is a random partition over <span class="math inline">\(n\)</span> points. In practice we often integrate over the de Finetti mixing measure, dealing only with the predictive distribution <span class="math inline">\(p(Z_{n+1}|Z_1,\dots, Z_n)\)</span>. Here, <span class="math display">\[p(Z_{n+1}=\theta_k| Z_{1:n})= \begin{cases}
 \frac{n_k}{n+\alpha} \text{ if } n_k&gt;0 \\
 \frac{\alpha}{n+\alpha} \text{ otherwise}
 \end{cases}\]</span></p>
 <p>Where <span class="math inline">\(n_k\)</span> is the number of points assigned to cluster <span class="math inline">\(k\)</span>.</p>
-<p>Dependence on covariates can be injected into this process at several different points. It can be added to the de Finetti mixture measure, or to the conditional distributions that generate observations or directly into the predictive distribution of new data points in <span class="math inline">\(Z\)</span>.</p>
+<p>Dependence on covariates can be injected into this process at several different points. It can be added to the de Finetti mixture measure, or to the marginal distributions <span class="math inline">\(Q_{\theta},\)</span> or directly into the predictive distribution of new data points in <span class="math inline">\(Z\)</span>. Note that the de Finetti mixture measure is a discrete distribution, so it is defined by the locations of its point masses and the weights or probabilities associated with each location. Covariates can be included to induce dependence either among the weights or among the locations of the point masses.</p>
+<p>The authors recommend different dependence strategies depending on how you expect to see covariates influence your data. If the values of some parameters are expected to change with a covariate, then the locations of the de Finetti mixture measure can be made dependent while its weights are held constant. If you expect the proportions of the latent components to vary across the covariate space, then holding the locations fixed while the weights are made dependent is appropriate. Lastly, if you expect that observations will be similar to observations at nearby covariates, then introducing dependence through the marginal distributions <span class="math inline">\(Q_{\theta}\)</span> or the predictive distributions <span class="math inline">\(p(Z_i|Z_{j\neq i})\)</span> is the best way to accomplish this.</p>
 <p>The authors discuss the Distance Dependent CRP as an example of covariate dependence through the predictive distribution. They note that it is very flexible, allowing for the modeling of many relationships between data points, but lacks the property of marginal invariance, meaning that marginalizing over a given data point results in a different distribution than if that point was not included in the model at all.</p>
 <p>Marginal invariance is discussed by Blei and Frazier who argue that this property is reasonable in some cases but inappropriate for others. Knowing that two people have a common friend affects our belief in them sharing shopping habits, for example, even if we don’t observe the habits of the common friend. While this property is not particularly useful for spatial-temporal WEPP data, it is not clear either that it is harmful. A lack of marginal invariance does not affect predictive accuracy, which is our primary concern.</p>
 </section>
