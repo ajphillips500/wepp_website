@@ -15,33 +15,31 @@ This week I experimented with the properties of distance-dependent Chinese resta
 
 ### iMGPE-DDEM
 
-Default algo on two new data sets.
-[Plot new data sets]
+This week, I studied the iMGPE algorithm with distance-dependent CRP clustering and maximum likelihood estimation of each GP expert, or iMGPE-DDEM. I tested it on two new simulated data sets and Simulated Data 1 in order to see how well it identifies the 'true' cluster structure of a data set. The new data sets are plotted below, along with their mean functions, and are both step functions. 
+
 ```{r, fig.show='hold', out.width="30%", fig.align='center'}
 knitr::include_graphics(c('Reports/simulated_data1.png', 'Reports2/simulated_data2.png', 'Reports2/simulated_data3.png'))
 ```
 
-[Plot posterior of mean, true mean fn] and describe the posteriors of $\alpha$ and $\phi$ and the typical cluster structure.
+I fit each data set using $1000$ iterations (a small number but it will turn out not to matter). The estimated mean function for each is plotted below in red, while the true mean function is plotted in blue. 
 
 ```{r, fig.show='hold', out.width="30%", fig.align='center'}
 knitr::include_graphics(c('Reports/plot3-10-9-25.png', 'Reports2/plot1-10-9-25.png', 'Reports2/plot2-10-9-25.png'))
 ```
 
-
-Repeat, fixing phi at small value.
-Repeat, fixing alpha at a large value. Note any differences in the outcomes. 
+It was not possible to include credible intervals for the mean because the model rapidly converged to putting all data points into a single cluster for every data set. Hence, there was no variation in the predictive posterior after the first few iterations. The posterior distribution of $\alpha$ was centered around $0.3$ for all fitted models, indicating that the algorithm had settled on a single cluster. This was clearly not desirable behavior for the two step function data sets, so I began investigating the distance-dependent CRP in isolation to see how it behaved.
 
 ### DDCRP Clustering
 
-Just clustering algo on simdat, simdat2, simdat3.
-Average number of clusters, shape of clusters.
-[Plots of final cluster state for each data set]
+I then chose to study the DDCRP clustering algorithm in isolation. Using a Gaussian decay function of $f(x,x')=\exp(-(x-x')/\theta)$ with $\theta=1$ and concentration parameter $\alpha=1$, I ran just the clustering algorithm on the three simulated data sets for $100$ iterations each.
+
+For all data sets, DDCRP converged quickly to a 'steady state' with a fairly, or even exactly, constant number of clusters. The first data set was fit almost entirely in a single cluster. The second was also fit into clusters encompassing the whole breadth of the data set. Only the third was divided into two groups of clusters in a visually sensible way. Plotted below are the three data sets with points colored by their final cluster assignments.
 
 ```{r, fig.show='hold', out.width="30%", fig.align='center'}
   knitr::include_graphics(c('Reports2/plot4-10-9-25.png', 'Reports2/plot5-10-9-25.png', 'Reports2/plot6-10-9-25.png'))
 ```
 
-Tried for different values of alpha, phi, and theta. No difference in overall structure. 
+I experimented with different values of $\alpha$ and $\phi$ but the results were disappointing. While larger $\alpha$ values and smaller $\phi$ values were associated with slightly more small clusters ($<10$ points), no difference was made in the overall structure. 
 
 ### Conclusions
 
@@ -49,7 +47,7 @@ It seems as though data will be clustered together so long as they are contiguou
 
 This has both good and bad consequences for prediction. In the data sets we have been working with so far, a single Gaussian process can fit the data fairly well, so putting all points in a single cluster may actually be an improvement over having multiple clusters. However, the DDCRP tends toward large clusters even when this is clearly not ideal, as with Data Set 2. In addition, one of the advantages we hoped to gain from clustering the data was that large data sets would be broken up into manageable pieces, reducing computation time. The DDCRP's preference for large clusters results in little computational improvement.
 
-This issue might be reduced or resolved as we employ higher dimensional data.
+Changing parameter values had surprisingly little effect on the overall behavior of the algorithm, making this a difficult issue to resolve. Single clustering might be made less likely as we employ higher dimensional data. However, it may be necessary to look for clustering methods with better properties.
 
 ## September 25, 2025
 

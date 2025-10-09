@@ -25,3 +25,31 @@ Column $x$ is a random draw from a uniform distribution on the interval $(0,5)$.
 ```{r}
 knitr::include_graphics("Reports/simulated_data1.png")
 ```
+
+## Simulated Data Set 2
+
+Column $x$ is a random draw from a uniform distribution on the interval $(0,5)$. Column $ytrue$ is generated from the $x$ values by a step function: 
+$$f(x)= \begin{cases}
+0\text{ if } x\leq 1.5\\
+2\text{ if } 1.5<x\leq 3\\
+5\text{ if } x > 3
+\end{cases}$$
+
+Column $y$ is the $ytrue$ column plus $N(\mu=0,\sigma^2=0.04)$ random noise.
+```{r}
+knitr::include_graphics("Reports2/simulated_data2.png")
+```
+
+## Simulated Data Set 3
+
+Column $x$ consists of $50$ points generated from a $N(\mu=-3,\sigma^2=0.5)$ distribution and $50$ points generated from a $N(\mu=3,\sigma^2=0.5)$ distribution.
+Column $ytrue$ is generated from the $x$ values by a step function:
+$$f(x)=\begin{cases}
+1\text{ if } x<= 0\\
+5\text{ if } x>0
+\end{cases}$$
+
+Column $y$ is the $ytrue$ column plus $N(\mu=0,\sigma^2=0.04)$ random noise.
+```{r}
+knitr::include_graphics("Reports2/simulated_data3.png")
+```
