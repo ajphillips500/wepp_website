@@ -7,6 +7,50 @@ knitr::opts_chunk$set(echo = FALSE)
 options(tinytex.verbose = TRUE)
 ```
 
+## October 9, 2025
+
+### Summary
+
+This week I experimented with the properties of distance-dependent Chinese restaurant process by itself and when combined with the iMGPE algorithm.
+
+### iMGPE-DDEM
+
+Default algo on two new data sets.
+[Plot new data sets]
+```{r, fig.show='hold', out.width="30%", fig.align='center'}
+knitr::include_graphics(c('Reports/simulated_data1.png', 'Reports2/simulated_data2.png', 'Reports2/simulated_data3.png'))
+```
+
+[Plot posterior of mean, true mean fn] and describe the posteriors of $\alpha$ and $\phi$ and the typical cluster structure.
+
+```{r, fig.show='hold', out.width="30%", fig.align='center'}
+knitr::include_graphics(c('Reports/plot3-10-9-25.png', 'Reports2/plot1-10-9-25.png', 'Reports2/plot2-10-9-25.png'))
+```
+
+
+Repeat, fixing phi at small value.
+Repeat, fixing alpha at a large value. Note any differences in the outcomes. 
+
+### DDCRP Clustering
+
+Just clustering algo on simdat, simdat2, simdat3.
+Average number of clusters, shape of clusters.
+[Plots of final cluster state for each data set]
+
+```{r, fig.show='hold', out.width="30%", fig.align='center'}
+  knitr::include_graphics(c('Reports2/plot4-10-9-25.png', 'Reports2/plot5-10-9-25.png', 'Reports2/plot6-10-9-25.png'))
+```
+
+Tried for different values of alpha, phi, and theta. No difference in overall structure. 
+
+### Conclusions
+
+It seems as though data will be clustered together so long as they are contiguous in the x-dimension. Only very high values of $\alpha$ drive up the number of clusters generated and even then there will often still be one cluster that contains most of the points in the data set. In addition, the DDCRP tends to quickly reach an 'optimal' cluster structure and deviate little from that in all subsequent iterations.
+
+This has both good and bad consequences for prediction. In the data sets we have been working with so far, a single Gaussian process can fit the data fairly well, so putting all points in a single cluster may actually be an improvement over having multiple clusters. However, the DDCRP tends toward large clusters even when this is clearly not ideal, as with Data Set 2. In addition, one of the advantages we hoped to gain from clustering the data was that large data sets would be broken up into manageable pieces, reducing computation time. The DDCRP's preference for large clusters results in little computational improvement.
+
+This issue might be reduced or resolved as we employ higher dimensional data.
+
 ## September 25, 2025
 
 ### Summary
