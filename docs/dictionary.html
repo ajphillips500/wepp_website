@@ -133,6 +133,10 @@ window.Quarto = {
     <a class="nav-link" href="./ref.html"> 
 <span class="menu-text">References</span></a>
   </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="./plan.html"> 
+<span class="menu-text">Research Goals</span></a>
+  </li>  
 </ul>
           </div> <!-- /navcollapse -->
             <div class="quarto-navbar-tools">
@@ -151,6 +155,8 @@ window.Quarto = {
   <ul>
   <li><a href="#motorcycle-data-set" id="toc-motorcycle-data-set" class="nav-link active" data-scroll-target="#motorcycle-data-set">Motorcycle Data Set</a></li>
   <li><a href="#simulated-data-set-1" id="toc-simulated-data-set-1" class="nav-link" data-scroll-target="#simulated-data-set-1">Simulated Data Set 1</a></li>
+  <li><a href="#simulated-data-set-2" id="toc-simulated-data-set-2" class="nav-link" data-scroll-target="#simulated-data-set-2">Simulated Data Set 2</a></li>
+  <li><a href="#simulated-data-set-3" id="toc-simulated-data-set-3" class="nav-link" data-scroll-target="#simulated-data-set-3">Simulated Data Set 3</a></li>
   </ul>
 </nav>
     </div>
@@ -200,6 +206,41 @@ window.Quarto = {
 <div>
 <figure class="figure">
 <p><img src="Reports/simulated_data1.png" class="img-fluid figure-img"></p>
+</figure>
+</div>
+</div>
+</div>
+</section>
+<section id="simulated-data-set-2" class="level2">
+<h2 class="anchored" data-anchor-id="simulated-data-set-2">Simulated Data Set 2</h2>
+<p>Column <span class="math inline">\(x\)</span> is a random draw from a uniform distribution on the interval <span class="math inline">\((0,5)\)</span>. Column <span class="math inline">\(ytrue\)</span> is generated from the <span class="math inline">\(x\)</span> values by a step function: <span class="math display">\[f(x)= \begin{cases}
+0\text{ if } x\leq 1.5\\
+2\text{ if } 1.5&lt;x\leq 3\\
+5\text{ if } x &gt; 3
+\end{cases}\]</span></p>
+<p>Column <span class="math inline">\(y\)</span> is the <span class="math inline">\(ytrue\)</span> column plus <span class="math inline">\(N(\mu=0,\sigma^2=0.04)\)</span> random noise.</p>
+<div class="cell">
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="Reports2/simulated_data2.png" class="img-fluid figure-img"></p>
+</figure>
+</div>
+</div>
+</div>
+</section>
+<section id="simulated-data-set-3" class="level2">
+<h2 class="anchored" data-anchor-id="simulated-data-set-3">Simulated Data Set 3</h2>
+<p>Column <span class="math inline">\(x\)</span> consists of <span class="math inline">\(50\)</span> points generated from a <span class="math inline">\(N(\mu=-3,\sigma^2=0.5)\)</span> distribution and <span class="math inline">\(50\)</span> points generated from a <span class="math inline">\(N(\mu=3,\sigma^2=0.5)\)</span> distribution. Column <span class="math inline">\(ytrue\)</span> is generated from the <span class="math inline">\(x\)</span> values by a step function: <span class="math display">\[f(x)=\begin{cases}
+1\text{ if } x&lt;= 0\\
+5\text{ if } x&gt;0
+\end{cases}\]</span></p>
+<p>Column <span class="math inline">\(y\)</span> is the <span class="math inline">\(ytrue\)</span> column plus <span class="math inline">\(N(\mu=0,\sigma^2=0.04)\)</span> random noise.</p>
+<div class="cell">
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="Reports2/simulated_data3.png" class="img-fluid figure-img"></p>
 </figure>
 </div>
 </div>
