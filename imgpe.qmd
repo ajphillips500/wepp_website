@@ -11,8 +11,7 @@ options(tinytex.verbose = TRUE)
 
 The basic data model of the Infinite Mixture of Gaussian Process Experts model is as follows. We have an $n\times 1$ continuous response vector $y$ and an $n\times d$ data matrix $X$. The estimated value of a data point $y_i$ under the iMGPE model is the sum of the fitted estimates for that data point from all possible GP experts fit to subsets of the data containing $y_i$ and weighted by a Dirichlet process. Let $z$ represent a possible vector of cluster assignments and let $z^{(k)}$ be the $k^{th}$ element of some ordered list of all possible $z$. Then $j=1,\dots,J_k$ index the clusters within $z^{(k)}$. Let $C_j^{(k)}$ be the number of observations in cluster $j$ given assignment $z^{(k)}$. Then we have as follows.
 
-$$y\sim \sum_{k=1}^{p(n)} \left[\prod_{j=1}^{J_k} N_{C_j^{(k)}}(0,\Sigma_{\theta_j}) \right] w_k$$
-$$w_k=P(z=z^{(k)}|\alpha,\phi)$$ where the $w_z$ are the marginal probabilities of a modified Chinese Restaurant Process that generates cluster assignments $z$ and $p(n)$ is the [partition function](https://en.wikipedia.org/wiki/Partition_function_(number_theory)). The CRP used here has been modified to depend on the input data $X$. It is controlled by two parameters, $\alpha$ and $\phi$, the first being the usual concentration parameter and the second controlling the cluster occupancy estimates. A more in-depth explanation of this CRP is provided in the iMGPE Algorithm section from last week. It should also be noted that there is no known closed form for $w_k$. The closest I could find was the multivariate [Ewen's distribution](https://en.wikipedia.org/wiki/Ewens%27s_sampling_formula), which describes the distribution on the set of $p(n)$ that arises from a regular Chinese Restaurant Process. However, it only accounts for the number of clusters of different sizes, and does not serve as a marginal distribution of $z$.
+$$y\sim \sum_{k=1}^{p(n)} \left[\prod_{j=1}^{J_k} N_{C_j^{(k)}}(0,\Sigma_{\theta_j}) \right] w_k$$ $$w_k=P(z=z^{(k)}|\alpha,\phi)$$ where the $w_z$ are the marginal probabilities of a modified Chinese Restaurant Process that generates cluster assignments $z$ and $p(n)$ is the [partition function](https://en.wikipedia.org/wiki/Partition_function_(number_theory)). The CRP used here has been modified to depend on the input data $X$. It is controlled by two parameters, $\alpha$ and $\phi$, the first being the usual concentration parameter and the second controlling the cluster occupancy estimates. A more in-depth explanation of this CRP is provided in the iMGPE Algorithm section from last week. It should also be noted that there is no known closed form for $w_k$. The closest I could find was the multivariate [Ewen's distribution](https://en.wikipedia.org/wiki/Ewens%27s_sampling_formula), which describes the distribution on the set of $p(n)$ that arises from a regular Chinese Restaurant Process. However, it only accounts for the number of clusters of different sizes, and does not serve as a marginal distribution of $z$.
 
 The full joint distribution, including the priors for all parameters, is as follows. Here, $\Phi$ is the pdf of a normal distribution.
 
@@ -26,7 +25,7 @@ Here, $N_{C_j^{(z)}}(0,\Sigma_{\theta_j})$ is the $C_j^{(z)}$-dimensional multiv
 
 Then $\theta_j$ is the parameter vector for the GP expert assigned to cluster $j$, while $\alpha$ is the CRP concentration parameter and $\phi$ is the parameter vector for the CRP's occupation number estimate. Note that $\phi$ is purely a vector of lengthscales for a Gaussian kernel. The priors on $\theta$, $\alpha$, and $\phi$ are described below.
 
-$$\theta_{j,k}\stackrel{ind}{\sim} Gamma(a_k,b_k) \text{ for } k=1,\dots,d$$ $$\alpha\sim Inv.Gam(1,1),\text{   } \phi_k\stackrel{iid}{\sim} LogN(0,1) \text{ for } k=1,\dots,d$$ That is, each element $k$ of $\theta_j$ (the dimension of $X$ plus a noise parameter) is assigned a independent Gamma prior with fixed parameters $a_k$ and $b_k$. Thus, every GP expert has the same prior on its noise parameter and so on. Similarly, each element of $\phi$ receives an independent log-normal prior.
+$$\theta_{j,k}\stackrel{ind}{\sim} Gamma(a_k,b_k) \text{ for } k=1,\dots,d$$ $$\alpha\sim Inv.Gam(1,1),\text{   } \phi_k\stackrel{iid}{\sim} LogN(0,1) \text{ for } k=1,\dots,d$$ That is, each element $k$ of $\theta_j$ ( where $d=\dim(X)+1$ counting the lengthscales and a noise parameter) is assigned a independent Gamma prior with fixed parameters $a_k$ and $b_k$. Thus, every GP expert has the same prior on its noise parameter and so on. Similarly, each element of $\phi$ receives an independent log-normal prior.
 
 A third visualization of the model structure is a directed acyclic graph, shown below. Starting with the priors for $\alpha$, $\phi$, and $\theta$, we can draw their values and generate our latent variables $z$ and our true variables $y$. Note that $\theta$ depends on $z$ as well as its prior, as $z$ defines the number of clusters and thus the number of GP parameters to be drawn. The red and blue boxes indicate the quantities which are drawn multiple times for each of the $n$ data points or each of the $J$ clusters.
 
@@ -34,8 +33,6 @@ A third visualization of the model structure is a directed acyclic graph, shown 
 library(ggplot2)
 suppressMessages(library(ggdag))
 
-labeldat <- data.frame('x'=2, 'y'=1.6,
-                       'labs'="i=1,...,n")
 model_dag <- dagify(theta~z,
                     z~alpha + phi,
                     y~z + theta,
@@ -74,8 +71,6 @@ I have implemented the Infinite Mixture of Gaussian Process Experts algorithm mo
 
 The paper by Rasmussen and Ghahramani does not discuss what a posterior predictive distribution would look like. However, it can be deduced based on the posterior predictive distribution of a lone Gaussian process. With $p(n)$ and $w_{z(k)}$ defined the same as in the original data model, we determine that the distribution of a new point $y^*$ with data $x^*$ is as follows.
 
-$$y^*\sim \sum_{k=1}^{p(n)} \left[\sum_{j=1}^{J_k} N(\mu_j^*,\sigma_j^*)  P(z_{y^*}=j)\right] w_k$$ 
-where $\mu_j^*$ and $\Sigma_j^*$ are found according to the kriging equations of a Gaussian process. That is,
+$$y^*\sim \sum_{k=1}^{p(n)} \left[\sum_{j=1}^{J_k} N(\mu_j^*,\sigma_j^*)  P(z_{y^*}=j)\right] w_k$$ where $\mu_j^*$ and $\Sigma_j^*$ are found according to the kriging equations of a Gaussian process. That is,
 
-$$\mu_j^*=K(x^*,X^{(j)})^TK^{-1}y^{(j)}\text{ and } \sigma_j^*=K(x^*,x^*)-K(x^*,X^{(j)})^T K^{-1}K(x^*,X^{(j)})$$ 
-where $K$ is the covariance matrix based on parameters $\theta_j$ and $X^{(j)}\subset X$ and $y^{(j)} \subset y$ are the data and response values associated with cluster $j$.
+$$\mu_j^*=K(x^*,X^{(j)})^TK^{-1}y^{(j)}\text{ and } \sigma_j^*=K(x^*,x^*)-K(x^*,X^{(j)})^T K^{-1}K(x^*,X^{(j)})$$ where $K$ is the covariance matrix based on parameters $\theta_j$ and $X^{(j)}\subset X$ and $y^{(j)} \subset y$ are the data and response values associated with cluster $j$.
