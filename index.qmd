@@ -21,14 +21,14 @@ Let $Z$ be the vector of randomly generated indicator variables representing clu
 
 $$\frac{p(Z=z|\alpha,\phi)}{p(Z=z'|\alpha,\phi)} = \frac{P(Z_1=z_1|z_{-1})P(Z_2 = z_2|z_{-2})\dots P(Z_n=z_n| z_{-n})}{P(Z_1=z_1'|z'_{-1})P(Z_2 = z_2'|z'_{-2})\dots P(Z_n=z_n'| z'_{-n})}$$
 
-Let $s\subset z$ and $s'\subset z'$ be the subsets of points in clusters by themselves and $|s|$ be the cardinality of those sets. From the conditional distributions described on the "iMGPE" page, we have 
+From the conditional distributions described on the "iMGPE" page, we have 
 
 $$P(z_i=j|z_{-i},y_i,\dots)\propto \begin{cases}
 \frac{n-1}{n+\alpha-1}\frac{\sum_{i'\neq i,z_{i'}=j} K_{\phi}(X_i,X_{i'})}{\sum_{i'\neq i} K_{\phi}(X_i,X_{i'})} \text{ for existing clusters}\\
 \frac{\alpha}{n+\alpha-1} \text{ for new clusters}
 \end{cases}$$
 
-The $n+\alpha-1$ term will cancel from all terms. Then, Brook's lemma becomes
+Note that the probability takes two possible forms, depending on whether $z_i$ is in a cluster by itself (and thus a "new" cluster given $z_{-i}$) or in a cluster with other points. Also, the $n+\alpha-1$ component will cancel from all terms. Let $s\subset z$ and $s'\subset z'$ be the subsets of points in clusters by themselves and $|s|$ be the cardinality of those sets. Then, Brook's lemma becomes
 
 $$\frac{p(Z=z|\alpha,\phi)}{p(Z=z'|\alpha,\phi)} = \frac{\prod_{i\notin s} \left(\sum_{i'\neq i,z_{i'}=z_i} K_{\phi}(x_i,x_{i'}) / \sum_{i'\neq i}K_{\phi}(x_i,x_{i'})\right)}{\prod_{i\notin s'} \left(\sum_{i'\neq i,z'_{i'}=z'_i} K_{\phi}(x_i,x_{i'})/ \sum_{i'\neq i} K_{\phi}(x_i,x_{i'}) \right)} (n-1)^{|z|-|z'|+|s'|-|s|}\alpha^{|s|-|s'|}$$
 
@@ -42,7 +42,7 @@ Each data set was generated in three steps. First, I drew 100 points from a $Uni
 $$g(x)=(a+bx)I(x\leq 2) + \cos(c\pi x)I(x > 2)$$
 Given this, I generated $Y_i=g(X_i)+\epsilon_i$ where the $\epsilon_i$ are independent $N(0,0.2^2)$ variables. This results in a number of data sets with discontinuities around 2.
 
-The predictive RMSE for the two methods are compared below. You can see that the data sets fall into two groups: those where iMGPE-EM significantly outperformed iMGPE-Slice and those where it only slightly outperformed iMGPE-Slice.
+The predictive RMSE for the two methods are compared below, where the RMSE has been divided by the range of its data set. You can see that the data sets fall into two groups: those where iMGPE-EM significantly outperformed iMGPE-Slice and those where it only slightly outperformed iMGPE-Slice.
 
 ```{r}
 knitr::include_graphics('Reports2/plot1-10-29-25.png')
