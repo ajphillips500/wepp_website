@@ -30,8 +30,10 @@ I also constructed the unnormalized pmf expressions for $n=4$. It was not necess
 $$(3+\alpha)^3D_K\left[P_K +Q_K+R_K +\alpha^4D_K \right]^{-1}$$
 where
 $$P_K= 3^4\left((K_{13}+K_{34})K_{14}KK_1KK_2 +K_{12}^2 K_{34}^2 +K_{13}^2K_{24}^2 +K_{14}^2K_{23}^2 \right)$$
-$$Q_K= 3^3\alpha\left((K_{12}+K_{13})(K_{12}+K_{23})K_{13}KK_4 +(K_{12}+K_{14})(K_{12}+K_{24})K_{14}KK_3\\ +(K_{13}+K_{14})(K_{13}+K_{34})K_{14}KK_2 +(K_{23}+K_{24})(K_{23}+K_{34})K_{24}KK_1\right)$$
-$$R_K= 3^2\alpha^2\left(K_{12}^2KK_3KK_4 +K_{13}^2KK_2KK_4 +K_{14}^2KK_2KK_3\\ +K_{23}^2KK_1KK_4 +K_{24}^2KK_1KK_3 +K_{34}^2KK_1KK_2 \right)$$
+$$Q_K= 3^3\alpha\big((K_{12}+K_{13})(K_{12}+K_{23})K_{13}KK_4 +(K_{12}+K_{14})(K_{12}+K_{24})K_{14}KK_3$$
+$$+(K_{13}+K_{14})(K_{13}+K_{34})K_{14}KK_2 +(K_{23}+K_{24})(K_{23}+K_{34})K_{24}KK_1\big)$$
+$$R_K= 3^2\alpha^2\big(K_{12}^2KK_3KK_4 +K_{13}^2KK_2KK_4 +K_{14}^2KK_2KK_3$$
+$$+K_{23}^2KK_1KK_4 +K_{24}^2KK_1KK_3 +K_{34}^2KK_1KK_2 \big)$$
 
 It is evident that a valid normalizing constant can be constructed for any $n$ that is a function only of $n$, $X$, $\alpha$, and $\phi$. However, I have not been able to determine a general formula for the normalizing constant. The joint distribution of the cluster indicator variables does exist, but as far as I can tell it is intractable when $n$ is not very small.
 
