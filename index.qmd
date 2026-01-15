@@ -2,10 +2,61 @@
 title: "Weekly Reports"
 ---
 
+
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = FALSE)
 options(tinytex.verbose = TRUE)
 ```
+
+## January 15, 2025
+
+### Summary
+
+Over break, I studied what the conditional density of $\alpha$ looks like for small values of $n$, when the normalizing constant of $p(z|\alpha)$ can be computed exactly. I also investigated the conditional density of $\alpha$ under the distance dependent CRP and concluded that, like the MCRP, it is not tractable for large $n$.
+
+Lastly, I considered what qualities we need in a clustering algorithm for analysis of large data sets and analyze how the iMGPE algorithm could be improved to improve its predictive performance.
+
+### Density of Alpha for Small N
+
+The distribution of the cluster assignment vector $z$ is a pmf over all possible partitions of $n$ data points. Indexing each cluster by the index of its leftmost data point, I can recursively construct a list of all possible partitions over $n$ elements, given such a list for $n-1$ elements. It works by taking each entry of the previous list and appending all possible $n^{th}$ elements. For example, taking $z=(1,1,3,4)$, we could append a 1, 3, 4, or 5 in the fifth position. 
+
+The number of possible partitions for low values of $n$ are plotted below. 
+
+```{r}
+knitr::include_graphics('Reports2/plot1-1-7-26.png')
+```
+
+I then explored the shape of the conditional distribution of $\alpha$ for the small value of $n=7$, when the normalizing constant can be computed exactly. I used $p(\alpha|z)\propto p(z|\alpha)p(\alpha)$ where $p(z|\alpha)$ is as I calculated before and $p(\alpha)$ is a Gamma(1,1) prior. This conditional distribution is plotted below for six different values of $z$.
+
+```{r}
+knitr::include_graphics('Reports2/plot2-1-8-26.png')
+```
+
+Note how the shape of the distribution does not change between the first two plots or between the next two, but does change between the first, third, and fifth plots.From this, we can confirm visually that the distribution of $\alpha$ depends only on the number of singleton clusters in $z$ and not on the total number of clusters. The distributions look like gamma distributions, particularly in how they may have either a hump over a particular mode value of $\alpha$ or an infinite peak at zero.
+
+### P(alpha|z) for DDCRP
+
+The description of the Distance Dependent CRP by Blei and Frazier does not try to learn the $\alpha$ parameter but instead holds it constant. I believe their variation on the Chinese Restaurant Process also does not produce a computationally tractable joint density over the cluster assignment vector. Rather, like the MCRP, the density's normalizing constant can only be found as the inverse sum of an exponentially increasing number of terms.
+
+To demonstrate this, we can apply Brook's lemma to the DD-CRP. Note that the DD-CRP defines a point assignment vector $c$ where each point in the data set is assigned to another point or to itself. Thus, for $n=2$, there are four potential point assignments: (1,1), (1,2), (2,1), and (2,2). The state (1,1), for example, indicates that point 1 is assigned to itself and point 2 is also assigned to point 1. All points that can be connected through these assignments are in the same cluster. Thus, only (1,2) represents a state in which there are two clusters. The rest all represent a single cluster.
+
+Let $c$ be a cluster assignment vector and let $c'=1:n$. Assume that $p(c'|\alpha)\propto \alpha^n$. Then, according to Brook's lemma, the probability of  $c$ given $\alpha$ is
+
+$$p(c|\alpha)\propto \prod_{i=1}^n \left[\frac{P(c_i=j|c_{1:i-1}',c_{i+1:n})} {P(c_i'=j|c_{1:i-1},c_{i+1:n}')} \right]p(c'|\alpha) =\prod_{i=1}^n f(d_{ic_i})I(c_i\neq i) +\alpha I(c_i=i)$$
+
+The normalizing constant for this distribution is the inverse sum of $n^n$ terms, as that is the number of possible cluster assignments. The normalizing constant when $n=2$ is $(\alpha^2+ 2\alpha f(d_{12}) + f(d_{12})^2)^{-1}$, for example. Since this constant involves $\alpha$ and cannot feasibly be determined for reasonably sized $n$, we cannot directly sample from $p(\alpha|c)$ under the DD-CRP.
+
+### Research Goals
+
+As things currently stand, there are two feasible paths before us.  We can modify the iMGPE algorithm presented by Rasmussen et al by fixing $\alpha$ instead of learning it. This would be a relatively small change that allows us to continue pursuing our current research options: the incorporation of categorical inputs, deep GPs, or variable selection.
+
+We could also abandon the MCRP and seek to find or devise a new clustering mechanism to replace it. If we do so, we have the opportunity to reconsider what properties we actually need in our clustering mechanism.
+
+The situation that originally drew us to the iMGPE algorithm was that we have a very large data set such that fitting a single Gaussian process to all of it is infeasible. The iMGPE algorithm was a way to partition the data into smaller clusters so we could fit multiple GPs, one to each cluster. Randomly generating a new partition at each step of a Markov chain allowed us to capture our uncertainty in the partition.
+
+For our purposes, we do not necessarily need to assume a "true" underlying cluster structure in our model. We don't necessarily care whether the partitions generated by the Markov chain are "accurate" or "informative" except in so far as we would like the data in each cluster to be similar and easily fit by a single GP. We would prefer that the data be somewhat evenly distributed between the clusters, as clusters with few points make for poor GP experts and clusters with too many take much longer to fit.
+
+In conclusion, if we stick with the iMGPE, then the primary drain on predictive performance is the quality of the clusters, rather than the number. I would investigate how we could improve the similarity of points within clusters and even out the distribution of points between clusters. If we choose to select a different clustering mechanism, I would look for one with the qualities described above.
 
 ## December 11, 2025
 
@@ -23,10 +74,10 @@ Here, I present a formal proof that given the Modified Chinese Restaurant Proces
 
 Let $X=(X_1,\dots,X_n)$ be a vector of covariate information for $n$ data points, where each $X_i$ may also be a vector. Let $z$ be a vector of indicator variables of length $n$ indicating the cluster assignments of the points. Assume $z$ is generated by the Modified CRP with the following probabilities of point $z_i$ being assigned to cluster $j$ given all other points.
 
-$$P(z_i=j|z_{-i},\dots)\propto \begin{cases}
-\frac{n-1}{n+\alpha-1}\frac{\sum_{i'\neq i,z_{i'}=j} K_{\phi}(X_i,X_{i'})}{\sum_{i'\neq i} K_{\phi}(X_i,X_{i'})} \text{ for } j=1,\dots,J^{-i}\\
-\frac{\alpha}{n+\alpha-1} \text{ for } j=J^{-i}+1
-\end{cases}$$
+$$P(z_i=j|z_{-i},\dots)\propto \begin{cases} \begin{align}
+&\frac{n-1}{n+\alpha-1}\frac{\sum_{i'\neq i,z_{i'}=j} K_{\phi}(X_i,X_{i'})}{\sum_{i'\neq i} K_{\phi}(X_i,X_{i'})} & \text{ for } j=1,\dots,J^{-i}\\
+&\frac{\alpha}{n+\alpha-1} & \text{ for } j=J^{-i}+1
+\end{align}\end{cases}$$
 
 Assume $\alpha >0$ and $n\geq 2$. Assume the kernel function $K_{\phi}:\mathbb{X}^2\to (0,\infty)$. That is, the kernel function returns a finite positive scalar value always. Then the ratio of kernel components in the conditional probability above is always in the interval $(0,1]$, since the sum in the numerator is over a subset of the values in the denominator. Note that if the numerator was equal to $0$, that would imply that $z_i$ is in a cluster by itself, so the indicator function on $S_i^C$ would cancel that term anyways.
 
@@ -66,7 +117,7 @@ The sampled $\alpha$ values do not match the original values of $\alpha$ at all.
 
 I searched papers citing the iMGPE article for any work done on exploring the distribution of the Modified CRP or its theoretical properties. The most relevant paper I could find was ["Convergence Rates for Gaussian Mixtures of Experts"](https://www.jmlr.org/papers/volume23/20-1129/20-1129.pdf) by Nhat Ho, Chiao-Yu Yang, and Michael Jordan, writing in 2022. Their paper proves the rate of convergence of MLEs for infinite mixtures of Gaussian experts with covariate-free clustering distributions. The authors remark that they chose to focus on the covariate-free context because the math is much more complicated when the cluster assignment distribution is covariate dependent.
 
-The authors prove that if the experts are "algebraically independent" then the MLEs will converge at a rate of $O(n^{-1/4})$.
+The authors prove that if the experts are "algebraically independent" then the MLEs will converge at a rate of $O(n^{1/4})$.
 
 ### Further Research
 
