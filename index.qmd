@@ -17,13 +17,13 @@ This week I studied the conditions of the Kolmogorov Extension Theorem and confi
 
 While the Modified CRP is not exchangeable, it fulfill the necessary conditions to be a stochastic process. The Kolmogorov Extension Theorem describes two properties a set of random variables must possess to be a stochastic process. My research has returned conflicting answers on what these conditions are called, but I will refer to them here as 'permutation invariance' and 'marginal consistency'.
 
-Permutation invariance is the property that for any finite set of time points, the joint distribution over those points is invariant under any permutation of their indices. This is similar to, but distinct from, exchangeability. The mathematical definition of exchangeability is that for all $k\in \mathbb{N}$ and for all permutations $\pi$ of $\{1,\dots, k\}$ and measureable sets $F_i\subseteq \mathbb{R}$
+Permutation invariance is the property that for any finite set of time points, the joint distribution over those points is invariant under any permutation of their indices. This is similar to, but distinct from, exchangeability. The mathematical definition of exchangeability is as follows. Say we have a sequence of random variables $z=\{z_t, t\in T\}$. Then for all $k\in \mathbb{N}$ and for all permutations $\pi$ of $\{1,\dots, k\}$ and measureable sets $F_i\subseteq \{1,\dots,k\}$
 
-$$\mathbb{P}(X_{t_{\pi(1)}}\in F_1, \dots, X_{t_{\pi(k)}}\in F_k) = \mathbb{P}(X_{t_1}\in F_1,\dots, X_{t_k}\in F_k)$$
+$$\mathbb{P}(z_{t_{\pi(1)}}\in F_1, \dots, z_{t_{\pi(k)}}\in F_k) = \mathbb{P}(z_{t_1}\in F_1,\dots, z_{t_k}\in F_k)$$
 
 Whereas permutation invariance is defined as
 
-$$\mathbb{P}(X_{t_{\pi(1)}}\in F_{\pi(1)}, \dots, X_{t_{\pi(k)}}\in F_{\pi(k)}) = \mathbb{P}(X_{t_1}\in F_1,\dots, X_{t_k}\in F_k)$$
+$$\mathbb{P}(z_{t_{\pi(1)}}\in F_{\pi(1)}, \dots, z_{t_{\pi(k)}}\in F_{\pi(k)}) = \mathbb{P}(z_{t_1}\in F_1,\dots, z_{t_k}\in F_k)$$
 
 The distinction is that for permutation invariance both the indices and the process values are permuted in the same way, while for exchangeability only the indices are permuted. Based on the pmf of the Modified CRP, the joint distribution of the cluster assignments $p(z|\alpha, X)$ will not change if $X$ and $z$ are permuted identically. Thus, the MCRP is indeed permutation invariant.
 
