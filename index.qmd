@@ -7,7 +7,7 @@ knitr::opts_chunk$set(echo = FALSE)
 options(tinytex.verbose = TRUE)
 ```
 
-## February 10, 2026
+## February 17, 2026
 
 ### Summary
 
