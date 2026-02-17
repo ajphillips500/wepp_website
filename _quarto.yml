@@ -16,6 +16,8 @@ website:
         text: References
       - href: plan.qmd
         text: Research Goals
+      - href: proofs.qmd
+        text: Proofs
 
 format:
   html:

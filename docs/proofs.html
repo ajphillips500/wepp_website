@@ -7,7 +7,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 
-<title>The iMGPE Algorithm – AJ Phillips Thesis Project</title>
+<title>Proofs – AJ Phillips Thesis Project</title>
 <style>
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
@@ -130,7 +130,7 @@ window.Quarto = {
 <span class="menu-text">Data Dictionary</span></a>
   </li>  
   <li class="nav-item">
-    <a class="nav-link active" href="./imgpe.html" aria-current="page"> 
+    <a class="nav-link" href="./imgpe.html"> 
 <span class="menu-text">iMGPE</span></a>
   </li>  
   <li class="nav-item">
@@ -142,7 +142,7 @@ window.Quarto = {
 <span class="menu-text">Research Goals</span></a>
   </li>  
   <li class="nav-item">
-    <a class="nav-link" href="./proofs.html"> 
+    <a class="nav-link active" href="./proofs.html" aria-current="page"> 
 <span class="menu-text">Proofs</span></a>
   </li>  
 </ul>
@@ -161,9 +161,12 @@ window.Quarto = {
     <h2 id="toc-title">On this page</h2>
    
   <ul>
-  <li><a href="#data-model" id="toc-data-model" class="nav-link active" data-scroll-target="#data-model">Data Model</a></li>
-  <li><a href="#gibbs-sampling-algorithm" id="toc-gibbs-sampling-algorithm" class="nav-link" data-scroll-target="#gibbs-sampling-algorithm">Gibbs Sampling Algorithm</a></li>
-  <li><a href="#posterior-predictive-distribution" id="toc-posterior-predictive-distribution" class="nav-link" data-scroll-target="#posterior-predictive-distribution">Posterior Predictive Distribution</a></li>
+  <li><a href="#proof-1" id="toc-proof-1" class="nav-link active" data-scroll-target="#proof-1">Proof 1</a></li>
+  <li><a href="#proof-2" id="toc-proof-2" class="nav-link" data-scroll-target="#proof-2">Proof 2</a>
+  <ul class="collapse">
+  <li><a href="#kolmogorov-extension-theorem" id="toc-kolmogorov-extension-theorem" class="nav-link" data-scroll-target="#kolmogorov-extension-theorem">Kolmogorov Extension Theorem</a></li>
+  <li><a href="#application-to-mcrp" id="toc-application-to-mcrp" class="nav-link" data-scroll-target="#application-to-mcrp">Application to MCRP</a></li>
+  </ul></li>
   </ul>
 </nav>
     </div>
@@ -172,7 +175,7 @@ window.Quarto = {
 
 <header id="title-block-header" class="quarto-title-block default">
 <div class="quarto-title">
-<h1 class="title">The iMGPE Algorithm</h1>
+<h1 class="title">Proofs</h1>
 </div>
 
 
@@ -189,53 +192,44 @@ window.Quarto = {
 </header>
 
 
-<section id="data-model" class="level2">
-<h2 class="anchored" data-anchor-id="data-model">Data Model</h2>
-<p>The basic data model of the Infinite Mixture of Gaussian Process Experts model is as follows. We have an <span class="math inline">\(n\times 1\)</span> continuous response vector <span class="math inline">\(y\)</span> and an <span class="math inline">\(n\times d\)</span> data matrix <span class="math inline">\(X\)</span>. The estimated value of a data point <span class="math inline">\(y_i\)</span> under the iMGPE model is the sum of the fitted estimates for that data point from all possible GP experts fit to subsets of the data containing <span class="math inline">\(y_i\)</span> and weighted by a Dirichlet process. Let <span class="math inline">\(z\)</span> represent a possible vector of cluster assignments and let <span class="math inline">\(z^{(k)}\)</span> be the <span class="math inline">\(k^{th}\)</span> element of some ordered list of all possible <span class="math inline">\(z\)</span>. Then <span class="math inline">\(j=1,\dots,J_k\)</span> index the clusters within <span class="math inline">\(z^{(k)}\)</span>. Let <span class="math inline">\(C_j^{(k)}\)</span> be the number of observations in cluster <span class="math inline">\(j\)</span> given assignment <span class="math inline">\(z^{(k)}\)</span>. Then we have as follows.</p>
-<p><span class="math display">\[y\sim \sum_{k=1}^{p(n)} \left[\prod_{j=1}^{J_k} N_{C_j^{(k)}}(0,\Sigma_{\theta_j}) \right] w_k\]</span> <span class="math display">\[w_k=P(z=z^{(k)}|\alpha,\phi)\]</span> where the <span class="math inline">\(w_z\)</span> are the marginal probabilities of a modified Chinese Restaurant Process that generates cluster assignments <span class="math inline">\(z\)</span> and <span class="math inline">\(p(n)\)</span> is the <a href="https://en.wikipedia.org/wiki/Partition_function_(number_theory)">partition function</a>. The CRP used here has been modified to depend on the input data <span class="math inline">\(X\)</span>. It is controlled by two parameters, <span class="math inline">\(\alpha\)</span> and <span class="math inline">\(\phi\)</span>, the first being the usual concentration parameter and the second controlling the cluster occupancy estimates. A more in-depth explanation of this CRP is provided in the iMGPE Algorithm section from last week. It should also be noted that there is no known closed form for <span class="math inline">\(w_k\)</span>. The closest I could find was the multivariate <a href="https://en.wikipedia.org/wiki/Ewens%27s_sampling_formula">Ewen’s distribution</a>, which describes the distribution on the set of <span class="math inline">\(p(n)\)</span> that arises from a regular Chinese Restaurant Process. However, it only accounts for the number of clusters of different sizes, and does not serve as a marginal distribution of <span class="math inline">\(z\)</span>.</p>
-<p>The full joint distribution, including the priors for all parameters, is as follows. Here, <span class="math inline">\(\Phi\)</span> is the pdf of a normal distribution.</p>
-<p><span class="math display">\[p(y,\theta,\phi,\alpha)=\left[ \sum_{k=1}^{p(n)} \left[\prod_{j=1}^{J_k} \Phi_{C_j^{(k)}}(0,\Sigma_{\theta_j}) \right] p(z(k)|\alpha,\phi)\right] p(\theta)p(\phi)p(\alpha)\]</span></p>
-<p>Alternatively, the model can be expressed in hierarchical terms where <span class="math inline">\(J_z\)</span> is the number of clusters in <span class="math inline">\(z\)</span> and <span class="math inline">\(C_{j,z}\)</span> is the number of observations in the <span class="math inline">\(j^{th}\)</span> cluster in <span class="math inline">\(z\)</span>.</p>
-<p><span class="math display">\[y|z\sim \prod_{j=1}^{J_z} N_{C_{j,z}}(0,\Sigma_{\theta_{j}})\]</span> <span class="math display">\[z|\alpha,\phi \sim MCRP(\alpha,\phi)\]</span></p>
-<p>Here, <span class="math inline">\(N_{C_j^{(z)}}(0,\Sigma_{\theta_j})\)</span> is the <span class="math inline">\(C_j^{(z)}\)</span>-dimensional multivariate normal distribution with covariance matrix <span class="math inline">\(\Sigma_{\theta_j}\)</span> defined by a Gaussian kernel function with parameters <span class="math inline">\(\theta_j\)</span>.</p>
-<p>Then <span class="math inline">\(\theta_j\)</span> is the parameter vector for the GP expert assigned to cluster <span class="math inline">\(j\)</span>, while <span class="math inline">\(\alpha\)</span> is the CRP concentration parameter and <span class="math inline">\(\phi\)</span> is the parameter vector for the CRP’s occupation number estimate. Note that <span class="math inline">\(\phi\)</span> is purely a vector of lengthscales for a Gaussian kernel. The priors on <span class="math inline">\(\theta\)</span>, <span class="math inline">\(\alpha\)</span>, and <span class="math inline">\(\phi\)</span> are described below.</p>
-<p><span class="math display">\[\theta_{j,k}\stackrel{ind}{\sim} Gamma(a_k,b_k) \text{ for } k=1,\dots,d\]</span> <span class="math display">\[\alpha\sim Inv.Gam(1,1),\text{   } \phi_k\stackrel{iid}{\sim} LogN(0,1) \text{ for } k=1,\dots,d\]</span> That is, each element <span class="math inline">\(k\)</span> of <span class="math inline">\(\theta_j\)</span> ( where <span class="math inline">\(d=\dim(X)+1\)</span> counting the lengthscales and a noise parameter) is assigned a independent Gamma prior with fixed parameters <span class="math inline">\(a_k\)</span> and <span class="math inline">\(b_k\)</span>. Thus, every GP expert has the same prior on its noise parameter and so on. Similarly, each element of <span class="math inline">\(\phi\)</span> receives an independent log-normal prior.</p>
-<p>A third visualization of the model structure is a directed acyclic graph, shown below. Starting with the priors for <span class="math inline">\(\alpha\)</span>, <span class="math inline">\(\phi\)</span>, and <span class="math inline">\(\theta\)</span>, we can draw their values and generate our latent variables <span class="math inline">\(z\)</span> and our true variables <span class="math inline">\(y\)</span>. Note that <span class="math inline">\(\theta\)</span> depends on <span class="math inline">\(z\)</span> as well as its prior, as <span class="math inline">\(z\)</span> defines the number of clusters and thus the number of GP parameters to be drawn. The red and blue boxes indicate the quantities which are drawn multiple times for each of the <span class="math inline">\(n\)</span> data points or each of the <span class="math inline">\(J\)</span> clusters.</p>
-<div class="cell">
-<div class="cell-output-display">
-<div>
-<figure class="figure">
-<p><img src="imgpe_files/figure-html/unnamed-chunk-1-1.png" class="img-fluid figure-img" width="672"></p>
-</figure>
-</div>
-</div>
-</div>
+<section id="proof-1" class="level2">
+<h2 class="anchored" data-anchor-id="proof-1">Proof 1</h2>
+<p>Here, I present a formal proof that given the Modified Chinese Restaurant Process used by Rasmussen and Ghahramani, a valid joint distribution over cluster indicators can be derived from Brook’s lemma.</p>
+<p>Let <span class="math inline">\(X=(X_1,\dots,X_n)\)</span> be a vector of covariate information for <span class="math inline">\(n\)</span> data points, where each <span class="math inline">\(X_i\)</span> may also be a vector. Let <span class="math inline">\(z\)</span> be a vector of indicator variables of length <span class="math inline">\(n\)</span> indicating the cluster assignments of the points. Assume <span class="math inline">\(z\)</span> is generated by the Modified CRP with the following probabilities of point <span class="math inline">\(z_i\)</span> being assigned to cluster <span class="math inline">\(j\)</span> given all other points.</p>
+<p><span class="math display">\[P(z_i=j|z_{-i},\dots)\propto \begin{cases} \begin{align}
+&amp;\frac{n-1}{n+\alpha-1}\frac{\sum_{i'\neq i,z_{i'}=j} K_{\phi}(X_i,X_{i'})}{\sum_{i'\neq i} K_{\phi}(X_i,X_{i'})} &amp; \text{ for } j=1,\dots,J^{-i}\\
+&amp;\frac{\alpha}{n+\alpha-1} &amp; \text{ for } j=J^{-i}+1
+\end{align}\end{cases}\]</span></p>
+<p>Assume <span class="math inline">\(\alpha &gt;0\)</span> and <span class="math inline">\(n\geq 2\)</span>. Assume the kernel function <span class="math inline">\(K_{\phi}:\mathbb{X}^2\to (0,\infty)\)</span>. That is, the kernel function returns a finite positive scalar value always. Then the ratio of kernel components in the conditional probability above is always in the interval <span class="math inline">\((0,1]\)</span>, since the sum in the numerator is over a subset of the values in the denominator. Note that if the numerator was equal to <span class="math inline">\(0\)</span>, that would imply that <span class="math inline">\(z_i\)</span> is in a cluster by itself, so the indicator function on <span class="math inline">\(S_i^C\)</span> would cancel that term anyways.</p>
+<p>Now we can apply Brook’s lemma. For a given cluster assignment <span class="math inline">\(z\)</span>, let <span class="math inline">\(S_i\)</span> be the event that the <span class="math inline">\(i^{th}\)</span> observation is clustered by itself in <span class="math inline">\(z\)</span> and let <span class="math inline">\(S_i^C\)</span> be its complement. Let <span class="math inline">\(z^*_i \equiv \{1,\dots,i-1,z_{i+1:n}\}\)</span>. Assume <span class="math inline">\(p(z'=1:n|\alpha,\phi)\)</span> is proportional to <span class="math inline">\(\left(\frac{\alpha}{n+\alpha-1}\right)^n\)</span> with an unknown normalizing constant. Then we know the pmf up to its normalizing constant.</p>
+<p><span class="math display">\[p(z|\alpha,\phi)\propto (n+\alpha-1)^{-n}\prod_{i=1}^n\left((n-1)\frac{\sum_{i'\neq i,z^*_{i'}=j}K_{\phi}(X_i,X_{i'})}{\sum_{i'\neq i}K_{\phi} (X_i,X_{i'})}I(S_i^C) + \alpha I(S_i) \right)\]</span></p>
+<p>By what we have established before, we know that <span class="math inline">\(p(z|\alpha,\phi)\)</span> is always finite and non-negative.</p>
+<p>There are only a finite number of possible cluster arrangements, so there is always a finite, non-negative normalizing constant constructed as the inverse sum of <span class="math inline">\(p^*(z|\alpha,\phi)\)</span> over all possible <span class="math inline">\(z\)</span>. Thus, there is a valid joint distribution for the cluster assignment indicators for any value of <span class="math inline">\(n\)</span>.</p>
 </section>
-<section id="gibbs-sampling-algorithm" class="level2">
-<h2 class="anchored" data-anchor-id="gibbs-sampling-algorithm">Gibbs Sampling Algorithm</h2>
-<p>The modified CRP used in this algorithm is defined by <a href="https://www.tandfonline.com/doi/abs/10.1080/10618600.2000.10474879">“R. M. Neal”</a> (Algorithm 8 in that paper with <span class="math inline">\(m=1\)</span>) and works as follows:</p>
-<p>We represent the current cluster state with assignment labels <span class="math inline">\(z=(z_1,\dots,z_n)\)</span> and GP parameter vectors <span class="math inline">\(\theta_1,\dots,\theta_J\)</span> where <span class="math inline">\(J\)</span> is the number of clusters in the current state. For <span class="math inline">\(i=1,\dots,n\)</span>, repeat the following. Let <span class="math inline">\(J^{-i}\)</span> be the number of clusters in <span class="math inline">\(z\)</span> with point <span class="math inline">\(i\)</span> removed. Let <span class="math inline">\(\theta_{J^{-i}+1}\)</span> be a parameter vector drawn from its prior distribution, in this case <span class="math inline">\(Gamma^d(a,b)\)</span>. Draw a new value for <span class="math inline">\(z_i\)</span> with the following conditional probabilities:</p>
-<p><span class="math display">\[P(z_i=j|z_{-i},y_i,\dots)\propto \begin{cases}
-\frac{n-1}{n+\alpha-1}\frac{\sum_{i'\neq i,z_{i'}=j} K_{\phi}(X_i,X_{i'})}{\sum_{i'\neq i} K_{\phi}(X_i,X_{i'})} f(y_i|\theta_j) \text{ for } j=1,\dots,J^{-i}\\
-\frac{\alpha}{n+\alpha-1}f(y_i|\theta_{J^{-i}+1}) \text{ for } j=J^{-i}+1
-\end{cases}\]</span></p>
-<p>where <span class="math inline">\(f(y_i|\theta_j)\)</span> is the normal density of <span class="math inline">\(y_i\)</span> given the kriging equations with parameter vector <span class="math inline">\(\theta_j\)</span> defining the kernel function.</p>
-<p>I have implemented the Infinite Mixture of Gaussian Process Experts algorithm mostly as described by the authors Rasmussen and Ghahramani, though with a few alterations of my own which are noted below. First, I initialize indicator variables <span class="math inline">\(z\)</span> to a set of values. I generally start by assigning all points to a single cluster. I set gamma prior distributions on the lengthscale and nugget parameters of the GP experts, using the ‘darg’ and ‘garg’ functions of the package ‘laGP’ and set initial values for <span class="math inline">\(\alpha\)</span> and <span class="math inline">\(\phi\)</span>. This approach then iterates through the following MCMC algorithm.</p>
-<ol type="1">
-<li>Perform a Gibbs sampling sweep over the cluster assignment indicators, using the modified Chinese Restaurant Process described in the model explanation, to generate a new cluster assignment vector <span class="math inline">\(z\)</span>.</li>
-<li>Fit a Gaussian process expert to each cluster in <span class="math inline">\(z\)</span> and get ML estimates of each expert’s parameters <span class="math inline">\(\theta_j\)</span>. Note that this is not a sampling step but maximization.</li>
-<li>Sample the Dirichlet process concentration parameter, <span class="math inline">\(\alpha\)</span>, using quantile slice sampling with a <span class="math inline">\(Gamma(1,1)\)</span> proposal distribution. The posterior distribution of <span class="math inline">\(\alpha\)</span> we sample from is <span class="math display">\[p(\alpha|n, J)\propto \alpha^{J-3/2}\exp(-1/2\alpha)\Gamma(\alpha)/\Gamma(n+\alpha)\]</span></li>
-<li>Sample the other CRP parameter <span class="math inline">\(\phi\)</span> via random walk Monte Carlo. The random walk step uses a normal proposal distribution centered at the current value and with variance equal to <span class="math inline">\((2.38^2/d)H^{-1}\)</span>, <span class="math inline">\(d\)</span> being the number of inputs and <span class="math inline">\(H\)</span> the Hessian matrix of the distribution of <span class="math inline">\(\phi\)</span>. The posterior distribution of <span class="math inline">\(\phi\)</span> we are sampling from is <span class="math display">\[p(\phi|z,\alpha,\dots)\propto p(z|y,\phi,\alpha)p(\phi)\approx \left[\prod_{i=1}^n p(z_i|y,\phi,\alpha) \right] p(\phi)\]</span></li>
-<li>Repeat from step 1 until the MCMC output has converged.</li>
-</ol>
+<section id="proof-2" class="level2">
+<h2 class="anchored" data-anchor-id="proof-2">Proof 2</h2>
+<p>Here, I present a formal proof that the Modified Chinese Restaurant Process is a stochastic process via the Kolmogorov Extension Theorem.</p>
+<section id="kolmogorov-extension-theorem" class="level3">
+<h3 class="anchored" data-anchor-id="kolmogorov-extension-theorem">Kolmogorov Extension Theorem</h3>
+<p>Let <span class="math inline">\(T\)</span> represent an interval (thought of as “time”) and let <span class="math inline">\(n\in \mathbb{N}\)</span>. For each <span class="math inline">\(k\in \mathbb{N}\)</span> and finite sequence of distinct times <span class="math inline">\(t_1,\dots,t_k\in T\)</span>, let <span class="math inline">\(\nu_{t_1,\dots,t_k}\)</span> be a probability measure on <span class="math inline">\((\mathbb{R}^n)^k\)</span>. Suppose that these measures satisfy two conditions:</p>
+<ul>
+<li><p>For all permutations <span class="math inline">\(\pi\)</span> of <span class="math inline">\(1,\dots,k\)</span> and measureable sets <span class="math inline">\(F_i\subseteq \mathbb{R}^n\)</span>, <span class="math inline">\(\nu_{t_{\pi(1)},\dots,t_{\pi(k)}}(F_{\pi(1)}\times \dots \times F_{pi(k)}) =\nu_{t_1,\dots,t_k} (F_1\times \dots \times F_k)\)</span>.</p></li>
+<li><p>For all measureable sets <span class="math inline">\(F_i\subseteq \mathbb{R}^n\)</span> and <span class="math inline">\(m\in \mathbb{N}\)</span>, <span class="math inline">\(\nu_{t_1,\dots,t_k} (F_1\times \dots \times F_k) =\nu_{t_1,\dots,t_k,t_{k+1},\dots,t_{k+m}}\left(F_1\times \dots \times F_k\times (\mathbb{R}^n)^m\right)\)</span>.</p></li>
+</ul>
+<p>Then there exists a probability space <span class="math inline">\((\Omega,F,\mathbb{P})\)</span> and a stochastic process <span class="math inline">\(X:T\times\Omega \to \mathbb{R}^n\)</span> such that <span class="math inline">\(\nu_{t_1,\dots,t_k} (F_1\times \dots \times F_k) =\mathbb{P}(X_{t_1}\in F_1,\dots, X_{t_k}\in F_k)\)</span>.</p>
 </section>
-<section id="posterior-predictive-distribution" class="level2">
-<h2 class="anchored" data-anchor-id="posterior-predictive-distribution">Posterior Predictive Distribution</h2>
-<p>The paper by Rasmussen and Ghahramani does not discuss what a posterior predictive distribution would look like. However, it can be deduced based on the posterior predictive distribution of a lone Gaussian process. With <span class="math inline">\(p(n)\)</span> and <span class="math inline">\(w_{z(k)}\)</span> defined the same as in the original data model, we determine that the distribution of a new point <span class="math inline">\(y^*\)</span> with data <span class="math inline">\(x^*\)</span> is as follows.</p>
-<p><span class="math display">\[y^*\sim \sum_{k=1}^{p(n)} \left[\sum_{j=1}^{J_k} N(\mu_j^*,\sigma_j^*)  P(z_{y^*}=j)\right] w_k\]</span> where <span class="math inline">\(\mu_j^*\)</span> and <span class="math inline">\(\Sigma_j^*\)</span> are found according to the kriging equations of a Gaussian process. That is,</p>
-<p><span class="math display">\[\mu_j^*=K(x^*,X^{(j)})^TK^{-1}y^{(j)}\text{ and } \sigma_j^*=K(x^*,x^*)-K(x^*,X^{(j)})^T K^{-1}K(x^*,X^{(j)})\]</span> where <span class="math inline">\(K\)</span> is the covariance matrix based on parameters <span class="math inline">\(\theta_j\)</span> and <span class="math inline">\(X^{(j)}\subset X\)</span> and <span class="math inline">\(y^{(j)} \subset y\)</span> are the data and response values associated with cluster <span class="math inline">\(j\)</span>.</p>
+<section id="application-to-mcrp" class="level3">
+<h3 class="anchored" data-anchor-id="application-to-mcrp">Application to MCRP</h3>
+<p>Let <span class="math inline">\(X=(X_1,\dots,X_n)\)</span> be a vector of covariate information for <span class="math inline">\(n\)</span> data points, where each <span class="math inline">\(X_i\)</span> may also be a vector. Let <span class="math inline">\(z\)</span> be a vector of indicator variables of length <span class="math inline">\(n\)</span> indicating the cluster assignments of the points. Assume <span class="math inline">\(z\)</span> is generated by the Modified CRP as defined in Proof 1. Then the probability mass function <span class="math inline">\(p(z|\alpha,\phi)\)</span> up to a normalizing constant is</p>
+<p><span class="math display">\[p(z|\alpha,\phi)\propto (n+\alpha-1)^{-n}\prod_{i=1}^n\left((n-1)\frac{\sum_{i'\neq i,z^*_{i'}=j}K_{\phi}(X_i,X_{i'})}{\sum_{i'\neq i}K_{\phi} (X_i,X_{i'})}I(S_i^C) + \alpha I(S_i) \right)\]</span></p>
+<p>Then let <span class="math inline">\(\pi\)</span> be a permutation of <span class="math inline">\(1,\dots,n\)</span> and let <span class="math inline">\(z_{\pi}\)</span> be a permutation of <span class="math inline">\(z\)</span> according to <span class="math inline">\(\pi\)</span>. Then</p>
+<p><span class="math display">\[p(z_{\pi}|\alpha,\phi)\propto (n+\alpha-1)^{-n}\prod_{i=1}^n\left((n-1)\frac{\sum_{i'\neq i,z^*_{\pi,i'}=j}K_{\phi}(X_{\pi(i)},X_{\pi(i')})}{\sum_{i'\neq i}K_{\phi} (X_{\pi(i)},X_{\pi(i')})}I(S_i^C) + \alpha I(S_i) \right)\]</span> <span class="math display">\[= (n+\alpha-1)^{-n}\prod_{i=1}^n\left((n-1)\frac{\sum_{i'\neq i,z^*_{i'}=j}K_{\phi}(X_i,X_{i'})}{\sum_{i'\neq i}K_{\phi} (X_i,X_{i'})}I(S_i^C) + \alpha I(S_i) \right)\]</span></p>
+<p>Note that the normalizing constants for <span class="math inline">\(z_{\pi}\)</span> and <span class="math inline">\(z\)</span> are defined as the inverse sum of the unnormalized pmf over all possible permutations of <span class="math inline">\(z\)</span> or <span class="math inline">\(z_{\pi}\)</span>. As the unnormalized pmfs are equal, the normalizing constants are equal. Thus, <span class="math inline">\(p(z|\alpha,\phi)=p(z_{\pi}|\alpha,\phi)\)</span>, completing the first condition of the Kolmogorov Extension Theorem.</p>
+<p>Now note that by the Modified CRP algorithm, you construct a partition by adding points one at a time. Then the <span class="math inline">\(n^{th}\)</span> point has no effect on how the previous <span class="math inline">\(n-1\)</span> points are partitioned, so <span class="math inline">\(p(z_{1,\dots,n}|\alpha,\phi) = \int p(z_{1,\dots,n+m}|\alpha,\phi) dz_{n+1}\dots dz_{n+m}\)</span>. This completes the second condition of the Kolmogorov Extension Theorem.</p>
+<p>As both conditions have been met, we conclude that the sequence of discrete random variables <span class="math inline">\(z_1,\dots\)</span> is a stochastic process.</p>
 
 
+</section>
 </section>
 
 </main> <!-- /main -->
