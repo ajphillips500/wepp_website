@@ -7,6 +7,51 @@ knitr::opts_chunk$set(echo = FALSE)
 options(tinytex.verbose = TRUE)
 ```
 
+## February 24, 2026
+
+### Summary
+
+This week I studied my custom slice sampler. I generated data sets from Gaussian processes with known parameters and compared the slice sampler to a simple Metropolis-Hastings sampler, and the STAN sampler from 'brms'. In these tests, I held the lengthscale and spatial variance parameters fixed and compared the performance of the methods only on the nugget (error variance). 
+
+The slice sampler and Metropolis-Hastings sampler both significantly overestimated the nugget for most data sets. I found that my log likelihood function for the GP is very diffuse, which likely explains why my samplers were failing. However, I am not sure what is wrong about the log likelihood function and unsure how to improve my custom samplers.
+
+### Generated Data
+
+This week I coded a data generation function to simulate from the iMGPE model. It takes the MCRP parameters $\alpha$ and $\phi$, the cluster structure $z$, and the GP parameters (lengthscale, nugget, and spatial variance) as possible parameters. Each part can be either prespecified or generated hierarchically from its priors.
+
+I generated $5$ data sets, each with $100$ points. For simplicity, I did not divide the data into clusters. For this week I focused on the nugget parameter, so the five data sets cover a range of values on that parameter while holding the other parameters fixed.
+
+```{r}
+knitr::include_graphics('Reports2/plot1-2-24-26.png')
+```
+
+### Single Parameter Estimation
+
+I tested my custom slice sampler and a simple Metropolis-Hastings sampler on the generated data sets, sampling only the nugget of the Gaussian process model while holding the other parameters fixed at their true values. I also fit a GP to each data set with STAN sampler, through 'brms'. All samplers were run for 10000 iterations and all chains had $\hat R$ values below $1.01$ for the final 5000 iterations. The table below shows the mean and median sampled values of the nugget for both methods, along with the true parameter value and the nugget as estimated by the STAN sampler.
+
+```{r}
+tab1 <- data.frame('True'=c(0.01,0.05,0.1,0.5,1), 'Slice Mean'=c(0.016,3.137,3.049,2.304,2.525), 'Slice Median'=c(0.015,1.378,1.473,1.319,1.32), 'M-H Mean'=c(0.015, 2.256,2.455, 2.138,2.198), 'M-H Median'=c(0.015, 1.308,1.376,1.262, 1.361), 'STAN Est'=c(0.014, 0.048, 0.130, 0.518, 1.103))
+knitr::kable(tab1, digits = 3)
+```
+
+I have also plotted the trace plots for the slice sampling draws given the first, third and fifth data sets.
+
+```{r}
+knitr::include_graphics('Reports2/plot2-2-24-26.png')
+```
+
+The nugget is severely overestimated for all data sets but the first with $g=0.01$. The posterior distributions are also significantly skewed, indicating a failure to converge to the true parameter value.
+
+### Nugget Profile Likelihood
+
+To better understand the source of this inaccuracy, I plotted my GP log likelihood function over different values of the nugget, with lengthscale and spatial variance held fixed at their true values. I plotted the nugget's profile likelihood for three of the generated data sets, with the true values of $\phi$ being $0.01$, $0.1$ and $1$.
+
+```{r}
+knitr::include_graphics('Reports2/plot3-2-24-26.png')
+```
+
+For the first data set, the density is concentrated near the true parameter value. For the other two, the density is very diffuse, placing nearly equal weight on a wide range of nugget values. I am unsure if this indicates an error in my log-likelihood function or if this is a real property of the distribution. The former seems more likely, but I have not been able to identify any error in my code.
+
 ## February 17, 2026
 
 ### Summary
