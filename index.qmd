@@ -7,6 +7,56 @@ knitr::opts_chunk$set(echo = FALSE)
 options(tinytex.verbose = TRUE)
 ```
 
+## March 3, 2026
+
+### Summary
+
+This week I revised the Metropolis Hastings sampler for the Gaussian process model and tested its ability to recover true parameter values from generated data sets. I tested this on the nugget parameter and the spatial variance parameter and found that the M-H sampler is working well for the nugget and somewhat less well for the spatial variance.
+
+### GP Sampling Improvements
+
+I made two adjustments to my posterior distribution function for Gaussian processes that significantly improved my ability to sample from it. First, on the advice of Gelman, I adopted a log-uniform prior for the spatial variance and nugget. This prior places equal weight on all magnitudes of the parameter within an interval. Second, I adjusted the function to take the standard deviation components as my quantities of interest rather than the variance components.
+
+My Gaussian process model is that for a data vector $X$ and a response vector $Y$, both of length $n$, the model is parameterized by a lengthscale $\theta$, a spatial variance $\tau^2$, and a nugget $g$.
+
+$$Y\sim N_n(0,\tau^2K+g),\text{ } K(i,j)=\exp\left(-\frac{(X_i-X_j)^2}{\theta}\right)$$
+
+with independent priors $\theta\sim IG(1,1)$, $\log(\tau)\sim Unif(-10,-10)$, and $\log(g^{1/2})\sim Unif(-10,10)$.
+
+Even with these adaptations, I could not get the slice sampler to produce reasonable estimates. In addition, it proved numerically unstable when the nugget was very small, collapsing to a single estimate instead of exploring the posterior space.
+
+However, I was able to construct a working Metropolis-Hastings within Gibbs sampler for estimating Gaussian process parameters. 
+
+### Nugget Estimation
+
+I generated $5$ data sets, each with $100$ points. For simplicity, I did not divide the data into clusters. The five data sets cover a range of values on the nugget parameter while holding the other parameters fixed. Specifically, the nugget is taken as $g=0.01$, $0.05$, $0.1$, $0.5$, and $1$, while the lengthscale was $0.5$ and the spatial variance was $1$.
+
+```{r}
+knitr::include_graphics('Reports2/plot1-2-24-26.png')
+```
+
+I fit a GP model to each data set using the M-H sampler, running it for $10000$ iterations and discarding the first $5000$ as burn-in. The proposal distribution for the sampler was log-uniform on the interval $\log(g^{1/2})\pm 0.5$, where $g^{1/2}$ is the current estimate of the square root of the nugget. The table below displays the true and estimated values of $g^{1/2}$ for the M-H sampler, along with the standard error and effective sample size. The last column shows the estimates from a GP model fit with STAN.
+
+```{r}
+tab1 <- data.frame('True'=c(0.1,0.224,0.316,0.707,1), 'MH Mean'=c(0.117, 0.223, 0.363, 0.713,1.05), 'MH SE'=c(0.009, 0.017,0.028,0.054, 0.075), 'ESS'=c(766,955,618,727,756), 'STAN Est'=c(0.118, 0.219, 0.361, 0.720, 1.05))
+knitr::kable(tab1, digits = 3)
+```
+
+The $\hat R$ values for all chains were below $1.001$, indicating convergence. The acceptance rate was around $24\%$ for all chains.
+
+### Spatial Variance Estimation
+
+I repeated the previous experiment with spatial variance as the parameter of interest. First, I generated five data sets with the lengthscale and nugget fixed at $0.5$ and $0.05$ and with the spatial variance taking values of $\tau^2=0.5$, $1$, $2$, $4$, and $8$.
+
+I fit a Gaussian process model to each data set using the Metropolis Hastings sampler, sampling only $\tau^2$ and holding the other parameters fixed at their true values. The table below contains the true and estimated spatial variance for each data set.
+
+```{r}
+tab2 <- data.frame('True'=c(0.5,1,2,4,8), 'MH Mean'=c(0.47, 1.277, 1.716, 6.666, 358.28), 'MH SE'=c(0.226,0.551,0.809,3.417,183.161), 'ESS'=c(884, 1345, 875, 656, 727))
+knitr::kable(tab2, digits = 3)
+```
+
+The $\hat R$ values for all chains were below $1.001$, indicating convergence. The acceptance rate was around $40\%$ for all chains. The spatial variance estimates grow increasingly inaccurate as the true variance increases, indicating that the method still needs some refining.
+
 ## February 24, 2026
 
 ### Summary
