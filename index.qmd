@@ -25,11 +25,9 @@ with independent priors $\theta\sim IG(1,1)$, $p(\tau)\propto 1/\tau$, and $p(\e
 
 I tested the improved M-H sampler on each parameter one at a time, holding the other two fixed. For each parameter, I generated five data sets with known parameter values and fit a Gaussian process model to each using the M-H sampler and a STAN sampler. Both samplers ran for $10000$ iterations, and the first $5000$ were discarded as burn in.
 
-For the nugget, the true parameter values were $\eta^2=0.01$, $0.05$, $0.1$, $0.5$, and $1$. I used a normal proposal distribution in the Metropolis-Hastings sampler.
+For the nugget, the true parameter values were $\eta^2=0.01$, $0.05$, $0.1$, $0.5$, and $1$. For the spatial variance, the true parameter values were $\tau^2=0.5$, $1$, $2$, $4$, and $8$. I used normal proposal distributions in the Metropolis-Hastings sampler with standard deviations of $0.25$ and $0.5$ respectively.
 
-For the spatial variance, the true parameter values were $\tau^2=0.5$, $1$, $2$, $4$, and $8$. I used a normal proposal distribution in the Metropolis-Hastings sampler.
-
-For the lengthscale, the true parameter values were $\theta=0.1$, $0.5$, $1$, $5$, and $10$. I used a chi-squared proposal distribution in the Metropolis-Hastings sampler.
+For the lengthscale, the true parameter values were $\theta=0.1$, $0.5$, $1$, $5$, and $10$. I used a cauchy proposal distribution in the Metropolis-Hastings sampler with scale parameter $1$.
 
 The tables below display the true and estimated parameter values for each method, as well as the standard errors of the estimates and the acceptance rate of the M-H sampler. Standard errors were calculated with the 'mcmcse' package for the M-H sampler and with STAN for the STAN sampler.
 
