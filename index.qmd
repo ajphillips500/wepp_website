@@ -7,6 +7,68 @@ knitr::opts_chunk$set(echo = FALSE)
 options(tinytex.verbose = TRUE)
 ```
 
+## March 10, 2026
+
+### Summary
+
+This week I revised the Metropolis Hastings sampler to use more sensible priors and proposal distributions. I tested its efficacy at recovering accurate parameter estimates from data sets generated from known parameter values and compared this to the estimates produced by a STAN sampler. I ran these experiments first on fitting one parameter at a time, then on fitting two at a time. Parameter estimates were fairly accurate, though the acceptance rates of the Markov chains indicate a need for fine tuning.
+
+### M-H Sampler, One Parameter
+
+I updated my Metropolis Hastings sampler with more reasonable priors for the variance components. After reviewing "Bayesian Data Analysis 3", I determined that the authors were not referring to log-uniform priors with finite endpoints. Rather, they meant that for a parameter $\epsilon$, the prior distribution of $\log(\epsilon)$ is uniform on the real line. Then the prior distribution of $\epsilon$ is log-uniform on the interval $(0,\infty)$. By a change of variables, $p(\epsilon)\propto 1/\epsilon$. 
+
+My Gaussian process model is that for a data vector $X$ and a response vector $Y$, both of length $n$, the model is parameterized by a lengthscale $\theta$, a spatial variance $\tau^2$, and a nugget $\eta^2$.
+
+$$Y\sim N_n(0,\tau^2(K+\eta^2)),\text{ } K(i,j)=\exp\left(-\frac{(X_i-X_j)^2}{\theta}\right)$$
+
+with independent priors $\theta\sim IG(1,1)$, $p(\tau)\propto 1/\tau$, and $p(\eta)\propto 1/\eta$.
+
+I tested the improved M-H sampler on each parameter one at a time, holding the other two fixed. For each parameter, I generated five data sets with known parameter values and fit a Gaussian process model to each using the M-H sampler and a STAN sampler. Both samplers ran for $10000$ iterations, and the first $5000$ were discarded as burn in.
+
+For the nugget, the true parameter values were $\eta^2=0.01$, $0.05$, $0.1$, $0.5$, and $1$. I used a normal proposal distribution in the Metropolis-Hastings sampler.
+
+For the spatial variance, the true parameter values were $\tau^2=0.5$, $1$, $2$, $4$, and $8$. I used a normal proposal distribution in the Metropolis-Hastings sampler.
+
+For the lengthscale, the true parameter values were $\theta=0.1$, $0.5$, $1$, $5$, and $10$. I used a chi-squared proposal distribution in the Metropolis-Hastings sampler.
+
+The tables below display the true and estimated parameter values for each method, as well as the standard errors of the estimates and the acceptance rate of the M-H sampler. Standard errors were calculated with the 'mcmcse' package for the M-H sampler and with STAN for the STAN sampler.
+
+```{r}
+#table for each parm
+#true, est, STAN est, mcmcse error, STAN error, acc rate, rhat
+tab_nug <- data.frame('True'=sqrt(c(0.01,0.05,0.1,0.5,1)), 'MH_est'=c(0.1171868, 0.2234854, 0.3635412, 0.7168747, 1.0436732), 'STAN_Est'=c(0.118, 0.224, 0.364, 0.716, 1.047), 'MH_SE'=c('0.00028', '0.00061', '0.00090', '0.00174', '0.00224'), 'STAN_SE'=c(0.009,0.018,0.028,0.055,0.074), 'Acc_Rate'=c(0.347,0.338,0.338,0.351,0.340))
+tab_spv <- data.frame('True'=sqrt(c(0.5,1,2,4,8)), 'MH_Est'=c(0.7709068, 1.0025943, 1.4532868, 2.0340065, 2.9958773), 'STAN_Est'=c(0.692, 1.10, 1.261, 2.471, 17.236), 'MH_SE'=c('0.0018', '0.0021', '0.0035', '0.0051', '0.0072'), 'STAN_SE'=c(0.158, 0.244, 0.278, 0.515, 4.17), 'Acc_Rate'=c(0.321,0.324,0.335,0.335,0.330))
+tab_ls <- data.frame('True'=c(0.1,0.5,1,5,10), 'MH_Est'=c(0.1265266, 0.4616232, 1.0245845, 3.3551199, 6.5174724), 'STAN_Est'=c(0.228, 0.470, 0.714, 1.372, 1.881), 'STAN_Est_Adj'=c(0.103968, 0.441800, 1.019592, 3.764768, 7.076322), 'MH_SE'=c('0.0007', '0.0033', '0.0080', '0.0451', '0.1199'), 'STAN_SE'=c(0.021,0.049, 0.078,0.228,0.410), 'Acc_Rate'=c(0.372,0.414,0.467,0.586,0.604))
+
+knitr::kable(tab_nug, digits = 3, caption = "Sampler Performance on Nugget SD")
+knitr::kable(tab_spv, digits = 3, caption = "Sampler Performance on Spatial SD")
+knitr::kable(tab_ls, digits = 3, caption = "Sampler Performance on Lengthscale")
+```
+
+The $\hat R$ values for all chains were below $1.001$, indicating that all chains had converged. In all cases, the Metropolis-Hastings estimates were reasonably close to the true parameter values and were close to the STAN estimates in almost all cases. STAN overestimated the spatial variance on the data set with $\tau=2.83$ and both methods underestimated the lengthscale for $\theta=5$ and $\theta=10$.
+
+The lengthscale table contains an extra column, 'STAN_Est_Adj', as STAN parameterizes the lengthscale differently, with a parameter $\lambda$ such that $\theta=2\lambda^2$. The adjusted estimates are thus twice the square of the raw estimates.
+
+### M-H Sampler, Two Parameters
+
+To continue verifying my Metropolis-Hastings sampler, I experimented with fitting to two parameters while holding the third fixed (So I now have a Metropolis-Hastings within Gibbs sampler). First, I generated a data set with $\theta=0.5$, $\tau^2=2$, and $\eta^2=0.05$. Then I fit the M-H sampler and the STAN sampler three times, each time holding one parameter fixed. As before, the samplers ran for $10000$ iterations and the first $5000$ were discarded as burn-in.
+
+```{r}
+tab2 <- data.frame('Par'=c('Nugget_SD','Spatial_SD'), 'True'=c(0.224,1.414), 'MH_Est'=c(0.285,1.228), 'STAN_Est'=c(0.333, 1.235), 'MH_SE'=c(0.009,0.050), 'STAN_SE'=c(0.025, 0.281), 'Acc_Rate'=c(0.335,0.356))
+tab3 <- data.frame('Par'=c('Nugget_SD','Lengthscale'), 'True'=c(0.224,0.5), 'MH_Est'=c(0.235,0.526), 'STAN_Est'=c(0.333, 0.506), 'MH_SE'=c(0.001,0.006), 'STAN_SE'=c(0.026, 0.053), 'Acc_Rate'=c(0.333,0.095))
+tab4 <- data.frame('Par'=c('Spatial_SD','Lengthscale'), 'True'=c(1.414,0.5), 'MH_Est'=c(1.468,0.547), 'STAN_Est'=c(1.015, 0.293), 'MH_SE'=c(0.004,0.008), 'STAN_SE'=c(0.232, 0.109), 'Acc_Rate'=c(0.328,0.098))
+
+knitr::kable(tab2, digits = 3, caption = "Sampler Performance with Fixed Lengthscale")
+knitr::kable(tab3, digits = 3, caption = "Sampler Performance with Fixed Spatial Variance")
+knitr::kable(tab3, digits = 3, caption = "Sampler Performance with Fixed Nugget")
+```
+
+The $\hat R$ values for all chains were below $1.001$, indicating that all chains had converged. In all cases, the M-H estimates were fairly close to the true parameter values, sometimes outperforming the STAN estimates.
+
+The acceptance rate for the nugget and spatial variance were all around $0.3$ to $0.4$. The acceptance rate for the lengthscale is closer to $0.1$, which is below the generally accepted target rate of $0.2$ to $0.4$.
+
+It is also worth noting that my Metropolis-Hastings sampler runs much faster than the STAN sampler. It takes around $75$ seconds to complete ten thousand iterations, while STAN takes $4$ to $6$ minutes to complete the same number.
+
 ## March 3, 2026
 
 ### Summary
