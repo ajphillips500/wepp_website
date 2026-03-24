@@ -576,9 +576,9 @@ window.Quarto = {
 </section>
 <section id="m-h-sampler-adaptive-proposal" class="level3">
 <h3 class="anchored" data-anchor-id="m-h-sampler-adaptive-proposal">M-H Sampler, Adaptive Proposal</h3>
-<p>I updated the priors of my Metropolis Hastings sampler as discussed in the previous section, then implemented an adaptive proposal variance. Proposals for new parameters are now drawn from a multivariate normal distribution with covariance matrix <span class="math inline">\(2.4^2S/d\)</span>, where <span class="math inline">\(d\)</span> is the number of parameters and <span class="math inline">\(S\)</span> is the sampling variance of the parameters. <span class="math inline">\(S\)</span> is updated every <span class="math inline">\(100\)</span> iterations for the first thousand, based on samples already drawn. I also discarded only the first <span class="math inline">\(1000\)</span> iterations as burn-in.</p>
+<p>I updated the priors of my Metropolis Hastings sampler as discussed in the previous section, then implemented an adaptive proposal variance. Proposals for new parameters are now drawn from a multivariate normal distribution with covariance matrix <span class="math inline">\(2.4^2S/d\)</span>, where <span class="math inline">\(d\)</span> is the number of parameters and <span class="math inline">\(S\)</span> is the sampling variance of the parameters. <span class="math inline">\(S\)</span> is updated every <span class="math inline">\(1000\)</span> iterations for the first ten thousand, based on samples already drawn. I discard these first <span class="math inline">\(10000\)</span> iterations as burn-in.</p>
 <p>I ran a number of experiments to study the performance of the Metropolis Hastings sampler when sampling all GP parameters at once. First, I generated 10 data sets from the parameter values <span class="math inline">\(\theta=0.5\)</span>, <span class="math inline">\(\tau^2=2\)</span> and <span class="math inline">\(\eta^2=0.5\)</span>. I then fit a GP to each data set using both the M-H sampler and a STAN sampler and recorded the parameter estimates and the standard errors of the estimates (via ‘mcmcse’).</p>
-<p>The table below shows the estimates and standard errors for each parameter, averaged across the data sets.</p>
+<p>The first table below shows the estimates and standard errors for each parameter, averaged across the data sets. The second shows the parameter estimates for each data set and sampler, as well as the acceptance rate of the M-H sampler.</p>
 <div class="cell">
 <div class="cell-output-display">
 <table class="caption-top table table-sm table-striped small">
@@ -597,34 +597,142 @@ window.Quarto = {
 <tr class="odd">
 <td style="text-align: left;">Theta</td>
 <td style="text-align: right;">0.500</td>
-<td style="text-align: right;">0.649</td>
-<td style="text-align: right;">3.442</td>
-<td style="text-align: right;">0.009</td>
-<td style="text-align: right;">0.475</td>
+<td style="text-align: right;">0.791</td>
+<td style="text-align: right;">0.972</td>
+<td style="text-align: right;">0.046</td>
+<td style="text-align: right;">0.043</td>
 </tr>
 <tr class="even">
 <td style="text-align: left;">Tau</td>
 <td style="text-align: right;">1.414</td>
-<td style="text-align: right;">0.608</td>
-<td style="text-align: right;">0.420</td>
-<td style="text-align: right;">0.020</td>
-<td style="text-align: right;">0.041</td>
+<td style="text-align: right;">1.535</td>
+<td style="text-align: right;">1.584</td>
+<td style="text-align: right;">0.043</td>
+<td style="text-align: right;">0.017</td>
 </tr>
 <tr class="odd">
 <td style="text-align: left;">Eta</td>
 <td style="text-align: right;">0.707</td>
-<td style="text-align: right;">0.451</td>
-<td style="text-align: right;">0.435</td>
-<td style="text-align: right;">0.016</td>
-<td style="text-align: right;">0.016</td>
+<td style="text-align: right;">0.717</td>
+<td style="text-align: right;">0.965</td>
+<td style="text-align: right;">0.017</td>
+<td style="text-align: right;">0.001</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="cell-output-display">
+<table class="caption-top table table-sm table-striped small">
+<caption>Parameter Estimates by Data Set</caption>
+<thead>
+<tr class="header">
+<th style="text-align: right;">MH_Theta</th>
+<th style="text-align: right;">MH_Tau</th>
+<th style="text-align: right;">MH_Eta</th>
+<th style="text-align: right;">STAN_Theta</th>
+<th style="text-align: right;">STAN_Tau</th>
+<th style="text-align: right;">STAN_Eta</th>
+<th style="text-align: right;">Acc_Rate</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: right;">0.418</td>
+<td style="text-align: right;">1.218</td>
+<td style="text-align: right;">0.854</td>
+<td style="text-align: right;">0.346</td>
+<td style="text-align: right;">1.186</td>
+<td style="text-align: right;">0.961</td>
+<td style="text-align: right;">0.043</td>
+</tr>
+<tr class="even">
+<td style="text-align: right;">0.806</td>
+<td style="text-align: right;">1.487</td>
+<td style="text-align: right;">0.666</td>
+<td style="text-align: right;">0.803</td>
+<td style="text-align: right;">1.546</td>
+<td style="text-align: right;">0.889</td>
+<td style="text-align: right;">0.131</td>
+</tr>
+<tr class="odd">
+<td style="text-align: right;">0.629</td>
+<td style="text-align: right;">1.191</td>
+<td style="text-align: right;">0.835</td>
+<td style="text-align: right;">0.483</td>
+<td style="text-align: right;">1.104</td>
+<td style="text-align: right;">0.889</td>
+<td style="text-align: right;">0.117</td>
+</tr>
+<tr class="even">
+<td style="text-align: right;">1.345</td>
+<td style="text-align: right;">1.355</td>
+<td style="text-align: right;">0.867</td>
+<td style="text-align: right;">3.270</td>
+<td style="text-align: right;">1.472</td>
+<td style="text-align: right;">1.076</td>
+<td style="text-align: right;">0.047</td>
+</tr>
+<tr class="odd">
+<td style="text-align: right;">0.820</td>
+<td style="text-align: right;">1.251</td>
+<td style="text-align: right;">0.782</td>
+<td style="text-align: right;">0.803</td>
+<td style="text-align: right;">1.281</td>
+<td style="text-align: right;">0.898</td>
+<td style="text-align: right;">0.206</td>
+</tr>
+<tr class="even">
+<td style="text-align: right;">1.075</td>
+<td style="text-align: right;">2.378</td>
+<td style="text-align: right;">0.470</td>
+<td style="text-align: right;">1.206</td>
+<td style="text-align: right;">2.671</td>
+<td style="text-align: right;">1.040</td>
+<td style="text-align: right;">0.153</td>
+</tr>
+<tr class="odd">
+<td style="text-align: right;">0.471</td>
+<td style="text-align: right;">1.535</td>
+<td style="text-align: right;">0.763</td>
+<td style="text-align: right;">0.386</td>
+<td style="text-align: right;">1.411</td>
+<td style="text-align: right;">1.029</td>
+<td style="text-align: right;">0.175</td>
+</tr>
+<tr class="even">
+<td style="text-align: right;">0.767</td>
+<td style="text-align: right;">1.718</td>
+<td style="text-align: right;">0.607</td>
+<td style="text-align: right;">0.751</td>
+<td style="text-align: right;">1.726</td>
+<td style="text-align: right;">0.948</td>
+<td style="text-align: right;">0.134</td>
+</tr>
+<tr class="odd">
+<td style="text-align: right;">0.694</td>
+<td style="text-align: right;">1.814</td>
+<td style="text-align: right;">0.559</td>
+<td style="text-align: right;">0.725</td>
+<td style="text-align: right;">1.994</td>
+<td style="text-align: right;">0.953</td>
+<td style="text-align: right;">0.052</td>
+</tr>
+<tr class="even">
+<td style="text-align: right;">0.885</td>
+<td style="text-align: right;">1.406</td>
+<td style="text-align: right;">0.766</td>
+<td style="text-align: right;">0.945</td>
+<td style="text-align: right;">1.453</td>
+<td style="text-align: right;">0.969</td>
+<td style="text-align: right;">0.211</td>
 </tr>
 </tbody>
 </table>
 </div>
 </div>
-<p>The acceptance rates for the M-H sampler vary from <span class="math inline">\(52\%\)</span> to <span class="math inline">\(2.4\%\)</span>, indicating that the adaptive proposal section was not always successful in reaching the optimal acceptance rate of <span class="math inline">\(23\%\)</span>. Further tuning may be required.</p>
+<p>The acceptance rates for the M-H sampler usually stay around <span class="math inline">\(10\%\)</span> to <span class="math inline">\(20\%\)</span>, occasionally getting down to about <span class="math inline">\(5\%\)</span>. It was necessary to significantly increase the number of samples used to estimate the sample variance to ensure the acceptance rate woudn’t be below <span class="math inline">\(5\%\)</span> too often. The acceptance rate is still below the optimal acceptance rate of <span class="math inline">\(23\%\)</span>, indicating that further tuning may be required.</p>
 <p>I began work on a larger simulation study of 100 data sets for each of 8 sets of parameter values. I used every combination of <span class="math inline">\(\theta=0.1,5\)</span>, <span class="math inline">\(\tau^2=0.1,10\)</span> and <span class="math inline">\(\eta^2=0.1,10\)</span>. I fit a GP to each data set using both the M-H sampler and a STAN sampler and recorded the parameter estimates from each method.</p>
-<p>This part of the project ran into difficulties and is not ready to be presented.</p>
+<p>This part of the project has not finished running, but I will report on it next week.</p>
 </section>
 </section>
 <section id="march-10-2026" class="level2">

@@ -29,22 +29,25 @@ In my Metropolis-Hastings sampler, I decided to use half-Cauchy priors for the v
 
 ### M-H Sampler, Adaptive Proposal
 
-I updated the priors of my Metropolis Hastings sampler as discussed in the previous section, then implemented an adaptive proposal variance. Proposals for new parameters are now drawn from a multivariate normal distribution with covariance matrix $2.4^2S/d$, where $d$ is the number of parameters and $S$ is the sampling variance of the parameters. $S$ is updated every $100$ iterations for the first thousand, based on samples already drawn. I also discarded only the first $1000$ iterations as burn-in.
+I updated the priors of my Metropolis Hastings sampler as discussed in the previous section, then implemented an adaptive proposal variance. Proposals for new parameters are now drawn from a multivariate normal distribution with covariance matrix $2.4^2S/d$, where $d$ is the number of parameters and $S$ is the sampling variance of the parameters. $S$ is updated every $1000$ iterations for the first ten thousand, based on samples already drawn. I discard these first $10000$ iterations as burn-in.
 
 I ran a number of experiments to study the performance of the Metropolis Hastings sampler when sampling all GP parameters at once. First, I generated 10 data sets from the parameter values $\theta=0.5$, $\tau^2=2$ and $\eta^2=0.5$. I then fit a GP to each data set using both the M-H sampler and a STAN sampler and recorded the parameter estimates and the standard errors of the estimates (via 'mcmcse').
 
-The table below shows the estimates and standard errors for each parameter, averaged across the data sets.
+The first table below shows the estimates and standard errors for each parameter, averaged across the data sets. The second shows the parameter estimates for each data set and sampler, as well as the acceptance rate of the M-H sampler.
 
 ```{r}
-tab1 <- data.frame('Par'=c('Theta','Tau','Eta'), 'True'=c(0.5,1.414,0.707), 'MH_Est'=c(0.649,0.608,0.451), 'STAN_Est'=c(3.442,0.420,0.435), 'MH_SE'=c(0.009,0.02,0.016), 'STAN_SE'=c(0.475,0.041,0.016))
+tab1 <- data.frame('Par'=c('Theta','Tau','Eta'), 'True'=c(0.5,1.414,0.707), 'MH_Est'=c(0.791,1.535,0.717), 'STAN_Est'=c(0.972,1.584,0.965), 'MH_SE'=c(0.046,0.043,0.017), 'STAN_SE'=c(0.043,0.017,0.001))
+tab2 <- data.frame('MH_Theta'=c(0.4179180, 0.8063549, 0.6285918, 1.3448891, 0.8197794, 1.0752763, 0.4706174, 0.7666565, 0.6940660, 0.8850504), 'MH_Tau'=c(1.217682, 1.487311, 1.191268, 1.354685, 1.251051, 2.377984, 1.535027, 1.717928, 1.814362, 1.405763), 'MH_Eta'=c(0.8538578, 0.6657139, 0.8350179, 0.8671625, 0.7821787, 0.4698515, 0.7628338, 0.6070651, 0.5592527, 0.7664017), 'STAN_Theta'=c(0.3457335, 0.8029383, 0.4830981, 3.2698615, 0.8028205, 1.2063414, 0.3863174, 0.7513213, 0.7245448, 0.9448918), 'STAN_Tau'=c(1.186270, 1.546140, 1.104393, 1.471686, 1.280609, 2.671206, 1.410640, 1.726113, 1.993948, 1.453477), 'STAN_Eta'=c(0.9609309, 0.8889643, 0.8885850, 1.0759693, 0.8975284, 1.0396259, 1.0288369, 0.9475622, 0.9528841, 0.9690540), 'Acc_Rate'=c(0.04333815, 0.13134793, 0.11745750, 0.04678298, 0.20557840, 0.15346150, 0.17479720, 0.13423714, 0.05200578, 0.21102345))
+
 knitr::kable(tab1, digits = 3, caption = "Estimates and SE for Both Samplers")
+knitr::kable(tab2, digits = 3, caption = "Parameter Estimates by Data Set")
 ```
 
-The acceptance rates for the M-H sampler vary from $52\%$ to $2.4\%$, indicating that the adaptive proposal section was not always successful in reaching the optimal acceptance rate of $23\%$. Further tuning may be required.
+The acceptance rates for the M-H sampler usually stay around $10\%$ to $20\%$, occasionally getting down to about $5\%$. It was necessary to significantly increase the number of samples used to estimate the sample variance to ensure the acceptance rate woudn't be below $5\%$ too often. The acceptance rate is still below the optimal acceptance rate of $23\%$, indicating that further tuning may be required.
 
 I began work on a larger simulation study of 100 data sets for each of 8 sets of parameter values. I used every combination of $\theta=0.1,5$, $\tau^2=0.1,10$ and $\eta^2=0.1,10$. I fit a GP to each data set using both the M-H sampler and a STAN sampler and recorded the parameter estimates from each method.
 
-This part of the project ran into difficulties and is not ready to be presented.
+This part of the project has not finished running, but I will report on it next week.
 
 ## March 10, 2026
 
