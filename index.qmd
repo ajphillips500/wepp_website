@@ -7,6 +7,45 @@ knitr::opts_chunk$set(echo = FALSE)
 options(tinytex.verbose = TRUE)
 ```
 
+## March 24, 2026
+
+### Summary
+
+This week I studied what priors are recommended for Gaussian process parameters, concluding that while the log-uniform, or flat, priors I had been using before do lead to a proper posterior, they are not optimal for my use case.
+
+I also experimented with the Metropolis-Hastings sampler, implementing a proposal distribution with adaptive variance and testing on multiple simulated data sets.
+
+### Priors for GP Hyperparameters
+
+At our last meeting, we debated whether flat prior for Gaussian process variance parameters result in improper posteriors. After reviewing the 2006 article by [Gelman](https://projecteuclid.org/journalArticle/Download?urlId=10.1214%2F06-BA117A), I have concluded that the posterior should be proper as long as the number of data points is sufficiently large.
+
+Gelman discusses a hierarchical model where $y_{ij}\sim N(\mu+\alpha_j, \sigma_y^2)$ and $\alpha_j\sim N(0,\sigma_{\alpha}^2)$ for $j=1,\dots,J$. He explains that a log-uniform prior on $\sigma_{\alpha}$, equivalent to $p(\sigma_{\alpha})\propto \sigma_{\alpha}^{-1}$, "has the form of an inverse $\chi^2$ density with $0$ degrees of freedom and can be taken as a limit of proper conditionally conjugate inverse-gamma priors." Furthermore, a uniform prior on $\sigma_{\alpha}$ directly is improper when the number of groups $J$ is $1$ or $2$, and biased towards larger values when $J$ is small due to the prior's heavy right tail. 
+
+A major difference between the model described by Gelman and a Gaussian process model is that the random effects $\alpha_j$ are independent in Gelman's formulation. For a Gaussian process model, the random (or spatial) effects are correlated to each other. That is, $y_i\sim N(0+\alpha_i,\sigma_y^2)$ and $\alpha_{1:n}\sim N(0,\tau^2\Sigma(X))$ where $n$ is the number of observations and $\Sigma(X)$ is defined pointwise by the kernel function and the inputs $X$. Consequently, each observation has a unique (not independent) random effect and $J=n$.
+
+I then investigated what [STAN](https://mc-stan.org/docs/stan-users-guide/gaussian-processes.html) recommended for GP priors. STAN suggests something like a half-t or half-normal prior for the variance components so that the variance can collapse to zero if the data warrants it. The lengthscale can cause numerical issues in HMC sampling if estimated too closely to zero, so STAN recommends an inverse gamma prior for the lengthscale. 
+
+In my Metropolis-Hastings sampler, I decided to use half-Cauchy priors for the variance components. I chose this because even if my interpretation of the Gelman paper is correct, the iMGPE algorithm often tries to fit GPs to clusters with only one or two data points. It would be better to have a sampler that is at least theoretically sound in such contexts. I use an $IG(1,1)$ prior for the lengthscale, as recommended by the STAN documentation.
+
+### M-H Sampler, Adaptive Proposal
+
+I updated the priors of my Metropolis Hastings sampler as discussed in the previous section, then implemented an adaptive proposal variance. Proposals for new parameters are now drawn from a multivariate normal distribution with covariance matrix $2.4^2S/d$, where $d$ is the number of parameters and $S$ is the sampling variance of the parameters. $S$ is updated every $100$ iterations for the first thousand, based on samples already drawn. I also discarded only the first $1000$ iterations as burn-in.
+
+I ran a number of experiments to study the performance of the Metropolis Hastings sampler when sampling all GP parameters at once. First, I generated 10 data sets from the parameter values $\theta=0.5$, $\tau^2=2$ and $\eta^2=0.5$. I then fit a GP to each data set using both the M-H sampler and a STAN sampler and recorded the parameter estimates and the standard errors of the estimates (via 'mcmcse').
+
+The table below shows the estimates and standard errors for each parameter, averaged across the data sets.
+
+```{r}
+tab1 <- data.frame('Par'=c('Theta','Tau','Eta'), 'True'=c(0.5,1.414,0.707), 'MH_Est'=c(0.649,0.608,0.451), 'STAN_Est'=c(3.442,0.420,0.435), 'MH_SE'=c(0.009,0.02,0.016), 'STAN_SE'=c(0.475,0.041,0.016))
+knitr::kable(tab1, digits = 3, caption = "Estimates and SE for Both Samplers")
+```
+
+The acceptance rates for the M-H sampler vary from $52\%$ to $2.4\%$, indicating that the adaptive proposal section was not always successful in reaching the optimal acceptance rate of $23\%$. Further tuning may be required.
+
+I began work on a larger simulation study of 100 data sets for each of 8 sets of parameter values. I used every combination of $\theta=0.1,5$, $\tau^2=0.1,10$ and $\eta^2=0.1,10$. I fit a GP to each data set using both the M-H sampler and a STAN sampler and recorded the parameter estimates from each method.
+
+This part of the project ran into difficulties and is not ready to be presented.
+
 ## March 10, 2026
 
 ### Summary
@@ -27,7 +66,7 @@ I tested the improved M-H sampler on each parameter one at a time, holding the o
 
 For the nugget, the true parameter values were $\eta^2=0.01$, $0.05$, $0.1$, $0.5$, and $1$. For the spatial variance, the true parameter values were $\tau^2=0.5$, $1$, $2$, $4$, and $8$. I used normal proposal distributions in the Metropolis-Hastings sampler with standard deviations of $0.25$ and $0.5$ respectively.
 
-For the lengthscale, the true parameter values were $\theta=0.1$, $0.5$, $1$, $5$, and $10$. I used a cauchy proposal distribution in the Metropolis-Hastings sampler with scale parameter $1$.
+For the lengthscale, the true parameter values were $\theta=0.1$, $0.5$, $1$, $5$, and $10$. I used a Cauchy proposal distribution in the Metropolis-Hastings sampler with scale parameter $1$.
 
 The tables below display the true and estimated parameter values for each method, as well as the standard errors of the estimates and the acceptance rate of the M-H sampler. Standard errors were calculated with the 'mcmcse' package for the M-H sampler and with STAN for the STAN sampler.
 
