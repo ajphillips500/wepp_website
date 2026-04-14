@@ -586,7 +586,213 @@ window.Quarto = {
 <section id="large-simulation-study" class="level3">
 <h3 class="anchored" data-anchor-id="large-simulation-study">Large Simulation Study</h3>
 <p>I conducted a large simulation study in which I considered 27 sets of true parameter values, generated 100 data sets for each, and fit a Gaussian process model using a Metropolis-Hastings sampler and STAN sampler with two choices of joint priors each. I allowed each of the three GP parameters (the lengthscale <span class="math inline">\(\theta\)</span>, the spatial standard deviation <span class="math inline">\(\tau\)</span>, and the noise-to-signal ratio standard deviation <span class="math inline">\(\eta\)</span>) to take the values <span class="math inline">\(0.2\)</span>, <span class="math inline">\(1\)</span> and <span class="math inline">\(5\)</span>. Two models used an <span class="math inline">\(IG(1,1)\)</span> prior on <span class="math inline">\(\theta\)</span> and <span class="math inline">\(Ca^+(0,2)\)</span> priors on <span class="math inline">\(\tau\)</span> and <span class="math inline">\(\eta\)</span>, all independent of each other. The other two models used independent <span class="math inline">\(LN(0,3)\)</span> priors on all three parameters.</p>
-<p>This time, I initialized the M-H chain for each model at the true parameter values. Their average acceptance rate was consistently between <span class="math inline">\(40\%\)</span> and <span class="math inline">\(50\%\)</span> in all scenarios. I ran each M-H chain until its <span class="math inline">\(\widehat R\)</span> value fell below <span class="math inline">\(1.01\)</span>.</p>
+<p>This time, I initialized the M-H chain for each model at the true parameter values. I ran each M-H chain until its <span class="math inline">\(\widehat R\)</span> value fell below <span class="math inline">\(1.01\)</span>. Most scenarios still displayed an acceptance rate below <span class="math inline">\(10\%\)</span>, particularly when <span class="math inline">\(\theta\)</span> or <span class="math inline">\(\eta\)</span> was large.</p>
+<div class="cell">
+<div class="cell-output-display">
+<table class="caption-top table table-sm table-striped small">
+<thead>
+<tr class="header">
+<th style="text-align: right;">Theta</th>
+<th style="text-align: right;">Tau</th>
+<th style="text-align: right;">Eta</th>
+<th style="text-align: right;">MH_AccRate</th>
+<th style="text-align: right;">MHLN_AccRate</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: right;">0.2</td>
+<td style="text-align: right;">0.2</td>
+<td style="text-align: right;">0.2</td>
+<td style="text-align: right;">0.292</td>
+<td style="text-align: right;">0.309</td>
+</tr>
+<tr class="even">
+<td style="text-align: right;">0.2</td>
+<td style="text-align: right;">1.0</td>
+<td style="text-align: right;">0.2</td>
+<td style="text-align: right;">0.134</td>
+<td style="text-align: right;">0.132</td>
+</tr>
+<tr class="odd">
+<td style="text-align: right;">0.2</td>
+<td style="text-align: right;">5.0</td>
+<td style="text-align: right;">0.2</td>
+<td style="text-align: right;">0.027</td>
+<td style="text-align: right;">0.025</td>
+</tr>
+<tr class="even">
+<td style="text-align: right;">0.2</td>
+<td style="text-align: right;">0.2</td>
+<td style="text-align: right;">1.0</td>
+<td style="text-align: right;">0.092</td>
+<td style="text-align: right;">0.102</td>
+</tr>
+<tr class="odd">
+<td style="text-align: right;">0.2</td>
+<td style="text-align: right;">1.0</td>
+<td style="text-align: right;">1.0</td>
+<td style="text-align: right;">0.148</td>
+<td style="text-align: right;">0.141</td>
+</tr>
+<tr class="even">
+<td style="text-align: right;">0.2</td>
+<td style="text-align: right;">5.0</td>
+<td style="text-align: right;">1.0</td>
+<td style="text-align: right;">0.094</td>
+<td style="text-align: right;">0.107</td>
+</tr>
+<tr class="odd">
+<td style="text-align: right;">0.2</td>
+<td style="text-align: right;">0.2</td>
+<td style="text-align: right;">5.0</td>
+<td style="text-align: right;">0.018</td>
+<td style="text-align: right;">0.026</td>
+</tr>
+<tr class="even">
+<td style="text-align: right;">0.2</td>
+<td style="text-align: right;">1.0</td>
+<td style="text-align: right;">5.0</td>
+<td style="text-align: right;">0.024</td>
+<td style="text-align: right;">0.041</td>
+</tr>
+<tr class="odd">
+<td style="text-align: right;">0.2</td>
+<td style="text-align: right;">5.0</td>
+<td style="text-align: right;">5.0</td>
+<td style="text-align: right;">0.028</td>
+<td style="text-align: right;">0.033</td>
+</tr>
+<tr class="even">
+<td style="text-align: right;">1.0</td>
+<td style="text-align: right;">0.2</td>
+<td style="text-align: right;">0.2</td>
+<td style="text-align: right;">0.196</td>
+<td style="text-align: right;">0.199</td>
+</tr>
+<tr class="odd">
+<td style="text-align: right;">1.0</td>
+<td style="text-align: right;">1.0</td>
+<td style="text-align: right;">0.2</td>
+<td style="text-align: right;">0.121</td>
+<td style="text-align: right;">0.135</td>
+</tr>
+<tr class="even">
+<td style="text-align: right;">1.0</td>
+<td style="text-align: right;">5.0</td>
+<td style="text-align: right;">0.2</td>
+<td style="text-align: right;">0.035</td>
+<td style="text-align: right;">0.041</td>
+</tr>
+<tr class="odd">
+<td style="text-align: right;">1.0</td>
+<td style="text-align: right;">0.2</td>
+<td style="text-align: right;">1.0</td>
+<td style="text-align: right;">0.072</td>
+<td style="text-align: right;">0.076</td>
+</tr>
+<tr class="even">
+<td style="text-align: right;">1.0</td>
+<td style="text-align: right;">1.0</td>
+<td style="text-align: right;">1.0</td>
+<td style="text-align: right;">0.090</td>
+<td style="text-align: right;">0.115</td>
+</tr>
+<tr class="odd">
+<td style="text-align: right;">1.0</td>
+<td style="text-align: right;">5.0</td>
+<td style="text-align: right;">1.0</td>
+<td style="text-align: right;">0.079</td>
+<td style="text-align: right;">0.098</td>
+</tr>
+<tr class="even">
+<td style="text-align: right;">1.0</td>
+<td style="text-align: right;">0.2</td>
+<td style="text-align: right;">5.0</td>
+<td style="text-align: right;">0.016</td>
+<td style="text-align: right;">0.027</td>
+</tr>
+<tr class="odd">
+<td style="text-align: right;">1.0</td>
+<td style="text-align: right;">1.0</td>
+<td style="text-align: right;">5.0</td>
+<td style="text-align: right;">0.025</td>
+<td style="text-align: right;">0.039</td>
+</tr>
+<tr class="even">
+<td style="text-align: right;">1.0</td>
+<td style="text-align: right;">5.0</td>
+<td style="text-align: right;">5.0</td>
+<td style="text-align: right;">0.028</td>
+<td style="text-align: right;">0.039</td>
+</tr>
+<tr class="odd">
+<td style="text-align: right;">5.0</td>
+<td style="text-align: right;">0.2</td>
+<td style="text-align: right;">0.2</td>
+<td style="text-align: right;">0.095</td>
+<td style="text-align: right;">0.099</td>
+</tr>
+<tr class="even">
+<td style="text-align: right;">5.0</td>
+<td style="text-align: right;">1.0</td>
+<td style="text-align: right;">0.2</td>
+<td style="text-align: right;">0.091</td>
+<td style="text-align: right;">0.104</td>
+</tr>
+<tr class="odd">
+<td style="text-align: right;">5.0</td>
+<td style="text-align: right;">5.0</td>
+<td style="text-align: right;">0.2</td>
+<td style="text-align: right;">0.040</td>
+<td style="text-align: right;">0.052</td>
+</tr>
+<tr class="even">
+<td style="text-align: right;">5.0</td>
+<td style="text-align: right;">0.2</td>
+<td style="text-align: right;">1.0</td>
+<td style="text-align: right;">0.051</td>
+<td style="text-align: right;">0.059</td>
+</tr>
+<tr class="odd">
+<td style="text-align: right;">5.0</td>
+<td style="text-align: right;">1.0</td>
+<td style="text-align: right;">1.0</td>
+<td style="text-align: right;">0.058</td>
+<td style="text-align: right;">0.079</td>
+</tr>
+<tr class="even">
+<td style="text-align: right;">5.0</td>
+<td style="text-align: right;">5.0</td>
+<td style="text-align: right;">1.0</td>
+<td style="text-align: right;">0.055</td>
+<td style="text-align: right;">0.082</td>
+</tr>
+<tr class="odd">
+<td style="text-align: right;">5.0</td>
+<td style="text-align: right;">0.2</td>
+<td style="text-align: right;">5.0</td>
+<td style="text-align: right;">0.016</td>
+<td style="text-align: right;">0.027</td>
+</tr>
+<tr class="even">
+<td style="text-align: right;">5.0</td>
+<td style="text-align: right;">1.0</td>
+<td style="text-align: right;">5.0</td>
+<td style="text-align: right;">0.025</td>
+<td style="text-align: right;">0.041</td>
+</tr>
+<tr class="odd">
+<td style="text-align: right;">5.0</td>
+<td style="text-align: right;">5.0</td>
+<td style="text-align: right;">5.0</td>
+<td style="text-align: right;">0.026</td>
+<td style="text-align: right;">0.037</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
 <p>The plots below show the average estimates for each parameter across the 100 data sets in each scenario, grouped by the true values of the parameter. The error bars show the <span class="math inline">\(95\%\)</span> credible interval around each estimate based on that method’s average MCMC standard error. For <span class="math inline">\(\theta\)</span>, the Metropolis-Hastings and STAN samplers produced very different estimates, so the two methods have been plotted separately.</p>
 <div class="cell">
 <div class="cell-output-display">
@@ -3127,7 +3333,7 @@ f(d_{ij}) \text{ if } j\neq i\\
 <div class="cell-output-display">
 <div>
 <figure class="figure">
-<p><img src="index_files/figure-html/unnamed-chunk-60-1.png" class="img-fluid figure-img" width="672"></p>
+<p><img src="index_files/figure-html/unnamed-chunk-61-1.png" class="img-fluid figure-img" width="672"></p>
 </figure>
 </div>
 </div>
@@ -3254,7 +3460,7 @@ f(d_{ij}) \text{ if } j\neq i\\
 <div class="cell-output-display">
 <div>
 <figure class="figure">
-<p><img src="index_files/figure-html/unnamed-chunk-63-1.png" class="img-fluid figure-img" width="672"></p>
+<p><img src="index_files/figure-html/unnamed-chunk-64-1.png" class="img-fluid figure-img" width="672"></p>
 </figure>
 </div>
 </div>
@@ -5392,42 +5598,42 @@ b\frac{\alpha}{n+\alpha-1}F(y_i|\theta_{J^{-}+1}) \text{ for } j=J^{-}+1
 <div class="cell-output-display">
 <div>
 <figure class="figure">
-<p><img src="index_files/figure-html/unnamed-chunk-97-1.png" style="width:50.0%;height:50.0%" class="figure-img"></p>
+<p><img src="index_files/figure-html/unnamed-chunk-98-1.png" style="width:50.0%;height:50.0%" class="figure-img"></p>
 </figure>
 </div>
 </div>
 <div class="cell-output-display">
 <div>
 <figure class="figure">
-<p><img src="index_files/figure-html/unnamed-chunk-97-2.png" style="width:50.0%;height:50.0%" class="figure-img"></p>
+<p><img src="index_files/figure-html/unnamed-chunk-98-2.png" style="width:50.0%;height:50.0%" class="figure-img"></p>
 </figure>
 </div>
 </div>
 <div class="cell-output-display">
 <div>
 <figure class="figure">
-<p><img src="index_files/figure-html/unnamed-chunk-97-3.png" style="width:50.0%;height:50.0%" class="figure-img"></p>
+<p><img src="index_files/figure-html/unnamed-chunk-98-3.png" style="width:50.0%;height:50.0%" class="figure-img"></p>
 </figure>
 </div>
 </div>
 <div class="cell-output-display">
 <div>
 <figure class="figure">
-<p><img src="index_files/figure-html/unnamed-chunk-97-4.png" style="width:50.0%;height:50.0%" class="figure-img"></p>
+<p><img src="index_files/figure-html/unnamed-chunk-98-4.png" style="width:50.0%;height:50.0%" class="figure-img"></p>
 </figure>
 </div>
 </div>
 <div class="cell-output-display">
 <div>
 <figure class="figure">
-<p><img src="index_files/figure-html/unnamed-chunk-97-5.png" style="width:50.0%;height:50.0%" class="figure-img"></p>
+<p><img src="index_files/figure-html/unnamed-chunk-98-5.png" style="width:50.0%;height:50.0%" class="figure-img"></p>
 </figure>
 </div>
 </div>
 <div class="cell-output-display">
 <div>
 <figure class="figure">
-<p><img src="index_files/figure-html/unnamed-chunk-97-6.png" style="width:50.0%;height:50.0%" class="figure-img"></p>
+<p><img src="index_files/figure-html/unnamed-chunk-98-6.png" style="width:50.0%;height:50.0%" class="figure-img"></p>
 </figure>
 </div>
 </div>
@@ -5971,42 +6177,42 @@ b\frac{\alpha}{n+\alpha-1}F(y_i|\theta_{J^{-}+1}) \text{ for } j=J^{-}+1
 <div class="cell-output-display">
 <div>
 <figure class="figure">
-<p><img src="index_files/figure-html/unnamed-chunk-104-1.png" style="width:50.0%;height:50.0%" class="figure-img"></p>
+<p><img src="index_files/figure-html/unnamed-chunk-105-1.png" style="width:50.0%;height:50.0%" class="figure-img"></p>
 </figure>
 </div>
 </div>
 <div class="cell-output-display">
 <div>
 <figure class="figure">
-<p><img src="index_files/figure-html/unnamed-chunk-104-2.png" style="width:50.0%;height:50.0%" class="figure-img"></p>
+<p><img src="index_files/figure-html/unnamed-chunk-105-2.png" style="width:50.0%;height:50.0%" class="figure-img"></p>
 </figure>
 </div>
 </div>
 <div class="cell-output-display">
 <div>
 <figure class="figure">
-<p><img src="index_files/figure-html/unnamed-chunk-104-3.png" style="width:50.0%;height:50.0%" class="figure-img"></p>
+<p><img src="index_files/figure-html/unnamed-chunk-105-3.png" style="width:50.0%;height:50.0%" class="figure-img"></p>
 </figure>
 </div>
 </div>
 <div class="cell-output-display">
 <div>
 <figure class="figure">
-<p><img src="index_files/figure-html/unnamed-chunk-104-4.png" style="width:50.0%;height:50.0%" class="figure-img"></p>
+<p><img src="index_files/figure-html/unnamed-chunk-105-4.png" style="width:50.0%;height:50.0%" class="figure-img"></p>
 </figure>
 </div>
 </div>
 <div class="cell-output-display">
 <div>
 <figure class="figure">
-<p><img src="index_files/figure-html/unnamed-chunk-104-5.png" style="width:50.0%;height:50.0%" class="figure-img"></p>
+<p><img src="index_files/figure-html/unnamed-chunk-105-5.png" style="width:50.0%;height:50.0%" class="figure-img"></p>
 </figure>
 </div>
 </div>
 <div class="cell-output-display">
 <div>
 <figure class="figure">
-<p><img src="index_files/figure-html/unnamed-chunk-104-6.png" style="width:50.0%;height:50.0%" class="figure-img"></p>
+<p><img src="index_files/figure-html/unnamed-chunk-105-6.png" style="width:50.0%;height:50.0%" class="figure-img"></p>
 </figure>
 </div>
 </div>
@@ -6029,23 +6235,6 @@ b\frac{\alpha}{n+\alpha-1}F(y_i|\theta_{J^{-}+1}) \text{ for } j=J^{-}+1
 <div class="cell-output-display">
 <div>
 <figure class="figure">
-<p><img src="index_files/figure-html/unnamed-chunk-105-1.png" class="img-fluid figure-img" style="width:50.0%"></p>
-</figure>
-</div>
-</div>
-<div class="cell-output-display">
-<div>
-<figure class="figure">
-<p><img src="index_files/figure-html/unnamed-chunk-105-2.png" class="img-fluid figure-img" style="width:50.0%"></p>
-</figure>
-</div>
-</div>
-</div>
-<p>For location <span class="math inline">\(070801051103\)</span>, we see:</p>
-<div class="cell">
-<div class="cell-output-display">
-<div>
-<figure class="figure">
 <p><img src="index_files/figure-html/unnamed-chunk-106-1.png" class="img-fluid figure-img" style="width:50.0%"></p>
 </figure>
 </div>
@@ -6058,7 +6247,7 @@ b\frac{\alpha}{n+\alpha-1}F(y_i|\theta_{J^{-}+1}) \text{ for } j=J^{-}+1
 </div>
 </div>
 </div>
-<p>For location <span class="math inline">\(102802010405\)</span>, we see:</p>
+<p>For location <span class="math inline">\(070801051103\)</span>, we see:</p>
 <div class="cell">
 <div class="cell-output-display">
 <div>
@@ -6071,6 +6260,23 @@ b\frac{\alpha}{n+\alpha-1}F(y_i|\theta_{J^{-}+1}) \text{ for } j=J^{-}+1
 <div>
 <figure class="figure">
 <p><img src="index_files/figure-html/unnamed-chunk-107-2.png" class="img-fluid figure-img" style="width:50.0%"></p>
+</figure>
+</div>
+</div>
+</div>
+<p>For location <span class="math inline">\(102802010405\)</span>, we see:</p>
+<div class="cell">
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="index_files/figure-html/unnamed-chunk-108-1.png" class="img-fluid figure-img" style="width:50.0%"></p>
+</figure>
+</div>
+</div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="index_files/figure-html/unnamed-chunk-108-2.png" class="img-fluid figure-img" style="width:50.0%"></p>
 </figure>
 </div>
 </div>
@@ -6151,7 +6357,7 @@ b\frac{\alpha}{n+\alpha-1}F(y_i|\theta_{J^{-}+1}) \text{ for } j=J^{-}+1
 <div class="cell-output-display">
 <div>
 <figure class="figure">
-<p><img src="index_files/figure-html/unnamed-chunk-108-1.png" class="img-fluid figure-img" width="672"></p>
+<p><img src="index_files/figure-html/unnamed-chunk-109-1.png" class="img-fluid figure-img" width="672"></p>
 </figure>
 </div>
 </div>
@@ -6161,7 +6367,7 @@ b\frac{\alpha}{n+\alpha-1}F(y_i|\theta_{J^{-}+1}) \text{ for } j=J^{-}+1
 <div class="cell-output-display">
 <div>
 <figure class="figure">
-<p><img src="index_files/figure-html/unnamed-chunk-109-1.png" class="img-fluid figure-img" width="672"></p>
+<p><img src="index_files/figure-html/unnamed-chunk-110-1.png" class="img-fluid figure-img" width="672"></p>
 </figure>
 </div>
 </div>
@@ -6171,7 +6377,7 @@ b\frac{\alpha}{n+\alpha-1}F(y_i|\theta_{J^{-}+1}) \text{ for } j=J^{-}+1
 <div class="cell-output-display">
 <div>
 <figure class="figure">
-<p><img src="index_files/figure-html/unnamed-chunk-110-1.png" class="img-fluid figure-img" width="672"></p>
+<p><img src="index_files/figure-html/unnamed-chunk-111-1.png" class="img-fluid figure-img" width="672"></p>
 </figure>
 </div>
 </div>
@@ -6201,14 +6407,14 @@ b\frac{\alpha}{n+\alpha-1}F(y_i|\theta_{J^{-}+1}) \text{ for } j=J^{-}+1
 <div class="cell-output-display">
 <div>
 <figure class="figure">
-<p><img src="index_files/figure-html/unnamed-chunk-111-1.png" class="img-fluid figure-img" width="672"></p>
+<p><img src="index_files/figure-html/unnamed-chunk-112-1.png" class="img-fluid figure-img" width="672"></p>
 </figure>
 </div>
 </div>
 <div class="cell-output-display">
 <div>
 <figure class="figure">
-<p><img src="index_files/figure-html/unnamed-chunk-111-2.png" class="img-fluid figure-img" width="672"></p>
+<p><img src="index_files/figure-html/unnamed-chunk-112-2.png" class="img-fluid figure-img" width="672"></p>
 </figure>
 </div>
 </div>
