@@ -5,7 +5,48 @@ title: "Weekly Reports"
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = FALSE)
 options(tinytex.verbose = TRUE)
+library(kableExtra)
 ```
+
+## April 14, 2026
+
+### Summary
+
+This week, I completed a large simulation study comparing my handmade Metropolis-Hastings sampler to the STAN sampler across a large variety of scenarios and using two different sets of priors. I find that the M-H sampler performs comparably to the STAN sampler in most scenarios, though it tends to have a larger MCMC standard error. Notably, for the lengthscale parameter $\theta$, the STAN samplers tended to grossly overestimate it while the M-H samplers remained at least within an order of magnitude of the truth.
+
+### Single-Chain R-Hat
+
+The $\widehat R$ diagnostic currently used by STAN and recommended by Gelman and others is called the Rank-Normalized Split-Chain $\widehat R$, which they describe in their 2021 paper !["Rank-normalization, Folding, and Localization: An improved R-hat for Assessing MCMC Convergence"](arxiv.org/abs/1903.08008). This diagnostic splits each chain in half and treats the halves as two separate chains. Thus, it can be calculated for a single chain as well.
+
+When applied to a single chain, this diagnostic measures whether the front and back halves of the chain have converged to the same distribution. Gelman recommends a threshold of $1.01$, below which the chain may be considered to have converged. 
+
+Gelman et al still recommends running multiple chains, but this is not seem to be because he believes the single chain $\widehat R$ is not theoretically sound but because he believes multiple chains initialized at different locations provide a better picture of the posterior space.
+
+### Large Simulation Study
+
+I conducted a large simulation study in which I considered 27 sets of true parameter values, generated 100 data sets for each, and fit a Gaussian process model using a Metropolis-Hastings sampler and STAN sampler with two choices of joint priors each. I allowed each of the three GP parameters (the lengthscale $\theta$, the spatial standard deviation $\tau$, and the noise-to-signal ratio standard deviation $\eta$) to take the values $0.2$, $1$ and $5$. Two models used an $IG(1,1)$ prior on $\theta$ and $Ca^+(0,2)$ priors on $\tau$ and $\eta$, all independent of each other. The other two models used independent $LN(0,3)$ priors on all three parameters.
+
+This time, I initialized the M-H chain for each model at the true parameter values. Their average acceptance rate was consistently between $40\%$ and $50\%$ in all scenarios. I ran each M-H chain until its $\widehat R$ value fell below $1.01$.
+
+The plots below show the average estimates for each parameter across the 100 data sets in each scenario, grouped by the true values of the parameter. The error bars show the $95\%$ credible interval around each estimate based on that method's average MCMC standard error. For $\theta$, the Metropolis-Hastings and STAN samplers produced very different estimates, so the two methods have been plotted separately.
+
+```{r}
+knitr::include_graphics('Reports2/plot1-4-14-26.png')
+knitr::include_graphics('Reports2/plot2-4-14-26.png')
+```
+
+From the M-H plot we can see that $\theta$ is estimated most accurately when $\eta$ is small and is overestimated when $\eta$ increases. Additionally, the M-H sampler with lognormal priors tends to produce smaller estimates than the M-H sampler with the inverse gamma prior.
+
+From the STAN plot, we see that STAN sometimes wildly overestimates $\theta$, particularly when $\eta=5$. A closer examination of the distribution of STAN estimates showed for scenarios where $\eta=0.2$, the mean of the estimates of $\theta$ are reasonably close to the truth, regardless of priors. However, when $\eta\geq 1$, the mean estimates are generally off by a factor of $10^3$ to $10^8$.
+
+```{r}
+knitr::include_graphics('Reports2/plot3-4-14-26.png')
+knitr::include_graphics('Reports2/plot4-4-14-26.png')
+```
+
+We see that  $\tau$ is usually slightly overestimated when its true value is $0.2$ or $1$. However, estimates have the same order of magnitude as the truth. The Metropolis-Hastings estimates have greater MCMC standard errors than the STAN estimates, an effect that grows more pronounced as both $\theta$ and $\eta$ increase.
+
+For $\eta$, we see that the M-H samplers almost always produce accurate estimates while STAN samplers tend to underestimate $\eta$ when $\tau=0.2$ and overestimate when $\tau=5$. Additionally, most estimates have fairly small MCMC standard errors, though the M-H estimates have larger errors when $\eta=5$.
 
 ## March 31, 2026
 
@@ -34,7 +75,7 @@ An alternative to the reference priors was presented by [Lalchand and Rasmussen]
 
 I completed a larger simulation study of 100 data sets for each of 8 sets of parameter values. I used every combination of $\theta=0.1,5$, $\tau^2=0.1,10$ and $\eta^2=0.1,10$. I fit a GP to each data set using two versions of the Metropolis Hastings sampler and a STAN sampler and recorded the parameter estimates from each method.
 
-I ran the Metropolis-Hastings sampler with two different sets of priors. First, I used the same priors as last week, $IG(1,1)$ on $\theta$ and $Ca^+(0,2)$ on $\tau$ and $\eta$. Then I applied the priors used by Lalchand and Rasmussen, lognormal $logN(0,3)$ priors for all three parameters.
+I ran the Metropolis-Hastings sampler with two different sets of priors. First, I used the same priors as last week, $IG(1,1)$ on $\theta$ and $Ca^+(0,2)$ on $\tau$ and $\eta$. Then I applied the priors used by Lalchand and Rasmussen, lognormal $LN(0,3)$ priors for all three parameters.
 
 The first table below show the average parameter estimates for each sampling method across the eight scenarios. The last two columns show the average acceptance rates for the two Metropolis-Hastings samplers.  The second table shows the mean absolute difference between the M-H sampler estimates and the STAN estimates.
 
@@ -129,7 +170,7 @@ knitr::kable(tab_spv, digits = 3, caption = "Sampler Performance on Spatial SD")
 knitr::kable(tab_ls, digits = 3, caption = "Sampler Performance on Lengthscale")
 ```
 
-The $\hat R$ values for all chains were below $1.001$, indicating that all chains had converged. In all cases, the Metropolis-Hastings estimates were reasonably close to the true parameter values and were close to the STAN estimates in almost all cases. STAN overestimated the spatial variance on the data set with $\tau=2.83$ and both methods underestimated the lengthscale for $\theta=5$ and $\theta=10$.
+The $\widehat R$ values for all chains were below $1.001$, indicating that all chains had converged. In all cases, the Metropolis-Hastings estimates were reasonably close to the true parameter values and were close to the STAN estimates in almost all cases. STAN overestimated the spatial variance on the data set with $\tau=2.83$ and both methods underestimated the lengthscale for $\theta=5$ and $\theta=10$.
 
 The lengthscale table contains an extra column, 'STAN_Est_Adj', as STAN parameterizes the lengthscale differently, with a parameter $\lambda$ such that $\theta=2\lambda^2$. The adjusted estimates are thus twice the square of the raw estimates.
 
