@@ -53,6 +53,12 @@ We see that  $\tau$ is usually slightly overestimated when its true value is $0.
 
 For $\eta$, we see that the M-H samplers almost always produce accurate estimates while STAN samplers tend to underestimate $\eta$ when $\tau=0.2$ and overestimate when $\tau=5$. Additionally, most estimates have fairly small MCMC standard errors, though the M-H estimates have larger errors when $\eta=5$.
 
+The last few plots here show the distribution of estimated parameter values across the 100 data sets for four representative scenarios. For visual convenience, outliers have been removed. The Metropolis-Hastings estimates are distributed fairly symmetrically across data sets, while the STAN estimates of $\theta$ are sometimes skewed right. STAN also generated some very extreme outlier estimates for $\theta$ in all scenarios but the top left.
+
+```{r}
+knitr::include_graphics('Reports2/plot5-4-14-26.png')
+```
+
 ## March 31, 2026
 
 ### Summary

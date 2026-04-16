@@ -830,6 +830,16 @@ window.Quarto = {
 </div>
 <p>We see that <span class="math inline">\(\tau\)</span> is usually slightly overestimated when its true value is <span class="math inline">\(0.2\)</span> or <span class="math inline">\(1\)</span>. However, estimates have the same order of magnitude as the truth. The Metropolis-Hastings estimates have greater MCMC standard errors than the STAN estimates, an effect that grows more pronounced as both <span class="math inline">\(\theta\)</span> and <span class="math inline">\(\eta\)</span> increase.</p>
 <p>For <span class="math inline">\(\eta\)</span>, we see that the M-H samplers almost always produce accurate estimates while STAN samplers tend to underestimate <span class="math inline">\(\eta\)</span> when <span class="math inline">\(\tau=0.2\)</span> and overestimate when <span class="math inline">\(\tau=5\)</span>. Additionally, most estimates have fairly small MCMC standard errors, though the M-H estimates have larger errors when <span class="math inline">\(\eta=5\)</span>.</p>
+<p>The last few plots here show the distribution of estimated parameter values across the 100 data sets for four representative scenarios. For visual convenience, outliers have been removed. The Metropolis-Hastings estimates are distributed fairly symmetrically across data sets, while the STAN estimates of <span class="math inline">\(\theta\)</span> are sometimes skewed right. STAN also generated some very extreme outlier estimates for <span class="math inline">\(\theta\)</span> in all scenarios but the top left.</p>
+<div class="cell">
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="Reports2/plot5-4-14-26.png" class="img-fluid figure-img"></p>
+</figure>
+</div>
+</div>
+</div>
 </section>
 </section>
 <section id="march-31-2026" class="level2">
@@ -3333,7 +3343,7 @@ f(d_{ij}) \text{ if } j\neq i\\
 <div class="cell-output-display">
 <div>
 <figure class="figure">
-<p><img src="index_files/figure-html/unnamed-chunk-61-1.png" class="img-fluid figure-img" width="672"></p>
+<p><img src="index_files/figure-html/unnamed-chunk-62-1.png" class="img-fluid figure-img" width="672"></p>
 </figure>
 </div>
 </div>
@@ -3460,7 +3470,7 @@ f(d_{ij}) \text{ if } j\neq i\\
 <div class="cell-output-display">
 <div>
 <figure class="figure">
-<p><img src="index_files/figure-html/unnamed-chunk-64-1.png" class="img-fluid figure-img" width="672"></p>
+<p><img src="index_files/figure-html/unnamed-chunk-65-1.png" class="img-fluid figure-img" width="672"></p>
 </figure>
 </div>
 </div>
@@ -5598,42 +5608,42 @@ b\frac{\alpha}{n+\alpha-1}F(y_i|\theta_{J^{-}+1}) \text{ for } j=J^{-}+1
 <div class="cell-output-display">
 <div>
 <figure class="figure">
-<p><img src="index_files/figure-html/unnamed-chunk-98-1.png" style="width:50.0%;height:50.0%" class="figure-img"></p>
+<p><img src="index_files/figure-html/unnamed-chunk-99-1.png" style="width:50.0%;height:50.0%" class="figure-img"></p>
 </figure>
 </div>
 </div>
 <div class="cell-output-display">
 <div>
 <figure class="figure">
-<p><img src="index_files/figure-html/unnamed-chunk-98-2.png" style="width:50.0%;height:50.0%" class="figure-img"></p>
+<p><img src="index_files/figure-html/unnamed-chunk-99-2.png" style="width:50.0%;height:50.0%" class="figure-img"></p>
 </figure>
 </div>
 </div>
 <div class="cell-output-display">
 <div>
 <figure class="figure">
-<p><img src="index_files/figure-html/unnamed-chunk-98-3.png" style="width:50.0%;height:50.0%" class="figure-img"></p>
+<p><img src="index_files/figure-html/unnamed-chunk-99-3.png" style="width:50.0%;height:50.0%" class="figure-img"></p>
 </figure>
 </div>
 </div>
 <div class="cell-output-display">
 <div>
 <figure class="figure">
-<p><img src="index_files/figure-html/unnamed-chunk-98-4.png" style="width:50.0%;height:50.0%" class="figure-img"></p>
+<p><img src="index_files/figure-html/unnamed-chunk-99-4.png" style="width:50.0%;height:50.0%" class="figure-img"></p>
 </figure>
 </div>
 </div>
 <div class="cell-output-display">
 <div>
 <figure class="figure">
-<p><img src="index_files/figure-html/unnamed-chunk-98-5.png" style="width:50.0%;height:50.0%" class="figure-img"></p>
+<p><img src="index_files/figure-html/unnamed-chunk-99-5.png" style="width:50.0%;height:50.0%" class="figure-img"></p>
 </figure>
 </div>
 </div>
 <div class="cell-output-display">
 <div>
 <figure class="figure">
-<p><img src="index_files/figure-html/unnamed-chunk-98-6.png" style="width:50.0%;height:50.0%" class="figure-img"></p>
+<p><img src="index_files/figure-html/unnamed-chunk-99-6.png" style="width:50.0%;height:50.0%" class="figure-img"></p>
 </figure>
 </div>
 </div>
@@ -6177,42 +6187,42 @@ b\frac{\alpha}{n+\alpha-1}F(y_i|\theta_{J^{-}+1}) \text{ for } j=J^{-}+1
 <div class="cell-output-display">
 <div>
 <figure class="figure">
-<p><img src="index_files/figure-html/unnamed-chunk-105-1.png" style="width:50.0%;height:50.0%" class="figure-img"></p>
+<p><img src="index_files/figure-html/unnamed-chunk-106-1.png" style="width:50.0%;height:50.0%" class="figure-img"></p>
 </figure>
 </div>
 </div>
 <div class="cell-output-display">
 <div>
 <figure class="figure">
-<p><img src="index_files/figure-html/unnamed-chunk-105-2.png" style="width:50.0%;height:50.0%" class="figure-img"></p>
+<p><img src="index_files/figure-html/unnamed-chunk-106-2.png" style="width:50.0%;height:50.0%" class="figure-img"></p>
 </figure>
 </div>
 </div>
 <div class="cell-output-display">
 <div>
 <figure class="figure">
-<p><img src="index_files/figure-html/unnamed-chunk-105-3.png" style="width:50.0%;height:50.0%" class="figure-img"></p>
+<p><img src="index_files/figure-html/unnamed-chunk-106-3.png" style="width:50.0%;height:50.0%" class="figure-img"></p>
 </figure>
 </div>
 </div>
 <div class="cell-output-display">
 <div>
 <figure class="figure">
-<p><img src="index_files/figure-html/unnamed-chunk-105-4.png" style="width:50.0%;height:50.0%" class="figure-img"></p>
+<p><img src="index_files/figure-html/unnamed-chunk-106-4.png" style="width:50.0%;height:50.0%" class="figure-img"></p>
 </figure>
 </div>
 </div>
 <div class="cell-output-display">
 <div>
 <figure class="figure">
-<p><img src="index_files/figure-html/unnamed-chunk-105-5.png" style="width:50.0%;height:50.0%" class="figure-img"></p>
+<p><img src="index_files/figure-html/unnamed-chunk-106-5.png" style="width:50.0%;height:50.0%" class="figure-img"></p>
 </figure>
 </div>
 </div>
 <div class="cell-output-display">
 <div>
 <figure class="figure">
-<p><img src="index_files/figure-html/unnamed-chunk-105-6.png" style="width:50.0%;height:50.0%" class="figure-img"></p>
+<p><img src="index_files/figure-html/unnamed-chunk-106-6.png" style="width:50.0%;height:50.0%" class="figure-img"></p>
 </figure>
 </div>
 </div>
@@ -6235,23 +6245,6 @@ b\frac{\alpha}{n+\alpha-1}F(y_i|\theta_{J^{-}+1}) \text{ for } j=J^{-}+1
 <div class="cell-output-display">
 <div>
 <figure class="figure">
-<p><img src="index_files/figure-html/unnamed-chunk-106-1.png" class="img-fluid figure-img" style="width:50.0%"></p>
-</figure>
-</div>
-</div>
-<div class="cell-output-display">
-<div>
-<figure class="figure">
-<p><img src="index_files/figure-html/unnamed-chunk-106-2.png" class="img-fluid figure-img" style="width:50.0%"></p>
-</figure>
-</div>
-</div>
-</div>
-<p>For location <span class="math inline">\(070801051103\)</span>, we see:</p>
-<div class="cell">
-<div class="cell-output-display">
-<div>
-<figure class="figure">
 <p><img src="index_files/figure-html/unnamed-chunk-107-1.png" class="img-fluid figure-img" style="width:50.0%"></p>
 </figure>
 </div>
@@ -6264,7 +6257,7 @@ b\frac{\alpha}{n+\alpha-1}F(y_i|\theta_{J^{-}+1}) \text{ for } j=J^{-}+1
 </div>
 </div>
 </div>
-<p>For location <span class="math inline">\(102802010405\)</span>, we see:</p>
+<p>For location <span class="math inline">\(070801051103\)</span>, we see:</p>
 <div class="cell">
 <div class="cell-output-display">
 <div>
@@ -6277,6 +6270,23 @@ b\frac{\alpha}{n+\alpha-1}F(y_i|\theta_{J^{-}+1}) \text{ for } j=J^{-}+1
 <div>
 <figure class="figure">
 <p><img src="index_files/figure-html/unnamed-chunk-108-2.png" class="img-fluid figure-img" style="width:50.0%"></p>
+</figure>
+</div>
+</div>
+</div>
+<p>For location <span class="math inline">\(102802010405\)</span>, we see:</p>
+<div class="cell">
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="index_files/figure-html/unnamed-chunk-109-1.png" class="img-fluid figure-img" style="width:50.0%"></p>
+</figure>
+</div>
+</div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="index_files/figure-html/unnamed-chunk-109-2.png" class="img-fluid figure-img" style="width:50.0%"></p>
 </figure>
 </div>
 </div>
@@ -6357,7 +6367,7 @@ b\frac{\alpha}{n+\alpha-1}F(y_i|\theta_{J^{-}+1}) \text{ for } j=J^{-}+1
 <div class="cell-output-display">
 <div>
 <figure class="figure">
-<p><img src="index_files/figure-html/unnamed-chunk-109-1.png" class="img-fluid figure-img" width="672"></p>
+<p><img src="index_files/figure-html/unnamed-chunk-110-1.png" class="img-fluid figure-img" width="672"></p>
 </figure>
 </div>
 </div>
@@ -6367,7 +6377,7 @@ b\frac{\alpha}{n+\alpha-1}F(y_i|\theta_{J^{-}+1}) \text{ for } j=J^{-}+1
 <div class="cell-output-display">
 <div>
 <figure class="figure">
-<p><img src="index_files/figure-html/unnamed-chunk-110-1.png" class="img-fluid figure-img" width="672"></p>
+<p><img src="index_files/figure-html/unnamed-chunk-111-1.png" class="img-fluid figure-img" width="672"></p>
 </figure>
 </div>
 </div>
@@ -6377,7 +6387,7 @@ b\frac{\alpha}{n+\alpha-1}F(y_i|\theta_{J^{-}+1}) \text{ for } j=J^{-}+1
 <div class="cell-output-display">
 <div>
 <figure class="figure">
-<p><img src="index_files/figure-html/unnamed-chunk-111-1.png" class="img-fluid figure-img" width="672"></p>
+<p><img src="index_files/figure-html/unnamed-chunk-112-1.png" class="img-fluid figure-img" width="672"></p>
 </figure>
 </div>
 </div>
@@ -6407,14 +6417,14 @@ b\frac{\alpha}{n+\alpha-1}F(y_i|\theta_{J^{-}+1}) \text{ for } j=J^{-}+1
 <div class="cell-output-display">
 <div>
 <figure class="figure">
-<p><img src="index_files/figure-html/unnamed-chunk-112-1.png" class="img-fluid figure-img" width="672"></p>
+<p><img src="index_files/figure-html/unnamed-chunk-113-1.png" class="img-fluid figure-img" width="672"></p>
 </figure>
 </div>
 </div>
 <div class="cell-output-display">
 <div>
 <figure class="figure">
-<p><img src="index_files/figure-html/unnamed-chunk-112-2.png" class="img-fluid figure-img" width="672"></p>
+<p><img src="index_files/figure-html/unnamed-chunk-113-2.png" class="img-fluid figure-img" width="672"></p>
 </figure>
 </div>
 </div>
