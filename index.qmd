@@ -8,6 +8,23 @@ options(tinytex.verbose = TRUE)
 library(kableExtra)
 ```
 
+## August 25, 2026
+
+### Summary
+
+This week I examined the relationship between $\pi_\phi$ and Pielou's Evenness metric and the MC standard error of the metric.
+
+### Diversity MCSE
+
+I chose the 500 point data set and fixed $\pi_\alpha$ at $0.01$ and $0.001$ and let $\pi_\phi$ vary from $1e-6$ to $1e+2$. For each combination of parameters, I ran an MCMC chain for $1000$ iterations past convergence using the Modified CRP and the distance-dependent CRP. From each chain, I calculated the mean Pielou's evenness and the MCSE of this estimate. The results are plotted below.
+
+```{r}
+knitr::include_graphics('Reports2/plot1-8-25-26.png')
+knitr::include_graphics('Reports2/plot2-8-25-26.png')
+```
+
+We can see that the MC standard errors for the DD-CRP are much smaller than those for the MCRP for the same parameters. The MC standard errors vary significantly with $\pi_\alpha$ in the MCRP. I will likely need to run these chains for much longer to get a less noisy estimate.
+
 ## August 18, 2026
 
 ### Summary
