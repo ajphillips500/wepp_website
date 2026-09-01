@@ -2,33 +2,35 @@
 title: "Research Plan"
 ---
 
-# Chapter 1 Plan
+# Primary Chapter Concepts
 
-1. Abstract
+1. Explain how Rasmussen and Ghahramani define a pseudolikelihood for $\phi$ and show how one can sample from the resulting pseudo-posterior. Evaluate the effectiveness and reasonableness of this approximation.
 
-2. Introduction
+2. Test the iMGPE algorithm on multidimensional data with $p$ inputs. Compare a single clustering lengthscale parameter to having $p$ such parameters.
 
-3. Describe Infinite Mixture of Gaussian Process Experts. Describe the two clustering mechanisms/ priors over clusters. Explain why a good clustering mechanism is important.
+# Chapter 2 Plan
 
-4. Prove MCRP and DD-CRP and both legitimate joint distributions over point assignments to clusters/customers. Prove that both are stochastic processes. Note that both are thus proper priors.
+1.  Abstract
 
-5. Explain the influence of the clustering parameters $\alpha$ and $\phi$. Advise on how to choose a value for each. Explain how Rasmussen and Ghahramani define a pseudolikelihood for $\phi$ and show how one can sample from the resulting pseudo-posterior.
+2.  Introduction: reintroduce the iMGPE algorithm, noting that the distributions of the clustering parameters are computationally intractable as they are currently defined.
 
-6. Compare both methods on a toy data set. How well does each recover the true cluster structure or true underlying function. Does one method explore the posterior space more fully than the other? Does learning either or both clustering parameters via their pseudolikelihood improve the results?
+3.  Explain how Rasmussen and Ghahramani define a pseudolikelihood for $\phi$. Define a pseudolikelihood for $\alpha$ based on similar principles. Show that these pseudolikelihoods are computationally tractable.
 
-7. Compare both methods on multiple toy data sets of increasing size. For each method, does its posterior confidence in cluster membership increase?
+4. Plot and compare the likelihood to the pseudolikelihood for a small $n$ data set. Comment on the quality of the approximation.
 
-8. Compare on real data set such as motorcycle crash data. Which method's suggested cluster structure looks more reasonable?
+5. Fit an iMGPE model to a toy data set, learning the clustering parameters via their pseudolikelihoods. Evaluate the performance of the clustering parameter estimators.
 
-9. Summarize the conclusions.
+6. Fit an iMGPE model to a real data set, such as the motorcycle data set, with pseudolikelihoods. Evaluate the performance of the clustering parameter estimators.
+
+7. Conclusions
 
 # Chapter Concepts
 
-1: Compare the fully Bayesian version of iMGPE described by Rasmussen et al. with the partially Bayesian version I have used where the parameters of the GP experts are fit with maximum likelihood estimation.  Compare their theoretical properties and evaluate the accuracy and precision of the estimates of each.
+1: Compare the fully Bayesian version of iMGPE described by Rasmussen et al. with the partially Bayesian version I have used where the parameters of the GP experts are fit with maximum likelihood estimation. Compare their theoretical properties and evaluate the accuracy and precision of the estimates of each.
 
-2: Replace the Modified Chinese Restaurant Process presented by the authors with another, better defined, clustering step such as the Distance Dependent CRP presented by Blei and Frazier.  Compare the theoretical tractability and theoretical properties of each distribution.
+2: Replace the Modified Chinese Restaurant Process presented by the authors with another, better defined, clustering step such as the Distance Dependent CRP presented by Blei and Frazier. Compare the theoretical tractability and theoretical properties of each distribution.
 
-3: Modify the clustering step or the GP expert step of the iMGPE algorithm to accept categorical variables as covariates.  Experiment with different approaches to find the most reliable and computationally efficient method of incorporating categorical covariate information.
+3: Modify the clustering step or the GP expert step of the iMGPE algorithm to accept categorical variables as covariates. Experiment with different approaches to find the most reliable and computationally efficient method of incorporating categorical covariate information.
 
 4: Modify the iMGPE algorithm to handle very large data sets (large $n$). In theory, iMGPE should already handle this by partitioning the data. The authors supplement this with the rather brute force suggestion of simply forbidding the construction of clusters of size greater than some threshold. We could study the effectiveness of the current algorithm and explore alternative methods of restricting maximum cluster size or requiring a minimum number of clusters. Another direction is to include big data methods such as Vecchia approximation in the fitting of GP experts, so that we can handle very large clusters.
 
@@ -39,3 +41,7 @@ title: "Research Plan"
 7: Modify the iMGPE algorithm to accept functional inputs or outputs. Identify or develop a reasonable method of measuring the distance between two functions and of clustering similar functions. Consider whether functional inputs should be handled differently for the purposes of clustering and GP expert sampling.
 
 8: Explore how one might define priors for the concentration or kernel parameters of the Modified Chinese Restaurant Process or the distance-dependent CRP. Consider whether it is justifiable to choose these priors, or fix initial values, based on the input data itself.
+
+9: Explain how Rasmussen and Ghahramani define a pseudolikelihood for $\phi$ and show how one can sample from the resulting pseudo-posterior. Evaluate the effectiveness and reasonableness of this approximation.
+
+10: Test the iMGPE algorithm on multidimensional data with $p$ inputs. Compare a single clustering lengthscale parameter to having $p$ such parameters.

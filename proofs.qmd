@@ -44,9 +44,9 @@ Here, I present a formal proof that the Modified Chinese Restaurant Process is a
 
 Let $T$ represent an interval (thought of as "time") and let $n\in \mathbb{N}$. For each $k\in \mathbb{N}$ and finite sequence of distinct times $t_1,\dots,t_k\in T$, let $\nu_{t_1,\dots,t_k}$ be a probability measure on $(\mathbb{R}^n)^k$. Suppose that these measures satisfy two conditions:
 
--   For all permutations $\pi$ of $1,\dots,k$ and measureable sets $F_i\subseteq \mathbb{R}^n$, $\nu_{t_{\pi(1)},\dots,t_{\pi(k)}}(F_{\pi(1)}\times \dots \times F_{pi(k)}) =\nu_{t_1,\dots,t_k} (F_1\times \dots \times F_k)$.
+- For all permutations $\pi$ of $1,\dots,k$ and measureable sets $F_i\subseteq \mathbb{R}^n$, $\nu_{t_{\pi(1)},\dots,t_{\pi(k)}}(F_{\pi(1)}\times \dots \times F_{pi(k)}) =\nu_{t_1,\dots,t_k} (F_1\times \dots \times F_k)$.
 
--   For all measureable sets $F_i\subseteq \mathbb{R}^n$ and $m\in \mathbb{N}$, $\nu_{t_1,\dots,t_k} (F_1\times \dots \times F_k) =\nu_{t_1,\dots,t_k,t_{k+1},\dots,t_{k+m}}\left(F_1\times \dots \times F_k\times (\mathbb{R}^n)^m\right)$.
+- For all measureable sets $F_i\subseteq \mathbb{R}^n$ and $m\in \mathbb{N}$, $\nu_{t_1,\dots,t_k} (F_1\times \dots \times F_k) =\nu_{t_1,\dots,t_k,t_{k+1},\dots,t_{k+m}}\left(F_1\times \dots \times F_k\times (\mathbb{R}^n)^m\right)$.
 
 Then there exists a probability space $(\Omega,F,\mathbb{P})$ and a stochastic process $X:T\times\Omega \to \mathbb{R}^n$ such that $\nu_{t_1,\dots,t_k} (F_1\times \dots \times F_k) =\mathbb{P}(X_{t_1}\in F_1,\dots, X_{t_k}\in F_k)$.
 
@@ -62,10 +62,9 @@ $$p(z_{\pi}|\alpha,\phi)\propto (n+\alpha-1)^{-n}\prod_{i=1}^n\left((n-1)\frac{\
 
 Note that the normalizing constants for $z_{\pi}$ and $z$ are defined as the inverse sum of the unnormalized pmf over all possible permutations of $z$ or $z_{\pi}$. As the unnormalized pmfs are equal, the normalizing constants are equal. Thus, $p(z|\alpha,\phi)=p(z_{\pi}|\alpha,\phi)$, completing the first condition of the Kolmogorov Extension Theorem.
 
-Now, we confirm the second condition of the Kolmogorov Extension Theorem. 
+Now, we confirm the second condition of the Kolmogorov Extension Theorem.
 
-$$\int p(z_{1:n}|\alpha,\phi)dz_n =\int p(z_1|\alpha,\phi)p(z_2|z_1,\alpha,\phi) \dots p(z_n|z_{1:n-1},\alpha,\phi)dz_n$$
-$$=p(z_1|\alpha,\phi)\dots p(z_{n-1}|z_{1:n-1},\alpha,\phi)\int p(z_n|z_{1:n-1},\alpha,\phi)dz_n
+$$\int p(z_{1:n}|\alpha,\phi)dz_n =\int p(z_1|\alpha,\phi)p(z_2|z_1,\alpha,\phi) \dots p(z_n|z_{1:n-1},\alpha,\phi)dz_n$$ $$=p(z_1|\alpha,\phi)\dots p(z_{n-1}|z_{1:n-1},\alpha,\phi)\int p(z_n|z_{1:n-1},\alpha,\phi)dz_n
 \\=p(z_{1:n-1}|\alpha,\phi)$$
 
 This completes the second condition.

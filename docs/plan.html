@@ -2,7 +2,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
 
 <meta charset="utf-8">
-<meta name="generator" content="quarto-1.9.36">
+<meta name="generator" content="quarto-1.9.38">
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
@@ -39,7 +39,7 @@ ul.task-list li input[type="checkbox"] {
 <script src="site_libs/quarto-html/tippy.umd.min.js"></script>
 <script src="site_libs/quarto-html/anchor.min.js"></script>
 <link href="site_libs/quarto-html/tippy.css" rel="stylesheet">
-<link href="site_libs/quarto-html/quarto-syntax-highlighting-845c23b38eaddc0f92fda52bfe77a8c8.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<link href="site_libs/quarto-html/quarto-syntax-highlighting-15634bcf2e68342d4ad2dfa704d543f6.css" rel="stylesheet" id="quarto-text-highlighting-styles">
 <script src="site_libs/bootstrap/bootstrap.min.js"></script>
 <link href="site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
 <link href="site_libs/bootstrap/bootstrap-a0f9fd0d421825b736dc1bbcbcba2219.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
@@ -161,7 +161,8 @@ window.Quarto = {
     <h2 id="toc-title">On this page</h2>
    
   <ul>
-  <li><a href="#chapter-1-plan" id="toc-chapter-1-plan" class="nav-link active" data-scroll-target="#chapter-1-plan">Chapter 1 Plan</a></li>
+  <li><a href="#primary-chapter-concepts" id="toc-primary-chapter-concepts" class="nav-link active" data-scroll-target="#primary-chapter-concepts">Primary Chapter Concepts</a></li>
+  <li><a href="#chapter-2-plan" id="toc-chapter-2-plan" class="nav-link" data-scroll-target="#chapter-2-plan">Chapter 2 Plan</a></li>
   <li><a href="#chapter-concepts" id="toc-chapter-concepts" class="nav-link" data-scroll-target="#chapter-concepts">Chapter Concepts</a></li>
   </ul>
 </nav>
@@ -188,18 +189,23 @@ window.Quarto = {
 </header>
 
 
-<section id="chapter-1-plan" class="level1">
-<h1>Chapter 1 Plan</h1>
+<section id="primary-chapter-concepts" class="level1">
+<h1>Primary Chapter Concepts</h1>
+<ol type="1">
+<li><p>Explain how Rasmussen and Ghahramani define a pseudolikelihood for <span class="math inline">\(\phi\)</span> and show how one can sample from the resulting pseudo-posterior. Evaluate the effectiveness and reasonableness of this approximation.</p></li>
+<li><p>Test the iMGPE algorithm on multidimensional data with <span class="math inline">\(p\)</span> inputs. Compare a single clustering lengthscale parameter to having <span class="math inline">\(p\)</span> such parameters.</p></li>
+</ol>
+</section>
+<section id="chapter-2-plan" class="level1">
+<h1>Chapter 2 Plan</h1>
 <ol type="1">
 <li><p>Abstract</p></li>
-<li><p>Introduction</p></li>
-<li><p>Describe Infinite Mixture of Gaussian Process Experts. Describe the two clustering mechanisms/ priors over clusters. Explain why a good clustering mechanism is important.</p></li>
-<li><p>Prove MCRP and DD-CRP and both legitimate joint distributions over point assignments to clusters/customers. Prove that both are stochastic processes. Note that both are thus proper priors.</p></li>
-<li><p>Explain the influence of the clustering parameters <span class="math inline">\(\alpha\)</span> and <span class="math inline">\(\phi\)</span>. Advise on how to choose a value for each. Explain how Rasmussen and Ghahramani define a pseudolikelihood for <span class="math inline">\(\phi\)</span> and show how one can sample from the resulting pseudo-posterior.</p></li>
-<li><p>Compare both methods on a toy data set. How well does each recover the true cluster structure or true underlying function. Does one method explore the posterior space more fully than the other? Does learning either or both clustering parameters via their pseudolikelihood improve the results?</p></li>
-<li><p>Compare both methods on multiple toy data sets of increasing size. For each method, does its posterior confidence in cluster membership increase?</p></li>
-<li><p>Compare on real data set such as motorcycle crash data. Which method’s suggested cluster structure looks more reasonable?</p></li>
-<li><p>Summarize the conclusions.</p></li>
+<li><p>Introduction: reintroduce the iMGPE algorithm, noting that the distributions of the clustering parameters are computationally intractable as they are currently defined.</p></li>
+<li><p>Explain how Rasmussen and Ghahramani define a pseudolikelihood for <span class="math inline">\(\phi\)</span>. Define a pseudolikelihood for <span class="math inline">\(\alpha\)</span> based on similar principles. Show that these pseudolikelihoods are computationally tractable.</p></li>
+<li><p>Plot and compare the likelihood to the pseudolikelihood for a small <span class="math inline">\(n\)</span> data set. Comment on the quality of the approximation.</p></li>
+<li><p>Fit an iMGPE model to a toy data set, learning the clustering parameters via their pseudolikelihoods. Evaluate the performance of the clustering parameter estimators.</p></li>
+<li><p>Fit an iMGPE model to a real data set, such as the motorcycle data set, with pseudolikelihoods. Evaluate the performance of the clustering parameter estimators.</p></li>
+<li><p>Conclusions</p></li>
 </ol>
 </section>
 <section id="chapter-concepts" class="level1">
@@ -212,6 +218,8 @@ window.Quarto = {
 <p>6: Modify the iMGPE algorithm to include a variable selection step. This is often done in a Bayesian way by using a vector of Bernoulli parameters <span class="math inline">\(\pi_{1:p}= (\pi_1,\dots, \pi_p)\sim \prod_{j=1}^p Bern(\gamma_j)\)</span> to represent which of <span class="math inline">\(p\)</span> variables are selected. My first thought was to draw a new instance of <span class="math inline">\(\pi_{1:p}\)</span> for each cluster so that we could let different variables be relevant in different parts of the data. However, as clusters do not carry over between iterations of the algorithm, we would need to make sure the conditional distributions for the <span class="math inline">\(\pi_{1:p}\)</span> are dependent on the input values.</p>
 <p>7: Modify the iMGPE algorithm to accept functional inputs or outputs. Identify or develop a reasonable method of measuring the distance between two functions and of clustering similar functions. Consider whether functional inputs should be handled differently for the purposes of clustering and GP expert sampling.</p>
 <p>8: Explore how one might define priors for the concentration or kernel parameters of the Modified Chinese Restaurant Process or the distance-dependent CRP. Consider whether it is justifiable to choose these priors, or fix initial values, based on the input data itself.</p>
+<p>9: Explain how Rasmussen and Ghahramani define a pseudolikelihood for <span class="math inline">\(\phi\)</span> and show how one can sample from the resulting pseudo-posterior. Evaluate the effectiveness and reasonableness of this approximation.</p>
+<p>10: Test the iMGPE algorithm on multidimensional data with <span class="math inline">\(p\)</span> inputs. Compare a single clustering lengthscale parameter to having <span class="math inline">\(p\)</span> such parameters.</p>
 
 
 </section>
