@@ -201,10 +201,13 @@ window.Quarto = {
 <ol type="1">
 <li><p>Abstract</p></li>
 <li><p>Introduction: reintroduce the iMGPE algorithm, noting that the distributions of the clustering parameters are computationally intractable as they are currently defined.</p></li>
-<li><p>Explain how Rasmussen and Ghahramani define a pseudolikelihood for <span class="math inline">\(\phi\)</span>. Define a pseudolikelihood for <span class="math inline">\(\alpha\)</span> based on similar principles. Show that these pseudolikelihoods are computationally tractable.</p></li>
-<li><p>Plot and compare the likelihood to the pseudolikelihood for a small <span class="math inline">\(n\)</span> data set. Comment on the quality of the approximation.</p></li>
-<li><p>Fit an iMGPE model to a toy data set, learning the clustering parameters via their pseudolikelihoods. Evaluate the performance of the clustering parameter estimators.</p></li>
-<li><p>Fit an iMGPE model to a real data set, such as the motorcycle data set, with pseudolikelihoods. Evaluate the performance of the clustering parameter estimators.</p></li>
+<li><p>Rasmussen and Ghahramani define a pseudo-conditional for <span class="math inline">\(\phi\)</span> as follows for use in a Metropolis-Hastings sampling step. <span class="math display">\[p^*(\phi|z,\alpha)\approx \prod_{i=1}^n p(z_i|z_{-i},\phi,\alpha) \times p(\phi)\]</span></p></li>
+</ol>
+<p>Define a pseudo-conditional for <span class="math inline">\(\alpha\)</span> based on similar principles. <span class="math display">\[p^*(\alpha|z,\phi)\approx \prod_{i=1}^n p(z_i|z_{-i},\phi,\alpha) \times p(\alpha)\]</span> Show that these pseudo-conditionals are computationally tractable.</p>
+<ol start="4" type="1">
+<li><p>With some preparation, the true conditional distribution for <span class="math inline">\(\phi\)</span> can be calculated for <span class="math inline">\(n\leq 10\)</span>. Plot the pseudo-conditionals for a given cluster assignment and <span class="math inline">\(\alpha\)</span> using a small <span class="math inline">\(n\)</span> data set. Repeat over a range of values for <span class="math inline">\(z\)</span>, <span class="math inline">\(\alpha\)</span>, and <span class="math inline">\(n\)</span>. Comment on the quality of the approximation and how it varies with <span class="math inline">\(n\)</span> in particular. Extrapolate to larger values of <span class="math inline">\(n\)</span>?</p></li>
+<li><p>Fit an iMGPE model to a toy data set with <span class="math inline">\(n\leq 10\)</span>, learning the clustering parameters via either their pseudo-conditionals or their true conditionals. The Markov chain provides us with an approximation of <span class="math inline">\(p(\phi|X,y)\)</span>, allowing us to compare the approximations for the true and pseudo-conditionals.</p></li>
+<li><p>Compare the iMGPE model with fixed <span class="math inline">\(\alpha\)</span> and <span class="math inline">\(\phi\)</span> to the model that learns them. Fit models using both approaches to a toy data set and compare their performance, perhaps through predictions on a test set. Note how learning additional parameters affects the model’s time to convergence. Repeat on a real data set.</p></li>
 <li><p>Conclusions</p></li>
 </ol>
 </section>

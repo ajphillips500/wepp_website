@@ -8,6 +8,26 @@ options(tinytex.verbose = TRUE)
 library(kableExtra)
 ```
 
+```{r}
+## September 8, 2026
+
+### Summary
+
+#This week I
+
+### Motorcycle Data, Alt Priors
+
+#I fit two more sets of iMGPE models to the motorcycle data, using the simulation study from August 18 to guide my choice of priors. First, I chose parameter values indicating a prior expectation of 3 clusters and 0.6 cluster evenness. Second, I chose parameter values indicating a prior expectation of 11 clusters and 0.8 cluster evenness.
+
+#For the first set, I fit an MCRP-iMGPE model with $\pi_\alpha=0.004$ and $\pi_\phi=0.001$ and a DDCRP-iMGPE model with $\pi_\alpha=0.002$ and $\pi_\phi=1$. I also fit a Dirichlet Gaussian mixture model with $\alpha=0.45$, which also results in a prior expectation of 3 clusters. Each model was run for 2000 MCMC iterations.
+
+#[plot of nclust/even 3]
+
+#For the second set, I fit an MCRP-iMGPE model with $\pi_\alpha=0.02$ and $\pi_\phi=0.0021$ and a DDCRP-iMGPE model with $\pi_\alpha=0.002$ and $\pi_\phi=0.002$. I also fit a Dirichlet Gaussian mixture model with $\alpha=2.75$, which also results in a prior expectation of 3 clusters.
+
+#[plot of nclust/even 4]
+```
+
 ## August 25, 2026
 
 ### Summary

@@ -14,13 +14,18 @@ title: "Research Plan"
 
 2.  Introduction: reintroduce the iMGPE algorithm, noting that the distributions of the clustering parameters are computationally intractable as they are currently defined.
 
-3.  Explain how Rasmussen and Ghahramani define a pseudolikelihood for $\phi$. Define a pseudolikelihood for $\alpha$ based on similar principles. Show that these pseudolikelihoods are computationally tractable.
+3.  Rasmussen and Ghahramani define a pseudo-conditional for $\phi$ as follows for use in a Metropolis-Hastings sampling step.
+$$p^*(\phi|z,\alpha)\approx \prod_{i=1}^n p(z_i|z_{-i},\phi,\alpha) \times p(\phi)$$ 
 
-4. Plot and compare the likelihood to the pseudolikelihood for a small $n$ data set. Comment on the quality of the approximation.
+Define a pseudo-conditional for $\alpha$ based on similar principles.
+$$p^*(\alpha|z,\phi)\approx \prod_{i=1}^n p(z_i|z_{-i},\phi,\alpha) \times p(\alpha)$$
+Show that these pseudo-conditionals are computationally tractable.
 
-5. Fit an iMGPE model to a toy data set, learning the clustering parameters via their pseudolikelihoods. Evaluate the performance of the clustering parameter estimators.
+4. With some preparation, the true conditional distribution for $\phi$ can be calculated for $n\leq 10$. Plot the pseudo-conditionals for a given cluster assignment and $\alpha$ using a small $n$ data set. Repeat over a range of values for $z$, $\alpha$, and $n$. Comment on the quality of the approximation and how it varies with $n$ in particular. Extrapolate to larger values of $n$?
 
-6. Fit an iMGPE model to a real data set, such as the motorcycle data set, with pseudolikelihoods. Evaluate the performance of the clustering parameter estimators.
+5. Fit an iMGPE model to a toy data set with $n\leq 10$, learning the clustering parameters via either their pseudo-conditionals or their true conditionals. The Markov chain provides us with an approximation of $p(\phi|X,y)$, allowing us to compare the approximations for the true and pseudo-conditionals.
+
+6. Compare the iMGPE model with fixed $\alpha$ and $\phi$ to the model that learns them. Fit models using both approaches to a toy data set and compare their performance, perhaps through predictions on a test set. Note how learning additional parameters affects the model's time to convergence. Repeat on a real data set.
 
 7. Conclusions
 
