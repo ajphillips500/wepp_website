@@ -32,9 +32,11 @@ The density plots of Pielou's Evenness for each method is shown below, with blue
 knitr::include_graphics('Reports2/plot2-9-15-26.png')
 ```
 
-Given a prior expectation of 3.1 clusters, the MCRP produced 7.5 clusters on average, the DDCRP produced 5.1 clusters, and the DGMM produced 4.3. Given a prior expectation of 11.7 clusters, the MCRP produced 9.3 clusters on average, the DDCRP produced 18.3, and the DGMM produced 7.1.
+Given a prior expectation of 3.1 clusters, the MCRP-iMGPE model produced 7.5 clusters on average, the DDCRP-iMGPE produced 5.1 clusters, and the DGMM produced 4.3. Given a prior expectation of 11.7 clusters, the MCRP-iMGPE produced 9.3 clusters on average, the DDCRP-iMGPE produced 18.3, and the DGMM produced 7.1.
 
-Given a prior expectation of 0.5 evenness, the MCRP had an average evenness of 0.77, the DDCRP an average evenness of 0.45, and the DGMM 0.92. Given a prior expectation of 0.8 evenness, the MCRP had an average evenness of 0.73, the DDCRP an average evenness of 0.77, and the DGMM 0.80.
+Given a prior expectation of 0.5 evenness, the MCRP-iMGPE had an average evenness of 0.77, the DDCRP-iMGPE an average evenness of 0.45, and the DGMM 0.92. Given a prior expectation of 0.8 evenness, the MCRP-iMGPE had an average evenness of 0.73, the DDCRP-iMGPE an average evenness of 0.77, and the DGMM 0.80.
+
+The DDCRP-iMGPE seems to be more strongly affected by its priors than the MCRP-iMGPE. The posterior densities of its cluster characteristics vary much more given the DDCRP than the MCRP.
 
 ## August 25, 2026
 
