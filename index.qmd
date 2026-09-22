@@ -8,6 +8,34 @@ options(tinytex.verbose = TRUE)
 library(kableExtra)
 ```
 
+## September 22, 2026
+
+### Summary
+
+This week I compared the true conditional density $p(\alpha|\phi,z)$ to the pseudo-conditional density for several values of $z$ with small sample size.
+
+### Alpha True Conditional
+
+For small sample sizes, it is possible to construct a complete list of all possible cluster assignments. As the sample size $n$ increases, the number of possible partitions increases exponentially, as shown in the plot below.
+
+```{r}
+knitr::include_graphics('Reports2/plot1-9-22-26.png')
+```
+
+The true conditional densities of the clustering parameters can be calculated for small $n$ as well. This allows us to compare it to the pseudo-conditional density suggested by Rasmussen and Ghahramani. For clarity, the conditional densities of $\phi$ are shown here. The conditional densities for $\alpha$ can be obtained by simply reversing the roles of $\phi$ and $\alpha$ in the equations below.
+
+$$p(\phi|z,\alpha)=p(z|\alpha,\phi)\times p(\phi)$$
+$$p^*(\phi|z,\alpha)\approx \prod_{i=1}^n p(z_i|z_{-i},\phi,\alpha) \times p(\phi)$$
+
+I generated a small data set with $n=5$ and computed the true and pseudo-conditional densities of $\phi$ and $\alpha$ for three different cluster assignments. Each are plotted below.
+
+```{r}
+knitr::include_graphics('Reports2/plot2-9-22-26.png')
+knitr::include_graphics('Reports2/plot3-9-22-26.png')
+```
+
+In most scenarios, the pseudo-conditional does not look like a good approximation of the true conditional density. The pseudo-conditional tends to be much flatter and with heavier tails. I will look for other possible approximations to consider in my next thesis paper.
+
 ## September 15, 2026
 
 ### Summary
