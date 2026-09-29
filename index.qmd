@@ -8,6 +8,30 @@ options(tinytex.verbose = TRUE)
 library(kableExtra)
 ```
 
+## September 29, 2026
+
+### Summary
+
+This week I normalized the true and pseudo-conditional density functions I had presented last week and compared their distributional shape and tail behavior. Since the true density cannot be calculated for large $n$, even up to a proportionality constant, most approximation methods will not work. The most promising line of inquiry is to simply replace it with some tractable function that we believe will behave similarly.
+
+### True vs Pseudo Conditionals
+
+The density functions I presented last week had not been normalized, rendering comparisons between them not meaningful. I did not have access to a closed form for the normalizing constants, so I calculated them empirically with R's 'integrate' function over the interval $(0,\infty)$. The true and pseudo-conditional densities of $p(\alpha|z,\phi)$ and $p(\phi|z,\alpha)$ were normalized in this way. I then plotted them for three different cluster assignments.
+
+```{r}
+knitr::include_graphics('Reports2/plot1-9-29-26.png')
+knitr::include_graphics('Reports2/plot2-9-29-26.png')
+```
+
+I also plotted both the true and pseudo-conditional log densities to understand the tail behavior of these functions. The densities over $\phi$ are plotted over the range $[1,5]$ rather than $[0,5]$ to ensure the tail behavior is visible.
+
+```{r}
+knitr::include_graphics('Reports2/plot3-9-29-26.png')
+knitr::include_graphics('Reports2/plot4-9-29-26.png')
+```
+
+The pseudo-conditional density proposed by Rasmussen and Ghahramani is a much closer approximation to the true density with regard to $\phi$ rather than $\alpha$. For $\alpha$, the pseudo-conditional exceeds the true conditional (has heavier tails) for every cluster assignment tested. For $\phi$, the relative tail behavior varies between cluster assignments.
+
 ## September 22, 2026
 
 ### Summary
@@ -24,8 +48,8 @@ knitr::include_graphics('Reports2/plot1-9-22-26.png')
 
 The true conditional densities of the clustering parameters can be calculated for small $n$ as well. This allows us to compare it to the pseudo-conditional density suggested by Rasmussen and Ghahramani. For clarity, the conditional densities of $\phi$ are shown here. The conditional densities for $\alpha$ can be obtained by simply reversing the roles of $\phi$ and $\alpha$ in the equations below.
 
-$$p(\phi|z,\alpha)=p(z|\alpha,\phi)\times p(\phi)$$
-$$p^*(\phi|z,\alpha)\approx \prod_{i=1}^n p(z_i|z_{-i},\phi,\alpha) \times p(\phi)$$
+$$p(\phi|z,\alpha)\propto p(z|\alpha,\phi)\times p(\phi)$$
+$$p^*(\phi|z,\alpha)\propto \prod_{i=1}^n p(z_i|z_{-i},\phi,\alpha) \times p(\phi)$$
 
 I generated a small data set with $n=5$ and computed the true and pseudo-conditional densities of $\phi$ and $\alpha$ for three different cluster assignments. Each are plotted below.
 
