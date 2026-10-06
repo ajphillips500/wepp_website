@@ -8,6 +8,53 @@ options(tinytex.verbose = TRUE)
 library(kableExtra)
 ```
 
+## October 6, 2026
+
+### Summary
+
+```{r}
+#run DD-iMGPE for more iterations [DONE]
+#plot prior alongside posterior density for motorcycle models
+#revise dissertation draft
+#begin dissertation slides
+```
+
+This week I compared the true and pseudo-conditional density functions of the clustering parameters when the parameter conditioned on was allowed to vary. I also studied the Approximate Bayesian Computation method as an alternative means to sample from these conditional densities and described how they could work.
+
+### Density Comparisons
+
+Previously, I had held $\phi$ fixed when comparing the density functions of $\alpha$ and vice versa. This week, I considered a range of $\phi$ values between 0 and 1 and $\alpha$ values between 1 and 5. I plotted the true and pseudo-conditional densities of each parameter for each value of the fixed parameter.
+
+```{r}
+knitr::include_graphics('Reports2/plot3-10-6-26.png')
+knitr::include_graphics('Reports2/plot4-10-6-26.png')
+```
+
+To examine this relationship closer, I looked at the distance between the true and pseudo-densities across a range of fixed parameter values. For example, for each value of $\phi$, I obtained the Kullback-Liebler divergence between the true and pseudo-conditional densities of $\alpha$, which quantifies the information lost when the pseudo-conditional is used to approximate the true conditional. KL divergence takes on non-negative real values where $0$ means that the distributions are identical. The KL divergence is plotted relative to the fixed parameter for both parameters below.
+
+```{r}
+knitr::include_graphics('Reports2/plot1-10-6-26.png')
+knitr::include_graphics('Reports2/plot2-10-6-26.png')
+```
+
+The KL Divergence between the densities for $\alpha$ increases with $\phi$, though the curve begins flattening out at about $\phi=0.25$. The KL Divergence between the densities for $\phi$ is overall smaller than that for $\alpha$ and displays different behavior depending on the cluster assignment.
+
+### Approximate Bayesian Computation
+
+In order to learn the clustering parameters of the MCRP or DDCRP without access to their likelihood we need to make use of methods that don't rely on a tractable likelihood. Approximate Bayesian Computation is one such likelihood-free method that has been applied successfully to an MCMC context, as discussed by [Plagnol and Tavare](https://link.springer.com/chapter/10.1007/978-3-642-18743-8_5). 
+
+Approximate Bayesian Computation relies on us being able to generate data from our model given its parameters. This holds for the iMGPE model, as we can easily generate cluster assignments given the input data $X$ and parameters $\alpha$ and $\phi$. Then the ABC algorithm works like this. Given current values $\alpha^{(m)}$ and $\phi^{(m)}$ of the clustering parameters and $z^{(m)}$ of the clustering assignment, we choose the next value of $\alpha$ as follows.
+
+1. Sample $\alpha^{(\text{prop})}$ from its prior $p(\alpha)$.
+
+2. Simulate $z'$ from the MCRP (or DDCRP) given $\alpha^{(\text{prop})}$, $\phi^{(m)}$, and $X$. We can do this since $p(\alpha|\dots)\propto p(\alpha|z,\phi,X)$.
+
+3. Calculate a measure of distance $d(z',z^{(m)})$ between $z'$ and $z^{(m)}$.
+
+4. If $d(z',z^{(m)})<\epsilon$ for some threshold $\epsilon$, set $\alpha^{(m+1)}= \alpha^{(\text{prop})}$. Otherwise set $\alpha^{(m+1)}=\alpha^{(m)}$.
+
+Note that this is essentially a modification of a rejection sampling algorithm and that a similar algorithm can easily be defined to sample $\phi$. We need to choose a distance metric between cluster assignments to use this method, though, and the metric I have in mind is the Variation of Information metric. Variation of Information represents the amount of information lost or gained moving between one clustering and another. It ranges from 0 when clusterings are identical to $\log(n)$ ($n$ being the number of data points) when clusterings are fully divergent.
+
 ## September 29, 2026
 
 ### Summary
