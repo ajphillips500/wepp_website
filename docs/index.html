@@ -161,7 +161,7 @@ window.Quarto = {
     <h2 id="toc-title">On this page</h2>
    
   <ul>
-  <li><a href="#october-6-2026" id="toc-october-6-2026" class="nav-link active" data-scroll-target="#october-6-2026">October 6, 2026</a>
+  <li><a href="#october-13-2026" id="toc-october-13-2026" class="nav-link active" data-scroll-target="#october-13-2026">October 13, 2026</a>
   <ul class="collapse">
   <li><a href="#summary" id="toc-summary" class="nav-link" data-scroll-target="#summary">Summary</a></li>
   <li><a href="#density-comparisons" id="toc-density-comparisons" class="nav-link" data-scroll-target="#density-comparisons">Density Comparisons</a></li>
@@ -654,8 +654,8 @@ window.Quarto = {
 </header>
 
 
-<section id="october-6-2026" class="level2">
-<h2 class="anchored" data-anchor-id="october-6-2026">October 6, 2026</h2>
+<section id="october-13-2026" class="level2">
+<h2 class="anchored" data-anchor-id="october-13-2026">October 13, 2026</h2>
 <section id="summary" class="level3">
 <h3 class="anchored" data-anchor-id="summary">Summary</h3>
 <p>This week I compared the true and pseudo-conditional density functions of the clustering parameters when the parameter conditioned on was allowed to vary. I also studied the Approximate Bayesian Computation method as an alternative means to sample from these conditional densities and described how they could work.</p>
@@ -704,11 +704,13 @@ window.Quarto = {
 <p>Approximate Bayesian Computation relies on us being able to generate data from our model given its parameters. This holds for the iMGPE model, as we can easily generate cluster assignments given the input data <span class="math inline">\(X\)</span> and parameters <span class="math inline">\(\alpha\)</span> and <span class="math inline">\(\phi\)</span>. Then the ABC algorithm works like this. Given current values <span class="math inline">\(\alpha^{(m)}\)</span> and <span class="math inline">\(\phi^{(m)}\)</span> of the clustering parameters and <span class="math inline">\(z^{(m)}\)</span> of the clustering assignment, we choose the next value of <span class="math inline">\(\alpha\)</span> as follows.</p>
 <ol type="1">
 <li><p>Sample <span class="math inline">\(\alpha^{(\text{prop})}\)</span> from its prior <span class="math inline">\(p(\alpha)\)</span>.</p></li>
-<li><p>Simulate <span class="math inline">\(z'\)</span> from the MCRP (or DDCRP) given <span class="math inline">\(\alpha^{(\text{prop})}\)</span>, <span class="math inline">\(\phi^{(m)}\)</span>, and <span class="math inline">\(X\)</span>. We can do this since <span class="math inline">\(p(\alpha|\dots)\propto p(\alpha|z,\phi,X)\)</span>.</p></li>
+<li><p>Simulate <span class="math inline">\(z'\)</span> from the MCRP (or DDCRP) given <span class="math inline">\(\alpha^{(\text{prop})}\)</span>, <span class="math inline">\(\phi^{(m)}\)</span>, and <span class="math inline">\(z^{(m)}\)</span>. We can do this since <span class="math inline">\(p(\alpha|\dots)\propto p(\alpha|z,\phi,X)\)</span>.</p></li>
 <li><p>Calculate a measure of distance <span class="math inline">\(d(z',z^{(m)})\)</span> between <span class="math inline">\(z'\)</span> and <span class="math inline">\(z^{(m)}\)</span>.</p></li>
 <li><p>If <span class="math inline">\(d(z',z^{(m)})&lt;\epsilon\)</span> for some threshold <span class="math inline">\(\epsilon\)</span>, set <span class="math inline">\(\alpha^{(m+1)}= \alpha^{(\text{prop})}\)</span>. Otherwise set <span class="math inline">\(\alpha^{(m+1)}=\alpha^{(m)}\)</span>.</p></li>
 </ol>
-<p>Note that this is essentially a modification of a rejection sampling algorithm and that a similar algorithm can easily be defined to sample <span class="math inline">\(\phi\)</span>. We need to choose a distance metric between cluster assignments to use this method, though, and the metric I have in mind is the Variation of Information metric. Variation of Information represents the amount of information lost or gained moving between one clustering and another. It ranges from 0 when clusterings are identical to <span class="math inline">\(\log(n)\)</span> (<span class="math inline">\(n\)</span> being the number of data points) when clusterings are fully divergent.</p>
+<p>Note that this is essentially a modification of a rejection sampling algorithm and that a similar algorithm can easily be defined to sample <span class="math inline">\(\phi\)</span>. To actually apply it to the iMGPE algorithm, we will need to choose a distance metric between cluster assignments and a threshold <span class="math inline">\(\epsilon\)</span> to control our acceptance rate. I am considering several possible distance metrics between partitions.</p>
+<p>One option is the Variation of Information, which represents the amount of information lost or gained moving between one clustering and another. It ranges from 0 when cluster assignments are identical to <span class="math inline">\(\log(n)\)</span> (<span class="math inline">\(n\)</span> being the number of data points) when cluster assignments are fully divergent.</p>
+<p>Another option is the difference in cluster count and Pielou’s evenness between the two partitions. A third is the classification error distance, which is defined as the minimum proportion of data points that must be re-assigned to turn one cluster assignment into another. Classification error distance and variation of information can both be normalized to the interval <span class="math inline">\([0,1]\)</span>, which might simplify choosing an acceptance threshold. I am conducting experiments with the iMGPE algorithm to see which metrics and thresholds work best.</p>
 </section>
 </section>
 <section id="september-29-2026" class="level2">

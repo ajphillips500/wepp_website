@@ -8,7 +8,7 @@ options(tinytex.verbose = TRUE)
 library(kableExtra)
 ```
 
-## October 6, 2026
+## October 13, 2026
 
 ### Summary
 
@@ -47,13 +47,17 @@ Approximate Bayesian Computation relies on us being able to generate data from o
 
 1. Sample $\alpha^{(\text{prop})}$ from its prior $p(\alpha)$.
 
-2. Simulate $z'$ from the MCRP (or DDCRP) given $\alpha^{(\text{prop})}$, $\phi^{(m)}$, and $X$. We can do this since $p(\alpha|\dots)\propto p(\alpha|z,\phi,X)$.
+2. Simulate $z'$ from the MCRP (or DDCRP) given $\alpha^{(\text{prop})}$, $\phi^{(m)}$, and $z^{(m)}$. We can do this since $p(\alpha|\dots)\propto p(\alpha|z,\phi,X)$.
 
 3. Calculate a measure of distance $d(z',z^{(m)})$ between $z'$ and $z^{(m)}$.
 
 4. If $d(z',z^{(m)})<\epsilon$ for some threshold $\epsilon$, set $\alpha^{(m+1)}= \alpha^{(\text{prop})}$. Otherwise set $\alpha^{(m+1)}=\alpha^{(m)}$.
 
-Note that this is essentially a modification of a rejection sampling algorithm and that a similar algorithm can easily be defined to sample $\phi$. We need to choose a distance metric between cluster assignments to use this method, though, and the metric I have in mind is the Variation of Information metric. Variation of Information represents the amount of information lost or gained moving between one clustering and another. It ranges from 0 when clusterings are identical to $\log(n)$ ($n$ being the number of data points) when clusterings are fully divergent.
+Note that this is essentially a modification of a rejection sampling algorithm and that a similar algorithm can easily be defined to sample $\phi$. To actually apply it to the iMGPE algorithm, we will need to choose a distance metric between cluster assignments and a threshold $\epsilon$ to control our acceptance rate. I am considering several possible distance metrics between partitions.
+
+One option is the Variation of Information, which represents the amount of information lost or gained moving between one clustering and another. It ranges from 0 when cluster assignments are identical to $\log(n)$ ($n$ being the number of data points) when cluster assignments are fully divergent.
+
+Another option is the difference in cluster count and Pielou's evenness between the two partitions. A third is the classification error distance, which is defined as the minimum proportion of data points that must be re-assigned to turn one cluster assignment into another. Classification error distance and variation of information can both be normalized to the interval $[0,1]$, which might simplify choosing an acceptance threshold. I am conducting experiments with the iMGPE algorithm to see which metrics and thresholds work best.
 
 ## September 29, 2026
 
