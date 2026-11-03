@@ -2,17 +2,23 @@
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
 
 <meta charset="utf-8">
-<meta name="generator" content="quarto-1.8.25">
+<meta name="generator" content="quarto-1.10.18">
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 
 <title>References – AJ Phillips Thesis Project</title>
 <style>
-code{white-space: pre-wrap;}
+/* Default styles provided by pandoc.
+** See https://pandoc.org/MANUAL.html#variables-for-html for config info.
+*/
 span.smallcaps{font-variant: small-caps;}
-div.columns{display: flex; gap: min(4vw, 1.5em);}
-div.column{flex: auto; overflow-x: auto;}
+div.columns{display: flex; gap: 1.5em;}
+div.column{flex: auto;}
+@media screen {
+div.columns{gap: min(4vw, 1.5em);}
+div.column{overflow-x: auto;}
+}
 div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
 ul.task-list{list-style: none;}
 ul.task-list li input[type="checkbox"] {
@@ -32,15 +38,14 @@ ul.task-list li input[type="checkbox"] {
 <meta name="quarto:offset" content="./">
 <script src="site_libs/quarto-html/quarto.js" type="module"></script>
 <script src="site_libs/quarto-html/tabsets/tabsets.js" type="module"></script>
-<script src="site_libs/quarto-html/axe/axe-check.js" type="module"></script>
 <script src="site_libs/quarto-html/popper.min.js"></script>
 <script src="site_libs/quarto-html/tippy.umd.min.js"></script>
 <script src="site_libs/quarto-html/anchor.min.js"></script>
 <link href="site_libs/quarto-html/tippy.css" rel="stylesheet">
-<link href="site_libs/quarto-html/quarto-syntax-highlighting-7b89279ff1a6dce999919e0e67d4d9ec.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<link href="site_libs/quarto-html/quarto-syntax-highlighting-64a204ab8560d761af7679ceaba22944.css" rel="stylesheet" id="quarto-text-highlighting-styles">
 <script src="site_libs/bootstrap/bootstrap.min.js"></script>
 <link href="site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
-<link href="site_libs/bootstrap/bootstrap-e31584831b205ffbb2d98406f31c2a5b.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
+<link href="site_libs/bootstrap/bootstrap-172ba59bd5e0b52282274ba0c0cc16fc.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
 <script id="quarto-search-options" type="application/json">{
   "location": "navbar",
   "copy-button": false,
@@ -80,8 +85,6 @@ ul.task-list li input[type="checkbox"] {
     <nav class="navbar navbar-expand-lg " data-bs-theme="dark">
       <div class="navbar-container container-fluid">
       <div class="navbar-brand-container mx-auto">
-    <a href="./index.html" class="navbar-brand navbar-brand-logo">
-    </a>
     <a class="navbar-brand" href="./index.html">
     <span class="navbar-title">AJ Phillips Thesis Project</span>
     </a>
@@ -127,8 +130,19 @@ ul.task-list li input[type="checkbox"] {
 <div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article page-navbar">
 <!-- sidebar -->
 <!-- margin-sidebar -->
-    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar zindex-bottom">
-        
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+        <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">On this page</h2>
+   
+  <ul>
+  <li><a href="#dependent-dirichlet-processes" id="toc-dependent-dirichlet-processes" class="nav-link active" data-scroll-target="#dependent-dirichlet-processes">Dependent Dirichlet Processes</a></li>
+  <li><a href="#dependent-chinese-restaurant-processes" id="toc-dependent-chinese-restaurant-processes" class="nav-link" data-scroll-target="#dependent-chinese-restaurant-processes">Dependent Chinese Restaurant Processes</a></li>
+  <li><a href="#infinite-mixtures-of-gaussian-processes" id="toc-infinite-mixtures-of-gaussian-processes" class="nav-link" data-scroll-target="#infinite-mixtures-of-gaussian-processes">Infinite Mixtures of Gaussian Processes</a></li>
+  <li><a href="#single-chain-r-hat" id="toc-single-chain-r-hat" class="nav-link" data-scroll-target="#single-chain-r-hat">Single Chain R-hat</a></li>
+  <li><a href="#em-models" id="toc-em-models" class="nav-link" data-scroll-target="#em-models">EM Models</a></li>
+  <li><a href="#other" id="toc-other" class="nav-link" data-scroll-target="#other">Other</a></li>
+  </ul>
+</nav>
     </div>
 <!-- main -->
 <main class="content" id="quarto-document-content">
@@ -152,18 +166,45 @@ ul.task-list li input[type="checkbox"] {
 </header>
 
 
-<p>M. Blei, D., &amp; I. Frazier, P. (2010). Distance Dependent Chinese Restaurant Processes. Journal of Machine Learning Research. <a href="https://jmlr.org/papers/volume12/blei11a/blei11a.pdf" class="uri">https://jmlr.org/papers/volume12/blei11a/blei11a.pdf</a></p>
-<p>Rasmussen, C. E., &amp; Ghahramani, Z. (2001). Infinite mixtures of Gaussian process experts. Neural Information Processing Systems, 14, 881–888. <a href="http://learning.eng.cam.ac.uk/zoubin/papers/iMGPE.pdf" class="uri">http://learning.eng.cam.ac.uk/zoubin/papers/iMGPE.pdf</a></p>
-<p>Ruth, W. (2024). A Review of Monte Carlo-based Versions of the EM Algorithm. <a href="https://arxiv.org/pdf/2401.00945" class="uri">https://arxiv.org/pdf/2401.00945</a></p>
-<p>Lawrence, N. D. (2021). Deep Gaussian Processes: A Motivation and Introduction. <a href="https://inverseprobability.com/talks/notes/deep-gaussian-processes-a-motivation-and-introduction.html" class="uri">https://inverseprobability.com/talks/notes/deep-gaussian-processes-a-motivation-and-introduction.html</a></p>
+<section id="dependent-dirichlet-processes" class="level1">
+<h1>Dependent Dirichlet Processes</h1>
+<p>MacEachern, S. N. (1999). Dependent nonparametric processes. In ASA Proceedings of the Section on Bayesian Statistical Science. American Statistical Association, Alexandria, VA. <a href="https://aima.eecs.berkeley.edu/~russell/classes/cs294/f05/papers/maceachern-1999.pdf" class="uri">https://aima.eecs.berkeley.edu/~russell/classes/cs294/f05/papers/maceachern-1999.pdf</a></p>
 <p>Foti, N., &amp; Williamson, S. (2015). A Survey of Non-exchangeable Priors for Bayesian Nonparametric Models. IEEE Transactions on Pattern Analysis and Machine Intelligence, 37, no. 2, 359-371 <a href="https://www.researchgate.net/publication/233720862_A_Survey_of_Non-Exchangeable_Priors_for_Bayesian_Nonparametric_Models" class="uri">https://www.researchgate.net/publication/233720862_A_Survey_of_Non-Exchangeable_Priors_for_Bayesian_Nonparametric_Models</a></p>
+<p>Gelfand, A. E., Kottas, A., &amp; MacEachern, S. N. (2005). Bayesian Nonparametric Spatial Modeling With Dirichlet Process Mixing. Journal of the American Statistical Association, 100(471), 1021–1035. <a href="https://doi.org/10.1198/016214504000002078" class="uri">https://doi.org/10.1198/016214504000002078</a></p>
+<p>Quintana, F. A., Müller, P., Jara, A., &amp; MacEachern, S. N. (2022). The Dependent Dirichlet Process and Related Models. Statistical Science, 37(1), 24–41. <a href="https://www.jstor.org/stable/27368553" class="uri">https://www.jstor.org/stable/27368553</a></p>
+<p>Di Benedetto, G., Caron, F., &amp; Teh, Y. W. (2021). Nonexchangeable Random Partition Models For Microclustering. The Annals of Statistics, 49(4), 1931–1957. <a href="https://www.jstor.org/stable/27169449" class="uri">https://www.jstor.org/stable/27169449</a></p>
+</section>
+<section id="dependent-chinese-restaurant-processes" class="level1">
+<h1>Dependent Chinese Restaurant Processes</h1>
+<p>M. Blei, D., &amp; I. Frazier, P. (2010). Distance Dependent Chinese Restaurant Processes. Journal of Machine Learning Research. <a href="https://jmlr.org/papers/volume12/blei11a/blei11a.pdf" class="uri">https://jmlr.org/papers/volume12/blei11a/blei11a.pdf</a></p>
+</section>
+<section id="infinite-mixtures-of-gaussian-processes" class="level1">
+<h1>Infinite Mixtures of Gaussian Processes</h1>
+<p>Rasmussen, C. E., &amp; Ghahramani, Z. (2001). Infinite mixtures of Gaussian process experts. Neural Information Processing Systems, 14, 881–888. <a href="http://learning.eng.cam.ac.uk/zoubin/papers/iMGPE.pdf" class="uri">http://learning.eng.cam.ac.uk/zoubin/papers/iMGPE.pdf</a></p>
+<p>Meeds, Edward &amp; Osindero, Simon. (2005). An Alternative Infinite Mixture Of Gaussian Process Experts.. Advances in Neural Information Processing Systems. 18. <a href="https://www.researchgate.net/publication/221619000_An_Alternative_Infinite_Mixture_Of_Gaussian_Process_Experts" class="uri">https://www.researchgate.net/publication/221619000_An_Alternative_Infinite_Mixture_Of_Gaussian_Process_Experts</a></p>
 <p>Sun, S., &amp; Xu, X. (2011). Variational Inference for Infinite Mixtures of Gaussian Processes With Applications to Traffic Flow Prediction. IEEE Transactions on Intelligent Transportation Systems, 12, no. 2, 466-475, doi: 10.1109/TITS.2010.2093575.</p>
-<p>Gorur, D., Rasmussen, C. E., (2009). Dirichlet Process Gaussian Mixture Models: Choice of the Base Distribution. Journal of Computer Science and Technology, 25(4), 615-626. <a href="https://mlg.eng.cam.ac.uk/pub/pdf/GoeRas10.pdf" class="uri">https://mlg.eng.cam.ac.uk/pub/pdf/GoeRas10.pdf</a></p>
-<p>Gelfand, A. E., Kottas, A., &amp; MacEachern, S. N. (2005). Bayesian Nonparametric Spatial Modeling With Dirichlet Process Mixing. Journal of the American Statistical Association, 100(471), 1021–1035. https://doi.org/10.1198/016214504000002078</p>
-<p>Dootika Vats. Christina Knudson. “Revisiting the Gelman–Rubin Diagnostic.” Statist. Sci. 36 (4) 518 - 529, November 2021. https://doi.org/10.1214/20-STS812</p>
+<p>Wade, S., Mongelluzzo, S., Petrone, S. An enriched conjugate prior for Bayesian nonparametric inference. Bayesian Analysis, 6:359–386, 2011.</p>
+<p>Gadd, C., Wade, S., Boukouvalas, A. (2020). Enriched mixtures of generalised Gaussian process experts. <i>Proceedings of the Twenty Third International Conference on Artificial Intelligence and Statistics</i>, in <i>Proceedings of Machine Learning Research</i> 108:3144-3154 <a href="https://proceedings.mlr.press/v108/gadd20a.html" class="uri">https://proceedings.mlr.press/v108/gadd20a.html</a></p>
+<p>Wade, S, Dunson, DB, Petrone, S &amp; Trippa, L (2014), ‘Improving Prediction from Dirichlet Process Mixtures via Enrichment’, Journal of Machine Learning Research, vol.&nbsp;15, pp.&nbsp;1041-1071. <a href="https://www.pure.ed.ac.uk/ws/portalfiles/portal/82444679/EnrichedDPReg.pdf" class="uri">https://www.pure.ed.ac.uk/ws/portalfiles/portal/82444679/EnrichedDPReg.pdf</a></p>
+</section>
+<section id="single-chain-r-hat" class="level1">
+<h1>Single Chain R-hat</h1>
+<p>Dootika Vats. Christina Knudson. “Revisiting the Gelman–Rubin Diagnostic.” Statist. Sci. 36 (4) 518 - 529, November 2021. <a href="https://doi.org/10.1214/20-STS812" class="uri">https://doi.org/10.1214/20-STS812</a></p>
 <p>Vehtari, A., Gelman, A., Simpson, D., Carpenter, B., Burkner, P. (2021). Rank-normalization, Folding, and Localization: An improved R-hat for Assessing MCMC Convergence. Bayesian Analysis, 16, no. 2, June 2021. arxiv.org/abs/1903.08008</p>
+</section>
+<section id="em-models" class="level1">
+<h1>EM Models</h1>
+<p>Ruth, W. (2024). A Review of Monte Carlo-based Versions of the EM Algorithm. <a href="https://arxiv.org/pdf/2401.00945" class="uri">https://arxiv.org/pdf/2401.00945</a></p>
+<p>Kimura, T., Tokuda, T., Nakada, Y. et al.&nbsp;Expectation-maximization algorithms for inference in Dirichlet processes mixture. Pattern Analysis and Applications 16, 55–67 (2013). <a href="https://doi.org/10.1007/s10044-011-0256-4" class="uri">https://doi.org/10.1007/s10044-011-0256-4</a></p>
+<p>Blei, David &amp; Jordan, Michael. (2006). Variational inference for Dirichlet process mixtures. Bayesian Analysis. 1. 121-143. 10.1214/06-BA104.</p>
+</section>
+<section id="other" class="level1">
+<h1>Other</h1>
+<p>Lawrence, N. D. (2021). Deep Gaussian Processes: A Motivation and Introduction. <a href="https://inverseprobability.com/talks/notes/deep-gaussian-processes-a-motivation-and-introduction.html" class="uri">https://inverseprobability.com/talks/notes/deep-gaussian-processes-a-motivation-and-introduction.html</a></p>
+<p>Gorur, D., Rasmussen, C. E., (2009). Dirichlet Process Gaussian Mixture Models: Choice of the Base Distribution. Journal of Computer Science and Technology, 25(4), 615-626. <a href="https://mlg.eng.cam.ac.uk/pub/pdf/GoeRas10.pdf" class="uri">https://mlg.eng.cam.ac.uk/pub/pdf/GoeRas10.pdf</a></p>
 
 
+</section>
 
 </main> <!-- /main -->
 <script id="quarto-html-after-body" type="application/javascript">

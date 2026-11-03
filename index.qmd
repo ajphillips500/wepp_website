@@ -8,16 +8,41 @@ options(tinytex.verbose = TRUE)
 library(kableExtra)
 ```
 
+## November 3, 2026
+
+### Literature Review
+
+This week I surveyed the existing statistical literature on non-exchangeable and covariate dependent clustering distributions for regression problems. I found three major classes of clustering distributions in work similar to my own.
+
+**Dependent Dirichlet process**: An extension of the Dirichlet process where the atoms or weights (or both) have been modified to depend on covariate information. This class of distributions was first developed by MacEachern in a [1999 paper](https://aima.eecs.berkeley.edu/~russell/classes/cs294/f05/papers/maceachern-1999.pdf) and many variations have been proposed since. These methods form non-exchangeable priors over possible clusterings. They are often computationally intensive, even when the parameters of the clustering distribution are held fixed.
+
+**Dependent Chinese Restaurant process**: Drs. Blei and Frazier defined a class of clustering mechanisms by modifying the conditional probabilities of the Chinese Restaurant process. The Modified CRP used by Rasmussen and Ghahramani takes the same approach but is distinct. Blei took the probability of assigning point $i$ to $j$ to be proportional to a decay function $f$ of the distance between the points, noting that for some values of $f$ this construction fails to define a valid random distribution. I have confirmed that using a Gaussian kernel as the decay function does result in a valid distribution, albeit an intractable one.
+
+These clustering mechanisms are not marginally invariant, so removing one data point from consideration changes the marginal distribution of the rest. Dr. Blei argues this is a modeling choice that may or may not be appropriate for a given problem.
+
+**Enriched Dirichlet process**: This extension of the DP can be viewed as a nested Chinese Restaurant process where input and response data is first clustered in the response dimension and then each cluster is partitioned into subclusters in the input space. It was proposed by Dr. Sarah Wade in her 2011 paper "An Enriched Conjugate Prior for Bayesian
+Nonparametric Inference".
+
+When clustering based on joint density of inputs $X$ and response $y$, the likelihood of $X$ can overwhelm that of $y$ as input dimension increases. This results in many small clusters that are homogeneous in $X$ but not in $y$, which results in high predictive uncertainty. The purpose of the Enriched DP is to ensure that the response remains influential in the clustering distribution, keeping the number of clusters down and reducing predictive uncertainty. The EDP prior has been applied to mixture models and even an infinite mixture of Gaussian process experts.
+
+The table below shows which properties each method has. I have not determined whether the MCRP or DDCRP are conjugate, but suspect they are not.
+
+```{r}
+tab1 <- data.frame('Q'=c('Non-exchangeability','Marginal Invariance', 'Conjugacy', 'Scalability', 'Bayesian'), 'DDP'=c('Y','Y','Y','N','Y'), 'MCRP'=c('Y','N','N*','Y','Y'), 'DDCRP'=c('Y','N','N*','Y','Y'), 'EDP'=c('N','Y','Y','Y','Y'))
+knitr::kable(tab1)
+```
+
+### Research Questions
+
+Based on the general characteristics of each class of clustering distribution, I tentatively estimate the unique niche of the Modified CRP and distance-dependent CRP to be as follows:
+
+Dependent Chinese Restaurant processes define a class of clustering distributions for mixture models or mixture of experts models that are tractable for large data sets and can be induced to generate clustering arrangements with desirable properties with respect to the number and sizes of the clusters through informative priors on the clustering parameters.
+
+Some other promising avenues of investigation include the clustering behavior of dependent CRPs in high dimensional contexts and the interpretation of the posterior clustering structure and parameter distributions. Specifically, I would like to eventually test the MCRP on high-dimensional data and see if it also suffers from the problems noted by Dr. Wade or whether those problems can be avoided by placing appropriate priors on the clustering parameters. I also plan to study dependent Dirichlet process methods to see which allow us to interpret the impact of different covariate inputs on the clustering distribution and compare this to the MCRP.
+
 ## October 13, 2026
 
 ### Summary
-
-```{r}
-#run DD-iMGPE for more iterations [DONE]
-#plot prior alongside posterior density for motorcycle models
-#revise dissertation draft
-#begin dissertation slides
-```
 
 This week I compared the true and pseudo-conditional density functions of the clustering parameters when the parameter conditioned on was allowed to vary. I also studied the Approximate Bayesian Computation method as an alternative means to sample from these conditional densities and described how they could work.
 
