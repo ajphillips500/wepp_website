@@ -164,8 +164,9 @@ window.Quarto = {
     <h2 id="toc-title">On this page</h2>
    
   <ul>
-  <li><a href="#november-3-2026" id="toc-november-3-2026" class="nav-link active" data-scroll-target="#november-3-2026">November 3, 2026</a>
+  <li><a href="#november-10-2026" id="toc-november-10-2026" class="nav-link active" data-scroll-target="#november-10-2026">November 10, 2026</a>
   <ul class="collapse">
+  <li><a href="#advancement-plan" id="toc-advancement-plan" class="nav-link" data-scroll-target="#advancement-plan">Advancement Plan</a></li>
   <li><a href="#literature-review" id="toc-literature-review" class="nav-link" data-scroll-target="#literature-review">Literature Review</a></li>
   <li><a href="#research-questions" id="toc-research-questions" class="nav-link" data-scroll-target="#research-questions">Research Questions</a></li>
   </ul></li>
@@ -662,15 +663,40 @@ window.Quarto = {
 </header>
 
 
-<section id="november-3-2026" class="level2">
-<h2 class="anchored" data-anchor-id="november-3-2026">November 3, 2026</h2>
+<section id="november-10-2026" class="level2">
+<h2 class="anchored" data-anchor-id="november-10-2026">November 10, 2026</h2>
+<section id="advancement-plan" class="level3">
+<h3 class="anchored" data-anchor-id="advancement-plan">Advancement Plan</h3>
+<ol type="1">
+<li>By the end of the month:</li>
+</ol>
+<ul>
+<li>Finish literature review.</li>
+<li>Define the overall thesis research question.</li>
+</ul>
+<ol start="2" type="1">
+<li>By the end of the semester:</li>
+</ol>
+<ul>
+<li>Define the research question for Manuscript 1.</li>
+<li>Identify 3 new ideas for M1</li>
+</ul>
+<ol start="3" type="1">
+<li>By the end of winter break:</li>
+</ol>
+<ul>
+<li>Plan 3 new ideas for M2, M3.</li>
+<li>Write the thesis proposal and submit it to the committee.</li>
+</ul>
+<p>Final product: A written thesis proposal, containing a survey of the academic literature on covariate dependent clustering distributions. The proposal explains my research question and the ‘gap’ in the existing literature that I seek to fill. It lays out the research question of each manuscript and the three new things my first manuscript will add to the field.</p>
+</section>
 <section id="literature-review" class="level3">
 <h3 class="anchored" data-anchor-id="literature-review">Literature Review</h3>
 <p>This week I surveyed the existing statistical literature on non-exchangeable and covariate dependent clustering distributions for regression problems. I found three major classes of clustering distributions in work similar to my own.</p>
 <p><strong>Dependent Dirichlet process</strong>: An extension of the Dirichlet process where the atoms or weights (or both) have been modified to depend on covariate information. This class of distributions was first developed by MacEachern in a <a href="https://aima.eecs.berkeley.edu/~russell/classes/cs294/f05/papers/maceachern-1999.pdf">1999 paper</a> and many variations have been proposed since. These methods form non-exchangeable priors over possible clusterings. They are often computationally intensive, even when the parameters of the clustering distribution are held fixed.</p>
 <p><strong>Dependent Chinese Restaurant process</strong>: Drs. Blei and Frazier defined a class of clustering mechanisms by modifying the conditional probabilities of the Chinese Restaurant process. The Modified CRP used by Rasmussen and Ghahramani takes the same approach but is distinct. Blei took the probability of assigning point <span class="math inline">\(i\)</span> to <span class="math inline">\(j\)</span> to be proportional to a decay function <span class="math inline">\(f\)</span> of the distance between the points, noting that for some values of <span class="math inline">\(f\)</span> this construction fails to define a valid random distribution. I have confirmed that using a Gaussian kernel as the decay function does result in a valid distribution, albeit an intractable one.</p>
 <p>These clustering mechanisms are not marginally invariant, so removing one data point from consideration changes the marginal distribution of the rest. Dr.&nbsp;Blei argues this is a modeling choice that may or may not be appropriate for a given problem.</p>
-<p><strong>Enriched Dirichlet process</strong>: This extension of the DP can be viewed as a nested Chinese Restaurant process where input and response data is first clustered in the response dimension and then each cluster is partitioned into subclusters in the input space. It was proposed by Dr.&nbsp;Sarah Wade in her 2011 paper “An Enriched Conjugate Prior for Bayesian Nonparametric Inference”.</p>
+<p><strong>Enriched Dirichlet process</strong>: This extension of the DP can be viewed as a nested Chinese Restaurant process where input and response data is first clustered in the response dimension and then each cluster is partitioned into subclusters in the input space. It was proposed by Dr.&nbsp;Sara Wade in her 2011 paper “An Enriched Conjugate Prior for Bayesian Nonparametric Inference”.</p>
 <p>When clustering based on joint density of inputs <span class="math inline">\(X\)</span> and response <span class="math inline">\(y\)</span>, the likelihood of <span class="math inline">\(X\)</span> can overwhelm that of <span class="math inline">\(y\)</span> as input dimension increases. This results in many small clusters that are homogeneous in <span class="math inline">\(X\)</span> but not in <span class="math inline">\(y\)</span>, which results in high predictive uncertainty. The purpose of the Enriched DP is to ensure that the response remains influential in the clustering distribution, keeping the number of clusters down and reducing predictive uncertainty. The EDP prior has been applied to mixture models and even an infinite mixture of Gaussian process experts.</p>
 <p>The table below shows which properties each method has. I have not determined whether the MCRP or DDCRP are conjugate, but suspect they are not.</p>
 <div class="cell">
@@ -730,7 +756,7 @@ window.Quarto = {
 <h3 class="anchored" data-anchor-id="research-questions">Research Questions</h3>
 <p>Based on the general characteristics of each class of clustering distribution, I tentatively estimate the unique niche of the Modified CRP and distance-dependent CRP to be as follows:</p>
 <p>Dependent Chinese Restaurant processes define a class of clustering distributions for mixture models or mixture of experts models that are tractable for large data sets and can be induced to generate clustering arrangements with desirable properties with respect to the number and sizes of the clusters through informative priors on the clustering parameters.</p>
-<p>Some other promising avenues of investigation include the clustering behavior of dependent CRPs in high dimensional contexts and the interpretation of the posterior clustering structure and parameter distributions. Specifically, I would like to eventually test the MCRP on high-dimensional data and see if it also suffers from the problems noted by Dr.&nbsp;Wade or whether those problems can be avoided by placing appropriate priors on the clustering parameters. I also plan to study dependent Dirichlet process methods to see which allow us to interpret the impact of different covariate inputs on the clustering distribution and compare this to the MCRP.</p>
+<p>Some other promising avenues of investigation include the clustering behavior of dependent CRPs in high dimensional contexts and the interpretation of the posterior clustering structure and parameter distributions. Specifically, I would like to eventually test the MCRP on high-dimensional data and see if it also suffers from the problems noted by Dr.&nbsp;Wade or whether those problems can be avoided by placing appropriate priors on the clustering parameters. I am also studying dependent Dirichlet process methods to see which allow us to interpret the impact of different covariate inputs on the clustering distribution and compare this to the MCRP.</p>
 </section>
 </section>
 <section id="october-13-2026" class="level2">

@@ -14,6 +14,16 @@ Quintana, F. A., Müller, P., Jara, A., & MacEachern, S. N. (2022). The Dependen
 
 Di Benedetto, G., Caron, F., & Teh, Y. W. (2021). Nonexchangeable Random Partition Models For Microclustering. The Annals of Statistics, 49(4), 1931–1957. <https://www.jstor.org/stable/27169449>
 
+Dunson, D., Pillai, N., Park, J., (2007). Bayesian Density Regression. Journal of the Royal Statistical Society, Vol 69(2), 163-183. <https://doi.org/10.1111/j.1467-9868.2007.00582.x>
+
+F. Caron, M. Davy, A. Doucet, E. Duflos and P. Vanheeghe. (2008). Bayesian Inference for Linear Dynamic Models With Dirichlet Process Mixtures. IEEE Transactions on Signal Processing, vol. 56, no. 1, pp. 71-84, doi: 10.1109/TSP.2007.900167.
+
+D E I ORIO , M., M ÜLLER , P., R OSNER , G. L. and M AC E ACH -
+ERN , S. N. 
+De Iorio, M., Müller, P., Rosner, G., MacEachern, S. (2004). An ANOVA Model for Dependent Random Measures. J. Amer. Statist. Assoc. 99 205–215. <https://doi.org/10.1198/016214504000000205>
+
+De Iorio, M., Johnson, W., Müller, P., Rosner, G. (2009). Bayesian Nonparametric Nonproportional Hazards Survival Modeling. Biometrics, Volume 65, Issue 3, Pages 762–771, <https://doi.org/10.1111/j.1541-0420.2008.01166.x>
+
 # Dependent Chinese Restaurant Processes
 
 M. Blei, D., & I. Frazier, P. (2010). Distance Dependent Chinese Restaurant Processes. Journal of Machine Learning Research. <https://jmlr.org/papers/volume12/blei11a/blei11a.pdf>
