@@ -12,19 +12,23 @@ library(kableExtra)
 
 ### Advancement Plan
 
-1.  By the end of the month:
+I have set the following goals to prepare a revised thesis proposal for the graduate committee.
+
+1.  By the end of the month (Dec. 1):
 
   - Finish literature review.
-  - Define the overall thesis research question.
+  - Define the overall thesis research question and the research question for Manuscript 1.
+  - Define relevant experiments for Manuscript 1.
 
-2.  By the end of the semester:
+2.  By the end of the semester (Dec. 15):
 
-  - Define the research question for Manuscript 1.
-  - Identify 3 new ideas for M1
+  - Define the research question for Manuscripts 2 and 3.
+  - Conduct experiments for Manuscript 1.
+  - Identify my 3 new ideas for Manuscript 1.
 
-3.  By the end of winter break:
+3.  By the end of winter break (Jan. 19):
 
-  - Plan 3 new ideas for M2, M3.
+  - Plan 3 new ideas for Manuscripts 2 and 3.
   - Write the thesis proposal and submit it to the committee.
 
 Final product: A written thesis proposal, containing a survey of the academic literature on covariate dependent clustering distributions. The proposal explains my research question and the 'gap' in the existing literature that I seek to fill. It lays out the research question of each manuscript and the three new things my first manuscript will add to the field.
