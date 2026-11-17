@@ -8,6 +8,47 @@ options(tinytex.verbose = TRUE)
 library(kableExtra)
 ```
 
+## November 17, 2026
+
+### Summary
+
+This week I updated my plan for my thesis proposal and continued reviewing the related literature. The most relevant paper I found this week was "Bayesian Density Regression" by Dunson et al. which is summarized below. I also identified and began running some prior elicitation studies that may prove useful.
+
+### Updated Plan
+
+I continue to survey the existing literature on covariate-dependent clustering distributions. I pay special attention to whether other proposed distributions possess the following characteristics.
+
+- Exchangeability: Whether the distribution treats observations as exchangeable.
+- Marginal Invariance: Whether 
+- Scalability: How fast computational complexity grows as the number of observations increases.
+- Interpretability of Covariates: Whether the distribution allows different covariates to affect the clustering distribution in different ways or to different degrees and whether inference can be performed on these differences.
+- Estimability: Whether the parameters of the clustering distribution can be learned or whether they must be fixed at reasonable values.
+
+I have also updated my thesis proposal plan with checkpoints for preparing drafts and reviewing them with Dr. Niemi.
+
+### Bayesian Density Regression
+
+The authors Dunson et al. present a Bayesian approach to density estimation of a response variable $Y$ given predictors $X$ that bears many similarities to the distance dependent Chinese restaurant process in a 2007 paper called ["Bayesian Density Regression"](https://doi.org/10.1111/j.1467-9868.2007.00582.x). They associate each location with a basis function $G_i(\cdot)$ draw from a Dirichlet process prior $DP(\alpha,G_0)$ and model each $Y_i$ as being drawn from a probability measure equal to a weighted sum of the basis functions across all locations, where the weights for $Y_i$ depend on the predictors $X_i$. That is, 
+
+$$Y_i\sim G_x(\cdot) = \sum_{j=1}^n b_j(x)G_j(\cdot)$$
+$$b_j(x)= \frac{\gamma_j K(x,x_j)}{\sum_{l=1}^n \gamma_l K(x,x_l)}$$
+
+The authors use $K(x,x')=\exp(-\psi ||x-x'||^2)$, which allows the distribution of $Y$ to vary with the predictors so that observations that are close together in the predictor space will be drawn from similar distributions. They call this prior a weighted mixture of DP (WMDP) priors.
+
+There are a number of clear similarities between this approach and the modified CRP and DDCRP. The weighted mixture of DPs is parameterized slightly differently, where $\psi=1/\phi$ for the kernel function. However, the authors also define $n$ weight variables, $\gamma_{1:n}$, that provide additional flexibility by scaling the influence of different locations. No equivalent for these weights is present in the MCRP or DDCRP.
+
+I do think this difference between the WMDP and the MCRP favors the modified CRP. There are $n$ additional weight parameters to learn in the WMDP, which adds significant computational complexity as $n$ increases. Also, the WMDP uses a single lengthscale parameter $\psi$, so it cannot account for different predictors having different degrees of influence on the response.
+
+Thus, the modified CRP and distance-dependent CRP are more scalable, that is, they can more easily be fit to large data sets. These dependent CRPs also allow us to model situations where different covariates have different degrees of influence on the clustering distribution.
+
+### Future Experiments
+
+Existing research into covariate-dependent clustering distributions display interest in the reliability and efficiency in scenarios with large $n$ (number of observations) or $d$ (number of covariates). Thus, I plan to conduct the following practical experiments while continuing my literature review.
+
+I will run prior elicitation studies on the MCRP and DDCRP on an array of simulated data sets that display distinct clusters, for example a data set containing $50$ draws from a $N(0,1)$ distribution and $50$ draws from a $N(5,1)$ distribution. I will compare the mean evenness and cluster count for different numbers of clusters and for different degrees of cluster separation.
+
+I will also run prior elicitation studies on the MCRP and DDCRP on simulated data sets with multiple covariate inputs. I will track how computation time increases as the dimensionality of the inputs increases.
+
 ## November 10, 2026
 
 ### Advancement Plan
