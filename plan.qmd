@@ -20,18 +20,18 @@ title: "Research Plan"
 
 3.  By the end of winter break (Jan. 19):
 
-  - Plan 3 new ideas for Manuscripts 2 and 3.
+  - Plan 3 novel concepts for Manuscripts 2 and 3.
   - Revise the thesis proposal and submit it to the committee.
 
 Final product: A written thesis proposal, containing a survey of the academic literature on covariate dependent clustering distributions. The proposal explains my research question and the 'gap' in the existing literature that I seek to fill. It lays out the research question of each manuscript and the three new things my first manuscript will add to the field.
 
-# Primary Chapter Concepts
+# Primary Manuscript Concepts
 
-1.  Explain how Rasmussen and Ghahramani define a pseudolikelihood for $\phi$ and show how one can sample from the resulting pseudo-posterior. Evaluate the effectiveness and reasonableness of this approximation.
+M2.  Explain how Rasmussen and Ghahramani define a pseudolikelihood for $\phi$ and show how one can sample from the resulting pseudo-posterior. Evaluate the effectiveness and reasonableness of this approximation.
 
-2.  Test the iMGPE algorithm on multidimensional data with $p$ inputs. Compare a single clustering lengthscale parameter to having $p$ such parameters.
+M3.  Test the iMGPE algorithm on multidimensional data with $p$ inputs. Compare a single clustering lengthscale parameter to having $p$ such parameters.
 
-# Chapter 2 Plan
+# Manuscript 2 Plan
 
 1.  Abstract
 
